@@ -9,26 +9,31 @@ const Header = () => {
         </div>
         <nav>
           <ul className="flex space-x-6">
-            <li>
+            <li className="Login">
+              <Link to="/dang-nhap" className="text-gray-600 hover:text-gray-900">
+                Đăng nhập
+              </Link>
+            </li>
+            <li className="Register">
+              <Link to="/dang-ky" className="text-gray-600 hover:text-gray-900">
+                Đăng ký
+              </Link>
+            </li>
+            {/* <li className="Home">
               <Link to="/" className="text-gray-600 hover:text-gray-900">
                 Home
               </Link>
             </li>
-            <li>
-              <Link to="/recipes" className="text-gray-600 hover:text-gray-900">
-                Recipes
+            <li className="Admin">
+              <Link to="/admin" className="text-gray-600 hover:text-gray-900">
+                Admin
               </Link>
             </li>
-            <li>
-              <Link to="/categories" className="text-gray-600 hover:text-gray-900">
-                Categories
-              </Link>
-            </li>
-            <li>
+            <li className="About">
               <Link to="/about" className="text-gray-600 hover:text-gray-900">
                 About
               </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </div>
