@@ -2,31 +2,18 @@ import './index.css';
 import Footer from './components/common/Footer.jsx';
 import Header from './components/common/Header.jsx';
 import { Outlet } from "react-router-dom";
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+// import { useEffect } from 'react';
+// import { useLocation } from 'react-router-dom';
 // import cr7Image from './assets/cr7.jpg';
 
-const SCROLL_OFFSET = 70; // Adjust this value based on your header height
 
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo({
-      top: SCROLL_OFFSET,
-      behavior: 'smooth'
-    });
-  }, [pathname]);
-
-  return null;
-};
 
 const App = () => {
 
   return (
     <div className="app-container">
       <div className='header-container'>
-        <ScrollToTop />
         <Header />
       </div>
       <div className='main-container'>

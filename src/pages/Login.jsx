@@ -1,4 +1,4 @@
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 // import cr7 from '../assets/cr7.jpeg';
 // import cr7_2 from '../assets/cr7_2.jpg';
 // import cr7_3 from '../assets/cr7_3.jpg';
@@ -7,6 +7,8 @@ import bg from '../assets/bg-10.jpg';
 import { NavLink } from "react-router";
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Login = () => {
     // const [isFormVisible, setIsFormVisible] = useState(false);
@@ -26,9 +28,27 @@ const Login = () => {
         console.log('Password:', password);
         console.log('Remember:', remember);
     };
+
+    const SCROLL_OFFSET = 70; // Adjust this value based on your header height
+
+    const ScrollToTop = () => {
+      const { pathname } = useLocation();
+  
+      useEffect(() => {
+        window.scrollTo({
+          top: SCROLL_OFFSET,
+          behavior: 'smooth'
+        });
+      }, [pathname]);
+  
+      return null;
+    };
+
     return (
+
         <div className="Login-container flex justify-center items-center min-h-lvh bg-cover "
             style={{ backgroundImage: `url(${bg})` }}>
+                <ScrollToTop />
             <div className="login-box w-96 text-white rounded-xl px-7 py-10 
             bg-transparent border-2 ">
                 <form action='' onSubmit={handleOnSubmit}>
