@@ -19,12 +19,12 @@ const Header = () => {
                 Đăng ký
               </Link>
             </li>
-            {/* <li className="Home">
+            <li className="Home">
               <Link to="/" className="text-gray-600 hover:text-gray-900">
-                Home
+                Trang chủ
               </Link>
             </li>
-            <li className="Admin">
+            {/* <li className="Admin">
               <Link to="/admin" className="text-gray-600 hover:text-gray-900">
                 Admin
               </Link>
