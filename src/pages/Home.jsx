@@ -159,8 +159,8 @@ const Home = () => {
                                 </div>
 
                             </div>
-                            <div className={scrollPosition >=500 ?'fade-in 6 flex flex-col relative mb-20 mx-2 h-80'
-                        :'fade-out 6 flex flex-col relative mb-20 mx-2 h-80'}>
+                            <div className={scrollPosition >=500 ?'fade-in 6 flex flex-col relative mb-40 mx-2 h-80'
+                        :'fade-out 6 flex flex-col relative mb-40 mx-2 h-80'}>
                                 <div className='md:w-2/3 md:absolute 
                         top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                         space-y-2 rounded-lg'>
