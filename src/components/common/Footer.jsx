@@ -18,7 +18,7 @@ const Footer = () => {
                 <img src={logo} alt="alo" className="h-20 " />
               </h1>
             </div>
-            <div className="2 py-3 px-5 flex justify-center text-center lg:text-left lg:-ml-40">
+            <div className="2 py-3 px-5 flex justify-center text-center lg:text-left lg:-ml-40 font-avanta text-xl">
               Khám phá thế giới tri thức <br />
               với hàng ngàn đầu sách chất lượng!
             </div>

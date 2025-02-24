@@ -32,28 +32,28 @@ const Login = () => {
     const SCROLL_OFFSET = 70; // Adjust this value based on your header height
 
     const ScrollToTop = () => {
-      const { pathname } = useLocation();
-  
-      useEffect(() => {
-        window.scrollTo({
-          top: SCROLL_OFFSET,
-          behavior: 'smooth'
-        });
-      }, [pathname]);
-  
-      return null;
+        const { pathname } = useLocation();
+
+        useEffect(() => {
+            window.scrollTo({
+                top: SCROLL_OFFSET,
+                behavior: 'smooth'
+            });
+        }, [pathname]);
+
+        return null;
     };
 
     return (
 
-        <div className="Login-container flex justify-center items-center min-h-lvh bg-cover "
+        <div className="Login-container flex justify-center items-center min-h-lvh bg-cover bg-center "
             style={{ backgroundImage: `url(${bg})` }}>
-                <ScrollToTop />
+            <ScrollToTop />
             <div className="login-box w-96 text-white rounded-xl px-7 py-10 
-            bg-transparent border-2 ">
+            bg-transparent border-2 backdrop-blur-xs">
                 <form action='' onSubmit={handleOnSubmit}>
                     <h1 className="text-4xl text-center mb-4 font-bold">Đăng nhập</h1>
-                    <div className="input-box flex w-full h-12 relative mb-4">
+                    <div className="input-box flex w-full h-12 relative mb-4 ">
                         <input
                             type="text"
                             placeholder="Tài khoản"
@@ -71,15 +71,15 @@ const Login = () => {
                             required
                             onChange={(e) => setPassword(e.target.value)}
                             className="flex flex-col w-full h-full bg-transparent
-                        rounded-4xl pl-5 pr-14 placeholder:text-white
+                        rounded-4xl pl-5 pr-14 placeholder:text-white 
                         border-2 border-cyan-950" />
                         {passwordType === 'password'
-                            ? <FaEyeSlash className="flex flex-col size-6 my-auto absolute right-4 top-2.5" onClick={() => { setPasswordType('text') }} />
-                            : <FaEye className="flex flex-col size-6 my-auto absolute right-4 top-2.5" onClick={() => { setPasswordType('password') }} />
+                            ? <FaEyeSlash className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setPasswordType('text') }} />
+                            : <FaEye className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setPasswordType('password') }} />
                         }
                     </div>
 
-                    <div className="remember-forgot flex justify-between my-3 relative">
+                    <div className="remember-forgot flex justify-between my-3 relative text-black ">
                         <label className="text-xs ">
                             <input
                                 type="checkbox"
@@ -93,11 +93,13 @@ const Login = () => {
                         font-bold text-xl hover:bg-black hover:text-white transition-all duration-300">
                         Đăng nhập
                     </button>
-                    <div className="signup text-center mt-4 text-xs text-black">
-                        Bạn chưa có tài khoản ? <NavLink to="/dang-ky" className="font-bold hover:underline">Đăng ký ngay</NavLink>
+                    <div className="signup text-center mt-4 text-xs text-white">
+                        Bạn chưa có tài khoản? <NavLink to="/dang-ky" className="font-bold hover:underline">Đăng ký ngay</NavLink>
                     </div>
                 </form>
             </div>
+
+
         </div>
     )
 }

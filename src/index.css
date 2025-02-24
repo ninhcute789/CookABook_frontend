@@ -13,7 +13,7 @@
 }
 @keyframes fadeOut {
     from {
-      opacity: 1;
+      opacity: 0;
     }
     to {
       opacity: 0;
@@ -22,3 +22,20 @@
   .fade-out {
       animation: fadeOut 1s ease-out;
   }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    background-size: contain;
+    background-image: url();
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border: none;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+   }  /* This is a hack to remove the calendar icon from the date input field */
+
+   .font-avanta {
+    font-family: Avanta Garde;
+   }
