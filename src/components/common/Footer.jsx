@@ -10,18 +10,19 @@ const Footer = () => {
   return (
     <footer className="bg-black py-20">
       <div className="container mx-auto px-4">
-        <div className="footer-top flex flex-col md:flex-row pb-6 justify-center">
-          <div className="text-white flex flex-col md:flex-row w-full md:w-6xl">
-            <div className="pl-4 flex flex-col items-center md:items-start">
+        <div className="footer-top flex pb-6 justify-center">
+          <div className="text-white grid lg:grid-cols-3 w-full md:w-6xl
+          lg:justify-between">
+            <div className="1 pl-4 flex justify-center items-center lg:mr-auto">
               <h1>
                 <img src={logo} alt="alo" className="h-20 " />
               </h1>
             </div>
-            <div className="py-3 px-5 flex flex-col text-center md:text-left ">
+            <div className="2 py-3 px-5 flex justify-center text-center lg:text-left lg:-ml-40">
               Khám phá thế giới tri thức <br />
               với hàng ngàn đầu sách chất lượng!
             </div>
-            <div className="flex bg-yellow-400 text-black mt-4 md:mt-0 md:ml-auto px-3 rounded">
+            <div className="3 flex justify-center bg-yellow-400 text-black mt-4 md:mt-0 lg:ml-auto px-3 rounded">
               <div className="flex flex-col justify-center my-auto">
                 <BsFillTelephoneFill size="3em" color="black" />
               </div>
@@ -32,9 +33,12 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="pb-10 mx-auto grid justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-4 text-white bg-gray-800 w-full md:w-6xl p-10 rounded">
-            <div className="columns mb-10">
+
+        <div className="pb-10 mx-auto flex justify-center ">
+          <div className="grid container text-white grid-cols-1 lg:grid-cols-4 gap-4 md:gap-10
+          bg-gray-800 w-full md:w-6xl p-10 rounded justify-between px-20 lg:pl-0
+          md:grid-cols-2 ">
+            <div className="flex flex-col columns mb-10 lg:ml-10">
               <h4 className="text-2xl ">Hỗ trợ</h4>
               <ul className="pl-0">
                 <li className="mt-4">
@@ -59,7 +63,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="columns mb-10">
+            <div className="flex flex-col mb-10 ">
               <h4 className="text-2xl">Khách hàng</h4>
               <ul className="pl-0">
                 <li className="mt-4">
@@ -84,7 +88,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="columns mb-10">
+            <div className="flex flex-col columns mb-10 max-w-2xs">
               <h4 className="text-2xl">Tin tức</h4>
               <ul className="pl-0">
                 <li className="mt-4">
@@ -97,7 +101,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="columns pl-0 md:pl-10">
+            <div className="flex flex-col columns pl-0 lg:pl-10">
               <h4 className="text-2xl">Về chúng tôi</h4>
               <ul className="pl-0">
                 <li className="text-white mt-4 hover:translate-x-2 transition ease-in duration-200 flex ">
@@ -128,6 +132,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
         <div className="footer-bottom">
           <p className="text-center text-white">
             &copy;{new Date().getFullYear()} City Guide App - All Rights Reserved

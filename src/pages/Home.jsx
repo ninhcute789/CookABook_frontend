@@ -69,115 +69,108 @@ const Home = () => {
                 <div className='container mx-auto grid grid-cols-1 lg:grid-cols-2
                     xl:grid-cols-3 w-2/3 space-y-4 '>
 
-                    
-                    
-                            <div className={scrollPosition >=120 ?'fade-in 1 flex flex-col relative mb-20 mx-2 h-80'
-                        :'fade-out 1 flex flex-col relative mb-20 mx-2 h-80'}>
-                                <div className='md:w-2/3 md:absolute 
+                    <div className={scrollPosition >= 120 ? 'fade-in 1 flex flex-col relative mb-20 mx-2 h-80'
+                        : 'fade-out 1 flex flex-col relative mb-20 mx-2 h-80'}>
+                        <div className='md:w-2/3 md:absolute 
                                 top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                                 space-y-2 rounded-lg'>
-                                    <div className='text-xl font-medium'>Khám Phá Cuốn Sách Mới Mỗi Ngày</div>
-                                    <div className='text-gray-500'>Mỗi ngày là một cơ hội để tìm
-                                        ra cuốn sách mới sẽ chinh phục bạn,
-                                        mang đến những câu chuyện, kiến thức mới mẻ.
-                                    </div>
-                                    <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
-                                </div>
-                                <div className='md:absolute right-0 bottom-0'>
-                                    <img src={th5} className='md:w-full rounded' />
-                                </div>
-
+                            <div className='text-xl font-medium'>Khám Phá Cuốn Sách Mới Mỗi Ngày</div>
+                            <div className='text-gray-500'>Mỗi ngày là một cơ hội để tìm
+                                ra cuốn sách mới sẽ chinh phục bạn,
+                                mang đến những câu chuyện, kiến thức mới mẻ.
                             </div>
-                            <div className={scrollPosition >=120 ?'fade-in 2 flex flex-col relative mb-20 mx-2 h-80'
-                        :'fade-out 2 flex flex-col relative mb-20 mx-2 h-80'}>
-                                <div className='md:w-2/3 md:absolute 
+                            <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
+                        </div>
+                        <div className='md:absolute right-0 bottom-0'>
+                            <img src={th5} className='md:w-full rounded' />
+                        </div>
+
+                    </div>
+                    <div className={scrollPosition >= 120 ? 'fade-in 2 flex flex-col relative mb-20 mx-2 h-80'
+                        : 'fade-out 2 flex flex-col relative mb-20 mx-2 h-80'}>
+                        <div className='md:w-2/3 md:absolute 
                         top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                         space-y-2 rounded-lg'>
-                                    <div className='text-xl font-medium'>Khám Phá Bộ Sưu Tập Sách Đặc Sắc</div>
-                                    <div className='text-gray-500'>Bộ sưu tập sách của chúng tôi
-                                        bao gồm những lựa chọn nổi bật và được yêu thích,
-                                        giúp bạn dễ dàng tìm thấy những cuốn sách phù hợp.
-                                    </div>
-                                    <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
-                                </div>
-                                <div className='md:absolute right-0 bottom-0'>
-                                    <img src={th2} className='md:w-full rounded' />
-                                </div>
-
+                            <div className='text-xl font-medium'>Khám Phá Bộ Sưu Tập Sách Đặc Sắc</div>
+                            <div className='text-gray-500'>Bộ sưu tập sách của chúng tôi
+                                bao gồm những lựa chọn nổi bật và được yêu thích,
+                                giúp bạn dễ dàng tìm thấy những cuốn sách phù hợp.
                             </div>
-                            <div className={scrollPosition >=120 ?'fade-in 3 flex flex-col relative mb-20 mx-2 h-80'
-                        :'fade-out 3 flex flex-col relative mb-20 mx-2 h-80'}>
-                                <div className='md:w-2/3 md:absolute 
+                            <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
+                        </div>
+                        <div className='md:absolute right-0 bottom-0'>
+                            <img src={th2} className='md:w-full rounded' />
+                        </div>
+
+                    </div>
+                    <div className={scrollPosition >= 120 ? 'fade-in 3 flex flex-col relative mb-20 mx-2 h-80'
+                        : 'fade-out 3 flex flex-col relative mb-20 mx-2 h-80'}>
+                        <div className='md:w-2/3 md:absolute 
                         top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                         space-y-2 rounded-lg'>
-                                    <div className='text-xl font-medium'>Tìm Kiếm Sách Theo Sở Thích Của Bạn</div>
-                                    <div className='text-gray-500'>Tìm những cuốn sách phù hợp với
-                                        sở thích và nhu cầu đọc của bạn, từ các thể loại khác nhau đến
-                                        những chủ đề chuyên sâu.
-                                    </div>
-                                    <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
-                                </div>
-                                <div className='md:absolute right-0 bottom-0'>
-                                    <img src={th3} className='md:w-full rounded' />
-                                </div>
-
+                            <div className='text-xl font-medium'>Tìm Kiếm Sách Theo Sở Thích Của Bạn</div>
+                            <div className='text-gray-500'>Tìm những cuốn sách phù hợp với
+                                sở thích và nhu cầu đọc của bạn, từ các thể loại khác nhau đến
+                                những chủ đề chuyên sâu.
                             </div>
-                        
+                            <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
+                        </div>
+                        <div className='md:absolute right-0 bottom-0'>
+                            <img src={th3} className='md:w-full rounded' />
+                        </div>
 
-                    
-                            <div className={scrollPosition >=500 ?'fade-in 4 flex flex-col relative mb-20 mx-2 h-80'
-                        :'fade-out 4 flex flex-col relative mb-20 mx-2 h-80'}>
-                                <div className='md:w-2/3 md:absolute 
+                    </div>
+                    <div className={scrollPosition >= 500 ? 'fade-in 4 flex flex-col relative mb-20 mx-2 h-80'
+                        : 'fade-out 4 flex flex-col relative mb-20 mx-2 h-80'}>
+                        <div className='md:w-2/3 md:absolute 
                         top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                         space-y-2 rounded-lg'>
-                                    <div className='text-xl font-medium'>Sách Mới Nhất Cập Nhật Hàng Ngày</div>
-                                    <div className='text-gray-500'>Khám phá những cuốn sách mới nhất vừa
-                                        ra mắt, luôn được cập nhật liên tục để bạn không bỏ lỡ những tác
-                                        phẩm hot nhất.
-                                    </div>
-                                    <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
-                                </div>
-                                <div className='md:absolute right-0 bottom-0'>
-                                    <img src={th2} className='md:w-full rounded' />
-                                </div>
-
+                            <div className='text-xl font-medium'>Sách Mới Nhất Cập Nhật Hàng Ngày</div>
+                            <div className='text-gray-500'>Khám phá những cuốn sách mới nhất vừa
+                                ra mắt, luôn được cập nhật liên tục để bạn không bỏ lỡ những tác
+                                phẩm hot nhất.
                             </div>
-                            <div className={scrollPosition >=500 ?'fade-in 5 flex flex-col relative mb-20 mx-2 h-80'
-                        :'fade-out 5 flex flex-col relative mb-20 mx-2 h-80'}>
-                                <div className='md:w-2/3 md:absolute 
+                            <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
+                        </div>
+                        <div className='md:absolute right-0 bottom-0'>
+                            <img src={th2} className='md:w-full rounded' />
+                        </div>
+
+                    </div>
+                    <div className={scrollPosition >= 500 ? 'fade-in 5 flex flex-col relative mb-20 mx-2 h-80'
+                        : 'fade-out 5 flex flex-col relative mb-20 mx-2 h-80'}>
+                        <div className='md:w-2/3 md:absolute 
                         top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                         space-y-2 rounded-lg'>
-                                    <div className='text-xl font-medium'>Sách Được Độc Giả Yêu Thích</div>
-                                    <div className='text-gray-500'>Những cuốn sách nhận được nhiều đánh
-                                        giá tích cực từ độc giả, giúp bạn dễ dàng tìm ra lựa chọn hoàn hảo
-                                        cho mình.
-                                    </div>
-                                    <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
-                                </div>
-                                <div className='md:absolute right-0 bottom-0'>
-                                    <img src={th3} className='md:w-full rounded' />
-                                </div>
-
+                            <div className='text-xl font-medium'>Sách Được Độc Giả Yêu Thích</div>
+                            <div className='text-gray-500'>Những cuốn sách nhận được nhiều đánh
+                                giá tích cực từ độc giả, giúp bạn dễ dàng tìm ra lựa chọn hoàn hảo
+                                cho mình.
                             </div>
-                            <div className={scrollPosition >=500 ?'fade-in 6 flex flex-col relative mb-40 mx-2 h-80'
-                        :'fade-out 6 flex flex-col relative mb-40 mx-2 h-80'}>
-                                <div className='md:w-2/3 md:absolute 
+                            <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
+                        </div>
+                        <div className='md:absolute right-0 bottom-0'>
+                            <img src={th3} className='md:w-full rounded' />
+                        </div>
+
+                    </div>
+                    <div className={scrollPosition >= 500 ? 'fade-in 6 flex flex-col relative mb-40 mx-2 h-80'
+                        : 'fade-out 6 flex flex-col relative mb-40 mx-2 h-80'}>
+                        <div className='md:w-2/3 md:absolute 
                         top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                         space-y-2 rounded-lg'>
-                                    <div className='text-xl font-medium'>Sách Cho Mọi Lứa Tuổi</div>
-                                    <div className='text-gray-500'>Dành cho mọi lứa tuổi và
-                                        nhu cầu đọc, từ sách thiếu nhi đến các tác phẩm dành
-                                        cho người trưởng thành, mỗi độ tuổi đều có những lựa chọn phù hợp.
-                                    </div>
-                                    <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
-                                </div>
-                                <div className='md:absolute right-0 bottom-0'>
-                                    <img src={th4} className='md:w-full rounded' />
-                                </div>
-
+                            <div className='text-xl font-medium'>Sách Cho Mọi Lứa Tuổi</div>
+                            <div className='text-gray-500'>Dành cho mọi lứa tuổi và
+                                nhu cầu đọc, từ sách thiếu nhi đến các tác phẩm dành
+                                cho người trưởng thành, mỗi độ tuổi đều có những lựa chọn phù hợp.
                             </div>
-                        
+                            <NavLink className=" text-amber-500 hover:underline">Thêm thông tin</NavLink>
+                        </div>
+                        <div className='md:absolute right-0 bottom-0'>
+                            <img src={th4} className='md:w-full rounded' />
+                        </div>
 
+                    </div>
 
                 </div>
             </div>
