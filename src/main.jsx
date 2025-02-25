@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import AdminBooks from "./pages/AdminBooks.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
+import AdminNews from "./pages/AminNews.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -24,6 +25,7 @@ ReactDOM.createRoot(root).render(
         <Route path='admin-books' element={<AdminBooks />} />
         <Route path='admin-orders' element={<AdminOrders />} />
         <Route path='admin-users' element={<AdminUsers />} />
+        <Route path='admin-news' element={<AdminNews />} />
 
       </Route>
 

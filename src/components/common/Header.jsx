@@ -14,11 +14,11 @@ const Header = () => {
                 Đăng nhập
               </Link>
             </li>
-            <li className="Register">
+            {/* <li className="Register">
               <Link to="/dang-ky" className="text-gray-600 hover:text-gray-900">
                 Đăng ký
               </Link>
-            </li>
+            </li> */}
             <li className="Home">
               <Link to="/" className="text-gray-600 hover:text-gray-900">
                 Trang chủ

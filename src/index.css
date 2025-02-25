@@ -60,3 +60,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .goes-in {
   animation: goesIn 1s ;
 }
+
+@keyframes goesOut {
+  from {
+    translate: -100%;
+  }
+
+  to {
+    translate: 0;
+  }
+}
+
+.goes-out {
+  animation: goesOut 1s;
+}
+
+
+
+/* .custom-w {
+  width: calc(100% - 208px);
+} */

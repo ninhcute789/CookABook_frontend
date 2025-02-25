@@ -1,6 +1,6 @@
 import SideBar from "../components/common/SideBar";
 
-const AdminOrders = () => {
+const AdminNews = () => {
     return (
         <div className="flex w-full bg-gray-500">
             <SideBar />
@@ -18,4 +18,4 @@ const AdminOrders = () => {
     )
 }
 
-export default AdminOrders;
+export default AdminNews;

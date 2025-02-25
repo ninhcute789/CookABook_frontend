@@ -2,17 +2,18 @@ import { NavLink } from "react-router";
 import SideBar from "../components/common/SideBar";
 const Admin = () => {
     return (
-        <div >
-            {/* <button className="bg-amber-500 p-3 rounded hover:bg-amber-600 transition-all ">
-                <Link to='/admin-books'><AdminBooks /></Link>
-            </button>
-            <button className="bg-amber-500 p-3 rounded hover:bg-amber-600 transition-all ">
-                <Link to='/admin-oders'><AdminOrders /></Link>
-            </button>
-            <button className="bg-amber-500 p-3 rounded hover:bg-amber-600 transition-all ">
-                <Link to='/admin-users'><AdminUsers /></Link>
-            </button> */}
-
+        <div className="flex w-full bg-gray-500">
+            <SideBar />
+            <div className="flex flex-col">
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+                <div className="flex w-24 h-24 bg-yellow-400 grow  justify-center">siu</div>
+            </div>
         </div>
     )
 }

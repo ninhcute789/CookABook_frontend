@@ -25,16 +25,14 @@ const App = () => {
           <Header />
         )}
       </div>
-      <div className={location.pathname === '/admin' || location.pathname === '/admin-books' 
-      || location.pathname === '/admin-users' || location.pathname === '/admin-orders'
-      ? 'main-container flex mx-auto' : 'main-container mx-auto'}>
+      <div className='main-container'>
         <div className='sideNav-container '>
-          {location.pathname === '/admin' || location.pathname === '/admin-books' 
+          {/* {location.pathname === '/admin' || location.pathname === '/admin-books' 
           || location.pathname === '/admin-users' || location.pathname === '/admin-orders'
           ? (<SideBar />) 
-          : ( null )}
+          : ( null )} */}
         </div>
-        <div className='app-content flex flex-col'>
+        <div className='app-content'>
           <Outlet />
         </div>
         {/* <div className='h-lvh'>
