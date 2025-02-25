@@ -19,9 +19,15 @@ const Header = () => {
                 Đăng ký
               </Link>
             </li> */}
+            
             <li className="Home">
               <Link to="/" className="text-gray-600 hover:text-gray-900">
                 Trang chủ
+              </Link>
+            </li>
+            <li className="News">
+              <Link to="/tin-tuc" className="text-gray-600 hover:text-gray-900">
+                Tin tức
               </Link>
             </li>
             <li className="Admin">

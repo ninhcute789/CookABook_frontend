@@ -11,6 +11,7 @@ import AdminBooks from "./pages/AdminBooks.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import AdminNews from "./pages/AminNews.jsx";
+import News from "./pages/News.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -21,6 +22,7 @@ ReactDOM.createRoot(root).render(
         <Route path='dang-ky' element={<Register />} />
         <Route index element={<Home />} />
         <Route path='about' element={<About />} />
+        <Route path='tin-tuc' element={<News />} />
         <Route path='admin' element={<Admin />} />
         <Route path='admin-books' element={<AdminBooks />} />
         <Route path='admin-orders' element={<AdminOrders />} />
