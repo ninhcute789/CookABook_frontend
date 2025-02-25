@@ -3,8 +3,8 @@ import { Link } from "react-router";
 const Header = () => {
   return (
     <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="text-2xl font-bold text-gray-800">
+      <div className="container mx-auto  py-4 flex justify-between items-center">
+        <div className="text-2xl font-bold text-gray-800 -translate-x-8">
           <Link to="/">CookABook</Link>
         </div>
         <nav>
@@ -24,12 +24,12 @@ const Header = () => {
                 Trang chủ
               </Link>
             </li>
-            {/* <li className="Admin">
+            <li className="Admin">
               <Link to="/admin" className="text-gray-600 hover:text-gray-900">
                 Admin
               </Link>
             </li>
-            <li className="About">
+            {/*<li className="About">
               <Link to="/about" className="text-gray-600 hover:text-gray-900">
                 About
               </Link>

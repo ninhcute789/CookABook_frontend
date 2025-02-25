@@ -7,6 +7,9 @@ import Admin from "./pages/Admin.jsx";
 import Register from "./pages/Register.jsx";
 import About from "./pages/About.jsx";
 import Login from "./pages/Login.jsx";
+import AdminBooks from "./pages/AdminBooks.jsx";
+import AdminOrders from "./pages/AdminOrders.jsx";
+import AdminUsers from "./pages/AdminUsers.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -16,9 +19,14 @@ ReactDOM.createRoot(root).render(
         <Route path='dang-nhap' element={<Login />} />
         <Route path='dang-ky' element={<Register />} />
         <Route index element={<Home />} />
-        <Route path='admin' element={<Admin />} />
         <Route path='about' element={<About />} />
+        <Route path='admin' element={<Admin />} />
+        <Route path='admin-books' element={<AdminBooks />} />
+        <Route path='admin-oders' element={<AdminOrders />} />
+        <Route path='admin-users' element={<AdminUsers />} />
+
       </Route>
+
     </Routes>
   </BrowserRouter>
 );
