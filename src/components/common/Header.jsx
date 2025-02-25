@@ -3,32 +3,43 @@ import { Link } from "react-router";
 const Header = () => {
   return (
     <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="container mx-auto  py-4 flex justify-between items-center">
         <div className="text-2xl font-bold text-gray-800">
           <Link to="/">CookABook</Link>
         </div>
         <nav>
           <ul className="flex space-x-6">
-            <li>
+            <li className="Login">
+              <Link to="/dang-nhap" className="text-gray-600 hover:text-gray-900">
+                Đăng nhập
+              </Link>
+            </li>
+            {/* <li className="Register">
+              <Link to="/dang-ky" className="text-gray-600 hover:text-gray-900">
+                Đăng ký
+              </Link>
+            </li> */}
+            
+            <li className="Home">
               <Link to="/" className="text-gray-600 hover:text-gray-900">
-                Home
+                Trang chủ
               </Link>
             </li>
-            <li>
-              <Link to="/recipes" className="text-gray-600 hover:text-gray-900">
-                Recipes
+            <li className="News">
+              <Link to="/tin-tuc" className="text-gray-600 hover:text-gray-900">
+                Tin tức
               </Link>
             </li>
-            <li>
-              <Link to="/categories" className="text-gray-600 hover:text-gray-900">
-                Categories
+            <li className="Admin">
+              <Link to="/admin" className="text-gray-600 hover:text-gray-900">
+                Admin
               </Link>
             </li>
-            <li>
+            {/*<li className="About">
               <Link to="/about" className="text-gray-600 hover:text-gray-900">
                 About
               </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </div>

@@ -1,28 +1,48 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
-import Home from "./pages/Home";
-import Shop from "./pages/Shop";
-import BookDetail from "./pages/BookDetail";
-import Cart from "./pages/Cart";
-import Admin from "./pages/Admin";
-import AdminBooks from "./pages/AdminBooks";
-import Header from "./components/common/Header";
-import Footer from "./components/common/Footer";
+import "./index.css";
+import Footer from "./components/common/Footer.jsx";
+import Header from "./components/common/Header.jsx";
+import LoginRegisterHeader from "./components/common/LoginRegisterHeader.jsx";
+import { Outlet } from "react-router-dom";
+// import { useEffect } from 'react';
+import { useLocation } from "react-router-dom";
+import SideBar from "./components/common/SideBar.jsx";
+// import cr7Image from './assets/cr7.jpg';
 
 const App = () => {
+  const location = useLocation();
+
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />}>
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/book/:id" element={<BookDetail />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/books" element={<AdminBooks />} />
-        </Route>
-      </Routes>
-      <Footer />
-    </Router>
+    <div className="app-container">
+      <div className="header-container">
+        {/* Hiển thị header riêng cho login và register */}
+        {location.pathname === "/dang-nhap" || location.pathname === "/dang-ky" ? (
+          <LoginRegisterHeader />
+        ) : (
+          <Header />
+        )}
+      </div>
+      <div className="main-container">
+        <div className="sideNav-container ">
+          {/* {location.pathname === '/admin' || location.pathname === '/admin-books' 
+          || location.pathname === '/admin-users' || location.pathname === '/admin-orders'
+          ? (<SideBar />) 
+          : ( null )} */}
+        </div>
+        <div className="app-content">
+          <Outlet />
+        </div>
+        {/* <div className='h-lvh'>
+          height div
+          <img src={cr7Image}
+            className='transform  transition-all 
+            hover:scale-125' alt='asdasd'
+          />
+        </div> */}
+      </div>
+      <div className="footer-container">
+        <Footer />
+      </div>
+    </div>
   );
 };
 
