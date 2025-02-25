@@ -25,17 +25,25 @@ const App = () => {
           <Header />
         )}
       </div>
-      <div className={'main-container mx-auto'}>
+      <div className={location.pathname === '/admin' || location.pathname === '/admin-books' 
+      || location.pathname === '/admin-users' || location.pathname === '/admin-orders'
+      ? 'main-container flex mx-auto' : 'main-container mx-auto'}>
         <div className='sideNav-container '>
-          {location.pathname === '/admin' || location.pathname === '/admin-books' ? (
-            <SideBar />
-          ) : (
-            null
-          )}
+          {location.pathname === '/admin' || location.pathname === '/admin-books' 
+          || location.pathname === '/admin-users' || location.pathname === '/admin-orders'
+          ? (<SideBar />) 
+          : ( null )}
         </div>
-        <div className='app-content'>
+        <div className='app-content flex flex-col'>
           <Outlet />
         </div>
+        {/* <div className='h-lvh'>
+          height div
+          <img src={cr7Image}
+            className='transform  transition-all 
+            hover:scale-125' alt='asdasd'
+          />
+        </div> */}
       </div>
       <div className='footer-container'>
         <Footer />

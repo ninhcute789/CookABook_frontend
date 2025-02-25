@@ -22,7 +22,7 @@ ReactDOM.createRoot(root).render(
         <Route path='about' element={<About />} />
         <Route path='admin' element={<Admin />} />
         <Route path='admin-books' element={<AdminBooks />} />
-        <Route path='admin-oders' element={<AdminOrders />} />
+        <Route path='admin-orders' element={<AdminOrders />} />
         <Route path='admin-users' element={<AdminUsers />} />
 
       </Route>

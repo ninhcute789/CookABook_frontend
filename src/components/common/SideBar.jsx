@@ -28,7 +28,7 @@ const SideBar = () => {
                         </div>
                         <div className="hover:bg-gray-400 rounded flex hover:translate-x-2 transition-all p-1">
                             <BsCart3 className="translate-y size-7 mr-3" />
-                            <NavLink to='/admin-oders' className="text-xl">Orders</NavLink>
+                            <NavLink to='/admin-orders' className="text-xl">Orders</NavLink>
                         </div>
                         <div className="hover:bg-gray-400 rounded flex hover:translate-x-2 transition-all p-1">
                             <FaRegCircleUser className="translate-y size-7 mr-3" />

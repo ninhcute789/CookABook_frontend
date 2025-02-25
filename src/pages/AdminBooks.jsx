@@ -1,17 +1,10 @@
-import SideBar from "../components/common/SideBar";
-
 
 const AdminBooks = () => {
     return (
-        <div className="">
-            {/* <div className="relative flex">
-                <SideBar />
-                
-            </div> */}
-            <div className="  flex justify-center w-lvw">
+            <div className="grow justify-center text-center items-center">
                 <h1>đây là admin books </h1>
             </div>
-        </div>
+        
     )
 }
 
