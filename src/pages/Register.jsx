@@ -64,16 +64,16 @@ const Register = () => {
 
 
     return (
-        <div className="Login-container flex justify-center items-center min-h-lvh bg-cover bg-center "
+        <div className="Login-container flex justify-center items-center min-h-screen bg-cover bg-center"
             style={{ backgroundImage: `url(${bg})` }}>
             <ScrollToTop />
-            <div className="login-box text-white rounded-xl px-7 py-10 
-            bg-transparent border-2 backdrop-blur-xs">
+            <div className="login-box text-white rounded-xl px-7 py-1 mt-2 
+            bg-transparent border-2 backdrop-blur-xs max-w-sm w-full">
                 <form action='' onSubmit={(e) => handleOnSubmit(e)}>
-                    <h1 className="text-4xl text-center mb-4 font-bold">Đăng ký</h1>
+                    <h1 className="text-4xl text-center my-4 font-bold">Đăng ký</h1>
                     <p className="text-xs text-center mb-2">Tham gia ngay để trải nghiệm trang web</p>
-                    <div className="flex space-x-4">
-                        <div className="input-box flex-col w-full h-12 relative mb-4">
+                    <div className="flex space-x-1">
+                        <div className="input-box flex-col w-full h-8 relative mb-1">
                             <input
                                 type="text"
                                 placeholder="Họ"
@@ -81,10 +81,10 @@ const Register = () => {
                                 onChange={(e) => { setLastName(e.target.value) }}
                                 className="flex flex-col w-full h-full bg-transparent
                                 rounded-4xl pl-5 pr-14 placeholder:text-white
-                                border-2 border-cyan-950 " />
-                            <RiMoneyCnyBoxFill className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+                                border-2 border-cyan-950 placeholder:text-sm text-sm" />
+                            <RiMoneyCnyBoxFill className="flex flex-col size-5 my-auto absolute right-4 top-1.5" />
                         </div>
-                        <div className="input-box flex-col w-full h-12 relative mb-4">
+                        <div className="input-box flex-col w-full h-8 relative mb-1">
                             <input
                                 type="text"
                                 placeholder="Tên"
@@ -92,12 +92,12 @@ const Register = () => {
                                 onChange={(e) => { setFirstName(e.target.value) }}
                                 className="flex flex-col w-full h-full bg-transparent
                                 rounded-4xl pl-5 pr-14 placeholder:text-white
-                                border-2 border-cyan-950 " />
-                            <GiFrozenArrow className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+                                border-2 border-cyan-950 placeholder:text-sm text-sm" />
+                            <GiFrozenArrow className="flex flex-col size-5 my-auto absolute right-4 top-1.5" />
                         </div>
                     </div>
-                    <div className="input-box flex w-full h-12 relative mb-4">
-                        <div className="absolute top-1.5 left-6 text-xs">Ngày sinh</div>
+                    <div className="input-box flex w-full h-8 relative mb-1">
+                        <div className="absolute top-0.5 left-6 text-[8px]">Ngày sinh</div>
                         <input
                             type="date"
                             placeholder=""
@@ -105,11 +105,12 @@ const Register = () => {
                             required
                             className=" flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
-                        border-2 border-cyan-950 py-4 uppercase z-10" />
-                        <LuCalendarFold className=" size-6  my-auto absolute right-4 top-2.5 cursor-pointer" />
+                        border-2 border-cyan-950 py-2 uppercase z-10
+                        placeholder:text-sm text-sm" />
+                        <LuCalendarFold className=" size-5  my-auto absolute right-4 top-1.5 cursor-pointer" />
                     </div>
                     
-                    <div className="input-box flex w-full h-12 relative mb-4">
+                    <div className="input-box flex w-full h-8 relative mb-1">
                         <input
                             type="email"
                             placeholder="Email"
@@ -117,10 +118,10 @@ const Register = () => {
                             onChange={(e) => { setEmail(e.target.value) }}
                             className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
-                        border-2 border-cyan-950 " />
-                        <MdOutlineMail className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+                        border-2 border-cyan-950 placeholder:text-sm text-sm" />
+                        <MdOutlineMail className="flex flex-col size-5 my-auto absolute right-4 top-1.5" />
                     </div>
-                    <div className="input-box flex w-full h-12 relative mb-4">
+                    <div className="input-box flex w-full h-8 relative mb-1">
                         <input
                             type="text"
                             placeholder="Tài khoản"
@@ -128,10 +129,10 @@ const Register = () => {
                             onChange={(e) => { setAccount(e.target.value) }}
                             className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
-                        border-2 border-cyan-950 " />
-                        <FaUser className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+                        border-2 border-cyan-950 placeholder:text-sm text-sm" />
+                        <FaUser className="flex flex-col size-5 my-auto absolute right-4 top-1.5" />
                     </div>
-                    <div className="input-box flex w-full h-12 relative mb-4">
+                    <div className="input-box flex w-full h-8 relative mb-1">
                         <input
                             type={passwordType}
                             placeholder="Mật khẩu"
@@ -139,13 +140,13 @@ const Register = () => {
                             onChange={(e) => { setPassword(e.target.value) }}
                             className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
-                        border-2 border-cyan-950" />
+                        border-2 border-cyan-950 placeholder:text-sm text-sm" />
                         {passwordType === 'password'
-                            ? <FaEyeSlash className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setPasswordType('text') }} />
-                            : <FaEye className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setPasswordType('password') }} />
+                            ? <FaEyeSlash className="flex flex-col size-5 my-auto absolute right-4 top-1.5 cursor-pointer" onClick={() => { setPasswordType('text') }} />
+                            : <FaEye className="flex flex-col size-5 my-auto absolute right-4 top-1.5 cursor-pointer" onClick={() => { setPasswordType('password') }} />
                         }
                     </div>
-                    <div className="input-box flex w-full h-12 relative mb-4">
+                    <div className="input-box flex w-full h-8 relative mb-2">
                         <input
                             type={rewirtePasswordType}
                             placeholder="Nhập lại mật khẩu"
@@ -153,26 +154,20 @@ const Register = () => {
                             onChange={(e) => { setRewirtePassword(e.target.value) }}
                             className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
-                        border-2 border-cyan-950" />
+                        border-2 border-cyan-950 placeholder:text-sm text-sm" />
                         {rewirtePasswordType === 'password'
-                            ? <FaEyeSlash className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setRewirtePasswordType('text') }} />
-                            : <FaEye className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setRewirtePasswordType('password') }} />
+                            ? <FaEyeSlash className="flex flex-col size-5 my-auto absolute right-4 top-1.5 cursor-pointer" onClick={() => { setRewirtePasswordType('text') }} />
+                            : <FaEye className="flex flex-col size-5 my-auto absolute right-4 top-1.5 cursor-pointer" onClick={() => { setRewirtePasswordType('password') }} />
                         }
                     </div>
 
-                    {/* <div className="remember-forgot flex justify-between my-3 relative">
-                        <label className="text-xs ">
-                            <input type="checkbox" className="size-3.5" /> Lưu tài khoản
-                        </label >
-                        <a href="#" className="no-underline hover:underline text-xs">Quên mật khẩu ?</a>
-                    </div> */}
                     <button
                         type="submit"
-                        className="w-full bg-white text-black h-14 rounded-4xl shadow-2xl
+                        className="w-full bg-white text-black h-10 rounded-4xl shadow-2xl
                         font-bold text-xl hover:bg-black hover:text-white transition-all duration-300">
                         Đăng Ký
                     </button>
-                    <div className="signup text-center mt-4 text-xs text-white">
+                    <div className="signup text-center my-4 text-xs text-white">
                         Bạn đã có tài khoản? <NavLink to="/dang-nhap" className="font-bold hover:underline">Đăng nhập ngay</NavLink>
                     </div>
                 </form>
