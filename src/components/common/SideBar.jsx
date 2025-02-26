@@ -37,7 +37,7 @@ const SideBar = () => {
                         </NavLink>
                         <NavLink to='/admin-news' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
                             <FaNewspaper className="translate-y size-7 mr-3" />
-                            Users
+                            News
                         </NavLink>
 
                         {/* <div className="hover:bg-gray-400 rounded flex hover:translate-x-2 transition-all p-1">
