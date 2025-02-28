@@ -61,8 +61,8 @@ const Login = () => {
                             onChange={(e) => setUsername(e.target.value)}
                             className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
-                        border-2 border-cyan-950 placeholder:text-sm text-sm" />
-                        <FaUser className="flex flex-col size-5 my-auto absolute right-4 top-3.5" />
+                        border-2 border-cyan-950 " />
+                        <FaUser className="flex flex-col size-6  my-auto absolute right-4 top-2.5" />
                     </div>
                     <div className="input-box flex w-full h-12 relative mb-4">
                         <input
@@ -72,10 +72,10 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white 
-                        border-2 border-cyan-950 placeholder:text-sm text-sm" />
+                        border-2 border-cyan-950" />
                         {passwordType === 'password'
-                            ? <FaEyeSlash className="flex flex-col size-5 my-auto absolute right-4 top-3.5 cursor-pointer" onClick={() => { setPasswordType('text') }} />
-                            : <FaEye className="flex flex-col size-5 my-auto absolute right-4 top-3.5 cursor-pointer" onClick={() => { setPasswordType('password') }} />
+                            ? <FaEyeSlash className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setPasswordType('text') }} />
+                            : <FaEye className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer" onClick={() => { setPasswordType('password') }} />
                         }
                     </div>
 
@@ -93,7 +93,7 @@ const Login = () => {
                         font-bold text-xl hover:bg-black hover:text-white transition-all duration-300">
                         Đăng nhập
                     </button>
-                    <div className="signup text-center mt-5 text-xs text-white">
+                    <div className="signup text-center mt-4 text-xs text-white">
                         Bạn chưa có tài khoản? <NavLink to="/dang-ky" className="font-bold hover:underline">Đăng ký ngay</NavLink>
                     </div>
                 </form>
