@@ -4,12 +4,12 @@ import { BsCart3 } from "react-icons/bs";
 const Header = () => {
   return (
     <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-4 flex justify-between space-x-40 items-center">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="text-2xl font-bold text-gray-800">
           <Link to="/">CookABook</Link>
         </div>
         <nav className="w-3xl">
-          <ul className="flex space-x-6 md:justify-between ">
+          <ul className="flex lg:space-x-20 space-x-6 justify-center ">
             <li className="Login">
               <Link
                 to="/dang-nhap"
