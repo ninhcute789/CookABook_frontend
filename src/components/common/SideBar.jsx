@@ -23,19 +23,19 @@ const SideBar = () => {
                     </div>
                     <hr className="my-5 w-5/6 mx-auto fade-in" />
                     <div className=" pl-3 pr-3 space-y-4 goes-in">
-                        <NavLink to='/admin-books' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
+                        <NavLink to='/admin/admin-books' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
                             <RiBookShelfLine className="translate-y size-7 mr-3" />
                             Book Lists
                         </NavLink>
-                        <NavLink to='/admin-orders' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
+                        <NavLink to='/admin/admin-orders' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
                             <BsCart3 className="translate-y size-7 mr-3" />
                             Orders
                         </NavLink>
-                        <NavLink to='/admin-users' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
+                        <NavLink to='/admin/admin-users' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
                             <FaRegCircleUser className="translate-y size-7 mr-3" />
                             Users
                         </NavLink>
-                        <NavLink to='/admin-news' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
+                        <NavLink to='/admin/admin-news' className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1">
                             <FaNewspaper className="translate-y size-7 mr-3" />
                             News
                         </NavLink>

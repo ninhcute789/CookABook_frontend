@@ -36,12 +36,12 @@ const Home = () => {
       <div
         className="container mx-auto p-4 bg-cover bg-center"
         style={{ backgroundImage: `url(${libra})` }}>
-        <div className="flex flex-col xl:flex-row justify-between items-center space-y-4 xl:space-y-0 xl:space-x-4 relative">
+        <div className="flex flex-col xl:flex-row justify-between items-center space-y-4 xl:space-y-0 relative">
           <div
             className="flex flex-col space-y-2 
-                    absolute xl:relative z-10 bottom-0 left-0 
+                    absolute xl:relative z-10 bottom-0 left-10 2xl:left-30
                     bg-amber-400 p-5 rounded-lg mt-auto">
-            <div className="space-y-2 border-dashed border-2 p-5 rounded-lg">
+            <div className="space-y-2 border-dashed border-2 p-2 rounded-lg">
               <p className="text-lg font-bold text-center">5000+</p>
               <p className="text-sm">
                 Thành viên đã <br /> đọc tựa sách!!!
@@ -52,7 +52,7 @@ const Home = () => {
             <div className="text-5xl font-semibold text-white w-3/4">
               Độ Nhiễu: Sai Lầm Trong Phán Đoán
             </div>
-            <div className="text-3xl text-amber-300">Daniel Kahneman</div>
+            <div className="text-[40px] text-amber-300">Daniel Kahneman</div>
             <div className="text-x text-white w-5/6">
               Một lựa chọn tuyệt vời cho những ai yêu thích tìm hiểu tâm lý và khoa học hành vi.
             </div>
@@ -65,11 +65,11 @@ const Home = () => {
               className="px-4 py-2 bg-amber-300 text-black font-medium rounded 
                             hover:bg-amber-500 w-28
                             cursor-pointer">
-              Đọc ngay
+              Mua ngay
             </button>
             <div className="text-xs text-white">* eBook bao gồm iBooks, PDF và các bản ePub</div>
           </div>
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 2xl:-translate-x-40 xl:-translate-x-25 ">
             <img src={book} alt="Book cover" className="w-96 h-auto shadow-2xl" />
           </div>
         </div>
