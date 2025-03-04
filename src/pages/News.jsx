@@ -253,13 +253,14 @@ import NewsArticle from "../components/common/NewsArticle";
         </div> */
 }
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { newsArticles } from "../data/dataNews.js";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import ArticleSideBar from "../components/common/ArticleSideBar.jsx";
+import SidebarArticles from "../components/sideBar/SidebarArticles.jsx";
 
 // const newsArticles = [
 //   {
@@ -308,7 +309,18 @@ import ArticleSideBar from "../components/common/ArticleSideBar.jsx";
 //       "Nếu bạn muốn phát triển bản thân trong năm 2025, đây là 5 cuốn sách bạn không thể bỏ lỡ...",
 //   },
 // ];
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 70,
+      behavior: "smooth",
+    });
+  }, [pathname]);
+
+  return null;
+};
 const fetchArticles = async () => {
   try {
     const token = localStorage.getItem("token"); // Lấy token từ localStorage
@@ -333,6 +345,8 @@ const News = () => {
       : text;
   };
   const [articles, setArticles] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef(null);
 
   localStorage.setItem(
     "token",
@@ -341,10 +355,11 @@ const News = () => {
 
   return (
     <div>
+      <ScrollToTop />
       <div className=" px-10 mx-auto py-5  bg-orange-50">
         {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
 
-        <header className="news-header shadow-md  top-5 z-50 backdrop-blur-md rounded-2xl  opacity-90">
+        <header className="news-header w-11/12 mx-auto shadow-md  top-5 z-50 backdrop-blur-md rounded-2xl bg-white opacity-90">
           <div className=" mx-auto flex items-center justify-between p-4">
             {/* Logo / Tên trang */}
             <NavLink
@@ -389,12 +404,15 @@ const News = () => {
           </nav> */}
 
             {/* Ô tìm kiếm */}
-            <div className="relative">
+            <div className="relative ">
               <input
+                ref={inputRef} // Ref cho input
                 type="text"
                 placeholder="Tìm bài viết..."
-                className="px-4 py-2 w-[350px] border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400
-              hover:cursor-pointer"
+                className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none 
+                ${isFocused ? "w-80 border-gray-400" : "w-48 border-gray-300"}`}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
               />
               <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
             </div>
@@ -407,7 +425,7 @@ const News = () => {
               {newsArticles.map((article) => (
                 <div
                   key={article.id}
-                  className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6"
+                  className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6 bg-white"
                 >
                   <img
                     src={article.image}
@@ -470,7 +488,7 @@ const News = () => {
             {/* <ArticleSideBar/> */}
           </div>
         ) : (
-          <div className="flex">
+          <div className="flex w-11/12 mx-auto">
             <div className="w-4/5">
               <button
                 onClick={() => {
@@ -497,7 +515,7 @@ const News = () => {
               />
               <p className="min-h-screen">{selectedArticle.content}</p>
             </div>
-            <aside className="pr-20 sticky top-15 z-50 mt-5 h-fit ml-auto w-3/8 hidden md:block  p-4 rounded-xl">
+            {/* <aside className="pr-20 sticky top-15 z-50 mt-5 h-fit ml-auto w-3/8 hidden md:block  p-4 rounded-xl">
               <div className="w-fit mb-5">
                 <h3 className="text-2xl font-bold mt-6 mb-3">
                   {" "}
@@ -509,13 +527,14 @@ const News = () => {
                 {newsArticles.slice(0, 5).map((article) => (
                   <li
                     key={article.id}
-                    className="flex gap-3 items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
+                    className="flex lg:flex-row flex-col text-center lg:text-left
+                    gap-3 items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
                     onClick={() => setSelectedArticle(article)}
                   >
                     <img
                       src={article.image}
                       alt={article.title}
-                      className="w-36 h-18 object-cover rounded-md"
+                      className="min-w-36 h-18 object-cover rounded-md"
                     />
                     <div>
                       <p className="text-sm font-semibold">
@@ -527,19 +546,23 @@ const News = () => {
                   </li>
                 ))}
               </ul>
-            </aside>
+            </aside> */}
+            <SidebarArticles
+              newsArticles={newsArticles} // ✅ Truyền dữ liệu từ JSON
+              setSelectedArticle={setSelectedArticle}
+            />
           </div>
         )}
         {/* Sidebar bên phải */}
       </div>
-      <div>
+      {/* <div>
         <h2>Danh sách bài viết</h2>
         <ul>
           {articles.map((article) => (
             <li key={article.id}>{article.title}</li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };

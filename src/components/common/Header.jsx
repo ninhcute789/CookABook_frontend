@@ -63,8 +63,8 @@ const Header = () => {
             </Link>
           </ul>
           <ul className="Cart">
-            <Link to="/gio-hang" className="text-white hover:text-gray-900">
-              <div className="bg-gray-600 p-1 rounded">
+            <Link to="/gio-hang" className="text-gray-700 hover:text-gray-900">
+              <div className="bg-gray-400 p-1 rounded">
                 <BsCart3 className="size-6  ml-auto" />
               </div>
             </Link>

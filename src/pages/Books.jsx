@@ -3,135 +3,27 @@ import { FaSearch } from "react-icons/fa";
 // import SideBar from "../components/common/SideBar";
 import { NavLink } from "react-router";
 // import { IoIosArrowBack } from "react-icons/io";
-import { useState } from "react";
+import { useRef, useState } from "react";
 // import { newsArticles } from "../data/dataBooks";
 import BookItem from "../components/common/BookItem";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import SidebarBooks from "../components/sideBar/sideBarBooks";
 
 const Books = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef(null);
   const truncateText = (text, wordLimit) => {
     const words = text.split(" ");
     return words.length > wordLimit
       ? words.slice(0, wordLimit).join(" ") + "..."
       : text;
   };
-  // const categories = [
-  //   "English Books",
-  //   "Sách tiếng Việt",
-  //   "Văn phòng phẩm",
-  //   "Quà lưu niệm",
-  // ];
-
-  // const Sidebar = () => {
-  //   return (
-  //     <div className="w-1/3 p-4  rounded-lg shadow-lg bg-white h-fit sticky top-4">
-  //       <h2 className="text-md font-bold mb-3">Khám phá theo danh mục</h2>
-  //       {categories.map((category, index) => (
-  //         <div
-  //           key={index}
-  //           className="py-2 border-b cursor-pointer hover:text-blue-500"
-  //         >
-  //           {category}
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // };
-  const categories = [
-    {
-      name: "English Books",
-      subcategories: [
-        "Art & Photography",
-        "Biographies & Memoirs",
-        "Business & Economics",
-        "How-to - Self Help",
-        "Children's Books",
-        "Dictionary",
-        "Education - Teaching",
-        "Fiction - Literature",
-        "Magazines",
-        "Medical Books",
-        "Parenting & Relationships",
-        "Reference",
-        "Science - Technology",
-        "History, Politics & Social Sciences",
-        "Travel & Holiday",
-        "Cookbooks, Food & Wine",
-      ],
-    },
-    {
-      name: "Sách tiếng Việt",
-      subcategories: ["Văn học", "Kinh tế", "Tâm lý & Kỹ năng sống"],
-    },
-    {
-      name: "Văn phòng phẩm",
-      subcategories: ["Bút viết", "Sổ tay", "Dụng cụ học tập"],
-    },
-    {
-      name: "Quà lưu niệm",
-      subcategories: ["Đồ trang trí", "Thiệp & Phụ kiện", "Hộp quà"],
-    },
-    { name: "Đồ chơi giáo dục", subcategories: [] },
-    { name: "Thiết bị công nghệ", subcategories: [] },
-    { name: "Dụng cụ học tập", subcategories: [] },
-  ];
-
-  const Sidebar = () => {
-    const [expanded, setExpanded] = useState(false);
-    const [openCategory, setOpenCategory] = useState(null);
-
-    const toggleCategory = (index) => {
-      setOpenCategory(openCategory === index ? null : index);
-    };
-
-    return (
-      <div className="w-1/3 h-fit p-4 rounded-lg shadow-lg bg-white">
-        <h2 className="text-md font-medium mb-3">Khám phá theo danh mục</h2>
-        <hr/>
-        {categories
-          .slice(0, expanded ? categories.length : 4)
-          .map((category, index) => (
-            <div key={index}>
-              <div
-                className="py-3 border-b cursor-pointer hover:text-blue-500 flex 
-            items-center justify-between"
-                onClick={() => toggleCategory(index)}
-              >
-                {category.name}
-                {category.subcategories.length > 0 && (
-                  <span>
-                    {openCategory === index ? (
-                      <IoIosArrowUp />
-                    ) : (
-                      <IoIosArrowDown />
-                    )}
-                  </span>
-                )}
-              </div>
-              <div
-                className={`pl-4 text-gray-700 transition-max-height duration-400 ease-in-out overflow-hidden ${
-                  openCategory === index ? "max-h-96" : "max-h-0"
-                }`}
-              >
-                {category.subcategories.map((sub, i) => (
-                  <div key={i} className="py-1 hover:text-blue-500 hover:underline hover:cursor-pointer">
-                    {sub}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-      </div>
-    );
-  };
-
   return (
-    <div className=" w-11/12 mx-auto my-5 px-6 flex gap-4 bg-">
+    <div className=" mx-auto py-5 px-[5%] flex gap-4 bg-gray-100">
       {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
-      <Sidebar />
+      <SidebarBooks />
       <div>
-        <header className="news-header mb-5 shadow-md top-5 z-50 backdrop-blur-md rounded-2xl opacity-90 ">
+        <header className="news-header mb-5 shadow-xl sticky top-4 z-50 backdrop-blur-lg rounded-2xl opacity-100 bg-white">
           <div className=" mx-auto flex items-center justify-between p-4">
             {/* Logo / Tên trang */}
             <NavLink
@@ -178,10 +70,14 @@ const Books = () => {
             {/* Ô tìm kiếm */}
             <div className="relative">
               <input
+                ref={inputRef} // Ref cho input
                 type="text"
-                placeholder="Tìm bài viết..."
-                className="px-4 py-2 w-[350px] border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400
-              hover:cursor-pointer"
+                placeholder="Tìm sách..."
+                className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none 
+                ${isFocused ? "w-80 border-gray-400" : "w-48 border-gray-300"}`}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                
               />
               <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
             </div>

@@ -44,7 +44,7 @@ const BookItem = () => {
             />
             <div className="p-2">
               <p className="text-xl font-semibold text-black">{book.price}</p>
-              <h3 className="text-lg mt-2">{truncateText(book.title, 15)}</h3>
+              <h3 className="text-lg my-2">{truncateText(book.title, 15)}</h3>
               {book.isOfficial ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                   CHÍNH HÃNG
@@ -64,6 +64,7 @@ const BookItem = () => {
                     viewBox="0 0 24 24"
                   >
                     <path d="M12 .587l3.668 7.431 8.211 1.192-5.939 5.791 1.401 8.17-7.341-3.857-7.341 3.857 1.401-8.17-5.939-5.791 8.211-1.192z" />
+                    {/* path vẽ ngôi sao */}
                   </svg>
                 ))}
                 <span className="text-gray-600 text-sm">
