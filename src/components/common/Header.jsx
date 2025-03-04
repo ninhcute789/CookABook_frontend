@@ -44,11 +44,11 @@ const Header = () => {
                 Về chúng tôi
               </Link>
             </li>
-            <li className="Contact">
+            {/* <li className="Contact">
               <Link to="/lien-he" className="text-gray-600 hover:text-gray-900">
                 Liên hệ
               </Link>
-            </li>
+            </li> */}
             <li className="Admin">
               <Link to="/admin" className="text-gray-600 hover:text-gray-900">
                 Admin

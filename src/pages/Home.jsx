@@ -15,6 +15,9 @@ import s3 from '../assets/s3.jpg';
 import s4 from '../assets/s4.jpg';
 import { NavLink } from 'react-router';
 import { useEffect, useState } from 'react';
+import BannerDeal from '../components/banner/BannerDeal';
+
+
 
 const Home = () => {
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -34,7 +37,7 @@ const Home = () => {
 
     return (
         <>
-            <div className="container mx-auto p-4 bg-cover bg-center"
+            <div className="home banner container mx-auto p-4 bg-cover bg-center"
                 style={{ backgroundImage: `url(${libra})` }}>
                 <div className="flex flex-col xl:flex-row justify-between items-center space-y-4 xl:space-y-0 relative">
                     <div className="flex flex-col space-y-2 
@@ -66,7 +69,7 @@ const Home = () => {
                 </div>
             </div>
 
-            <div>
+            <div className='chung toi lam gi'>
                 <div className='container mx-auto space-y-2 py-16'>
                     <div className='flex justify-center items-center space-x-2 text-red-600'>
                         <IoBookOutline className='size-7' />
@@ -186,7 +189,9 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className='container mx-auto p-4 bg-cover bg-center mb-20'>
+            <BannerDeal />
+
+            <div className='tin tuc tu chung toi container mx-auto p-4 bg-cover bg-center mb-20'>
                 <div className='container mx-auto space-y-2 py-16'>
                     <div className='flex justify-center items-center space-x-2 text-red-600'>
                         <FaEarthAsia className='size-7' />
