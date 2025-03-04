@@ -9,7 +9,7 @@ const Header = () => {
           <Link to="/">CookABook</Link>
         </div>
         <nav className="w-3xl">
-          <ul className="flex lg:space-x-20 space-x-6 justify-center ">
+          <ul className="flex xl:space-x-10 space-x-6 justify-center ">
             {/* <li className="Login">
               <Link
                 to="/dang-nhap"
@@ -37,6 +37,16 @@ const Header = () => {
             <li className="News">
               <Link to="/tin-tuc" className="text-gray-600 hover:text-gray-900">
                 Tin tức
+              </Link>
+            </li>
+            <li className="About">
+              <Link to="/ve-chung-toi" className="text-gray-600 hover:text-gray-900">
+                Về chúng tôi
+              </Link>
+            </li>
+            <li className="Contact">
+              <Link to="/lien-he" className="text-gray-600 hover:text-gray-900">
+                Liên hệ
               </Link>
             </li>
             <li className="Admin">
