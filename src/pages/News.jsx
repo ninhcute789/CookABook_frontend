@@ -254,10 +254,12 @@ import NewsArticle from "../components/common/NewsArticle";
 }
 
 import React, { useEffect, useState } from "react";
-import { newsArticles } from "../data/data.js";
+import { newsArticles } from "../data/dataNews.js";
 import { NavLink } from "react-router";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
+import axios from "axios";
+import ArticleSideBar from "../components/common/ArticleSideBar.jsx";
 
 // const newsArticles = [
 //   {
@@ -307,6 +309,21 @@ import { FaSearch } from "react-icons/fa";
 //   },
 // ];
 
+const fetchArticles = async () => {
+  try {
+    const token = localStorage.getItem("token"); // Lấy token từ localStorage
+    const response = await axios.get("http://localhost:8080/api/articles", {
+      headers: {
+        Authorization: `Bearer ${token}`, // Gửi token trong header
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy bài viết:", error);
+    return [];
+  }
+};
+
 const News = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const truncateText = (text, wordLimit) => {
@@ -315,29 +332,36 @@ const News = () => {
       ? words.slice(0, wordLimit).join(" ") + "..."
       : text;
   };
+  const [articles, setArticles] = useState([]);
+
+  localStorage.setItem(
+    "token",
+    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNvb2thYm9vayI6eyJwcmluY2lwYWwiOnsicGFzc3dvcmQiOm51bGwsInVzZXJuYW1lIjoiYWRtaW4iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IlJPTEVfVVNFUiJ9XSwiYWNjb3VudE5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25Mb2NrZWQiOnRydWUsImNyZWRlbnRpYWxzTm9uRXhwaXJlZCI6dHJ1ZSwiZW5hYmxlZCI6dHJ1ZX0sImNyZWRlbnRpYWxzIjpudWxsLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IlJPTEVfVVNFUiJ9XSwiZGV0YWlscyI6bnVsbCwiYXV0aGVudGljYXRlZCI6dHJ1ZX0sImV4cCI6MTc0MTYxOTcyMCwiaWF0IjoxNzQwNzU1NzIwfQ.Q8DS7S12QXLnwu5R1gBBTqRJ4o3iHHYvpl4NZpxbmDC5QblhA4JAEJ0oxTGte-NZWNxXXuqs8ocZwy6eVQmM2Q"
+  );
 
   return (
-    <div className=" w-11/12 mx-auto my-5 px-6">
-      {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
+    <div>
+      <div className=" px-10 mx-auto py-5  bg-orange-50">
+        {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
 
-      <header className="news-header shadow-md sticky top-5 z-50 backdrop-blur-md rounded-2xl bg-gray-300 opacity-90">
-        <div className="container mx-auto flex items-center justify-between p-4">
-          {/* Logo / Tên trang */}
-          <NavLink
-            onClick={() => {
-              setSelectedArticle(null),
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-            }}
-            className="text-2xl font-bold text-gray-800 hover:cursor-pointer"
-          >
-            📚 Tin tức
-          </NavLink>
+        <header className="news-header shadow-md  top-5 z-50 backdrop-blur-md rounded-2xl  opacity-90">
+          <div className=" mx-auto flex items-center justify-between p-4">
+            {/* Logo / Tên trang */}
+            <NavLink
+              onClick={() => {
+                setSelectedArticle(null),
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+              }}
+              className="text-2xl font-bold text-gray-800 hover:cursor-pointer"
+            >
+              📚 Tin tức
+            </NavLink>
 
-          {/* Thanh điều hướng */}
-          <nav className="hidden md:flex space-x-6">
+            {/* Thanh điều hướng */}
+            {/* <nav className="hidden md:flex space-x-6">
             <a
               href="#"
               className="text-gray-700 hover:text-blue-600 transition"
@@ -362,86 +386,160 @@ const News = () => {
             >
               Liên hệ
             </a>
-          </nav>
+          </nav> */}
 
-          {/* Ô tìm kiếm */}
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Tìm bài viết..."
-              className="px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400
+            {/* Ô tìm kiếm */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Tìm bài viết..."
+                className="px-4 py-2 w-[350px] border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400
               hover:cursor-pointer"
-            />
-            <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
-          </div>
-        </div>
-      </header>
-
-      {!selectedArticle ? (
-        <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-col-1 ">
-          {newsArticles.map((article) => (
-            <div
-              key={article.id}
-              className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6"
-            >
-              <img
-                src={article.image}
-                alt={article.title}
-                className="h-72 object-cover mx-auto rounded shadow-gray-100 shadow-sm"
               />
-              <div className="text-xl font-medium my-4">{truncateText(article.title, 10)}</div>
-              <div className="flex justify-between">
-                <div className="font-bold text-[12px]">{article.date}</div>
-                <div className="font-bold hover:underline cursor-pointer text-[12px]">
-                  {article.author}
+              <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
+            </div>
+          </div>
+        </header>
+
+        {!selectedArticle ? (
+          <div className="flex w-11/12 mx-auto">
+            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-col-1 ">
+              {newsArticles.map((article) => (
+                <div
+                  key={article.id}
+                  className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6"
+                >
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="h-50 object-cover mx-auto rounded shadow-gray-100 shadow-sm"
+                  />
+                  <div className="text-xl font-medium my-4">
+                    {truncateText(article.title, 7)}
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="font-bold text-[12px]">{article.date}</div>
+                    <div className="font-bold hover:underline cursor-pointer text-[12px]">
+                      {article.author}
+                    </div>
+                  </div>
+                  <p className="text-gray-700 mb-5">
+                    {truncateText(article.content, 10)}
+                  </p>
+                  <NavLink
+                    onClick={() => {
+                      setSelectedArticle(article),
+                        window.scrollTo({
+                          top: 70,
+                          behavior: "smooth",
+                        });
+                    }}
+                    className=" text-yellow-500 hover:underline "
+                  >
+                    Đọc thêm
+                  </NavLink>
                 </div>
-              </div>
-              <p className="text-gray-700">
-                {article.content.slice(0, 100)}...
-              </p>
-              <NavLink
+              ))}
+            </div>
+            {/* <aside className="mt-5 w-3/5 hidden md:block bg-gray-100 p-4 rounded-xl shadow-lg">
+              <h3 className="text-lg font-bold mt-6 mb-3">
+                🔥 Bài viết nổi bật
+              </h3>
+              <ul className="space-y-3">
+                {newsArticles.slice(0, 3).map((article) => (
+                  <li
+                    key={article.id}
+                    className="flex gap-3 items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
+                    onClick={() => setSelectedArticle(article)}
+                  >
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-28 h-14 object-cover rounded-md"
+                    />
+                    <div>
+                      <p className="text-sm font-semibold">
+                        {truncateText(article.title, 5)}
+                      </p>
+                      <p className="text-xs text-gray-500">{article.date}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </aside> */}
+            {/* <ArticleSideBar/> */}
+          </div>
+        ) : (
+          <div className="flex">
+            <div className="w-4/5">
+              <button
                 onClick={() => {
-                  setSelectedArticle(article),
+                  setSelectedArticle(null),
                     window.scrollTo({
-                      top: 70,
+                      top: 0,
                       behavior: "smooth",
                     });
                 }}
-                className=" text-yellow-500 hover:underline"
-              >
-                Đọc thêm
-              </NavLink>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <button
-            onClick={() => {
-              setSelectedArticle(null),
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-            }}
-            className="mb-4 px-4 py-2 hover:opacity-50 mt-5
+                className="mb-4 px-4 py-2 hover:opacity-50 mt-5
             bg-gray-200 rounded hover:cursor-pointer"
-          >
-            <IoIosArrowBack className="inline-block -translate-y-0.5 -translate-x-1" />
-            Quay lại
-          </button>
-          <h2 className="text-2xl font-bold ">{selectedArticle.title}</h2>
-          <p className="text-gray-600">
-            Bởi {selectedArticle.author} - {selectedArticle.date}
-          </p>
-          <img
-            src={selectedArticle.image}
-            alt={selectedArticle.title}
-            className=" max-h-96 object-cover rounded-md my-4 mx-auto"
-          />
-          <p>{selectedArticle.content}</p>
-        </div>
-      )}
+              >
+                <IoIosArrowBack className="inline-block -translate-y-0.5 -translate-x-1" />
+                Quay lại
+              </button>
+              <h2 className="text-2xl font-bold ">{selectedArticle.title}</h2>
+              <p className="text-gray-600">
+                Bởi {selectedArticle.author} - {selectedArticle.date}
+              </p>
+              <img
+                src={selectedArticle.image}
+                alt={selectedArticle.title}
+                className=" max-h-96 object-cover rounded-md my-4 mx-auto"
+              />
+              <p className="min-h-screen">{selectedArticle.content}</p>
+            </div>
+            <aside className="pr-20 sticky top-15 z-50 mt-5 h-fit ml-auto w-3/8 hidden md:block  p-4 rounded-xl">
+              <div className="w-fit mb-5">
+                <h3 className="text-2xl font-bold mt-6 mb-3">
+                  {" "}
+                  Bài viết nổi bật
+                </h3>
+                <hr className="text-amber-600 border-2 " />
+              </div>
+              <ul className="space-y-3">
+                {newsArticles.slice(0, 5).map((article) => (
+                  <li
+                    key={article.id}
+                    className="flex gap-3 items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
+                    onClick={() => setSelectedArticle(article)}
+                  >
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-36 h-18 object-cover rounded-md"
+                    />
+                    <div>
+                      <p className="text-sm font-semibold">
+                        {truncateText(article.title, 10)}
+                      </p>
+                      <p className="text-xs text-gray-500">{article.date}</p>
+                    </div>
+                    <hr className="" />
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </div>
+        )}
+        {/* Sidebar bên phải */}
+      </div>
+      <div>
+        <h2>Danh sách bài viết</h2>
+        <ul>
+          {articles.map((article) => (
+            <li key={article.id}>{article.title}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

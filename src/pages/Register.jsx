@@ -18,38 +18,38 @@ const Register = () => {
   const [rewirtePasswordType, setRewirtePasswordType] = useState("password");
   const [password, setPassword] = useState("");
   const [rewirtePassword, setRewirtePassword] = useState("");
-  const [account, setAccount] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
   const [date, setDate] = useState("");
+  const [gender, setGender] = useState("");
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    console.log("FirstName:", firstName);
-    console.log("LastName:", lastName);
+    console.log("Name:", name);
     console.log("Date:", date);
     console.log("Email:", email);
-    console.log("Account:", account);
+    console.log("Gender:", gender);
+    console.log("Username:", userName);
     console.log("Password:", password);
     console.log("RewirtePassword:", rewirtePassword);
     if (password !== rewirtePassword) {
       alert("Mật khẩu nhập lại không đúng");
     }
     const userData = {
-      firstName,
+      name,
       email,
       password,
     };
-    localStorage.setItem('user', JSON.stringify(userData));
-    console.log('User registered:', userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    console.log("User registered:", userData);
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const userData = JSON.parse(storedUser);
-      setFirstName(userData.firstName);
+      // setFirstName(userData.firstName);
       setEmail(userData.email);
       setPassword(userData.password);
     }
@@ -76,15 +76,15 @@ const Register = () => {
 
     return null;
   };
-  localStorage.setItem("name", { 
-    'firstName': firstName,
-    'lastName': lastName,
-    'date': date,
-    'email': email,
-    'account': account,
-    'password': password,
-    'rewirtePassword': rewirtePassword,
-   });
+  localStorage.setItem("name", {
+    // 'firstName': firstName,
+    // 'lastName': lastName,
+    date: date,
+    email: email,
+    userName: userName,
+    password: password,
+    rewirtePassword: rewirtePassword,
+  });
 
   return (
     <div
@@ -94,7 +94,7 @@ const Register = () => {
       <ScrollToTop />
       <div
         className="login-box text-white rounded-xl px-7 py-10 
-            bg-transparent border-2 backdrop-blur-xs"
+            bg-transparent border-2 backdrop-blur-xs w-2xl"
       >
         <form action="" onSubmit={(e) => handleOnSubmit(e)}>
           <h1 className="text-4xl text-center mb-4 font-bold">Đăng ký</h1>
@@ -105,30 +105,42 @@ const Register = () => {
             <div className="input-box flex-col w-full h-12 relative mb-4">
               <input
                 type="text"
-                placeholder="Họ"
+                placeholder="Họ tên"
                 required
                 onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
-                className="flex flex-col w-full h-full bg-transparent
-                                rounded-4xl pl-5 pr-14 placeholder:text-white
-                                border-2 border-cyan-950 "
-              />
-              <RiMoneyCnyBoxFill className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
-            </div>
-            <div className="input-box flex-col w-full h-12 relative mb-4">
-              <input
-                type="text"
-                placeholder="Tên"
-                required
-                onChange={(e) => {
-                  setFirstName(e.target.value);
+                  setName(e.target.value);
                 }}
                 className="flex flex-col w-full h-full bg-transparent
                                 rounded-4xl pl-5 pr-14 placeholder:text-white
                                 border-2 border-cyan-950 "
               />
               <GiFrozenArrow className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+            </div>
+
+            <div className="input-box flex-col w-1/2 h-12 relative mb-4">
+              <select
+                required
+                onChange={(e) => {
+                  setGender(e.target.value);
+                }}
+                className="flex flex-col w-full h-full bg-transparent
+                rounded-4xl pl-5 pr-14 text-white
+                border-2 border-cyan-950 appearance-none pt-2.5"
+              >
+                <option value="" disabled selected hidden className="">
+                  Chọn giới tính
+                </option>
+                <option value="male" className="text-black">
+                  Nam
+                </option>
+                <option value="female" className="text-black">
+                  Nữ
+                </option>
+                <option value="other" className="text-black">
+                  Khác
+                </option>
+              </select>
+              <RiMoneyCnyBoxFill className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
             </div>
           </div>
           <div className="input-box flex w-full h-12 relative mb-4">
@@ -167,7 +179,7 @@ const Register = () => {
               placeholder="Tài khoản"
               required
               onChange={(e) => {
-                setAccount(e.target.value);
+                setUserName(e.target.value);
               }}
               className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white

@@ -20,7 +20,7 @@ const NewsArticle = ({ title, author, date, content, image }) => {
           {author}
         </div>
       </div>
-      <div className="text-cyan-800 my-3 text-md">{content}</div>
+      <div className="text-cyan-800 my-3 text-md ">{content}</div>
       <NavLink to="/tin-tuc" className=" text-yellow-500">
         Đọc thêm
       </NavLink>

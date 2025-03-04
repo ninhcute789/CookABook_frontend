@@ -13,6 +13,7 @@ import AdminUsers from "./pages/AdminUsers.jsx";
 import AdminNews from "./pages/AminNews.jsx";
 import News from "./pages/News.jsx";
 import Cart from "./pages/Cart.jsx";
+import Books from "./pages/Books.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -22,6 +23,7 @@ ReactDOM.createRoot(root).render(
         <Route path="dang-nhap" element={<Login />} />
         <Route path="dang-ky" element={<Register />} />
         <Route index element={<Home />} />
+        <Route path="sach" element={<Books />} />
         <Route path="about" element={<About />} />
         <Route path="tin-tuc" element={<News />} />
         <Route path="gio-hang" element={<Cart />} />
