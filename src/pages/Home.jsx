@@ -4,17 +4,20 @@ import { IoBookOutline } from "react-icons/io5";
 import { FaEarthAsia } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { LuCalendarFold } from "react-icons/lu";
-import th1 from "../assets/th-1.jpg";
-import th2 from "../assets/th-2.jpg";
-import th3 from "../assets/th-3.jpg";
-import th4 from "../assets/th-4.jpg";
-import th5 from "../assets/th-5.jpg";
-import s1 from "../assets/s1.jpg";
-import s2 from "../assets/s2.jpg";
-import s3 from "../assets/s3.jpg";
-import s4 from "../assets/s4.jpg";
-import { NavLink } from "react-router";
-import { useEffect, useState } from "react";
+import th1 from '../assets/th-1.jpg';
+import th2 from '../assets/th-2.jpg';
+import th3 from '../assets/th-3.jpg';
+import th4 from '../assets/th-4.jpg';
+import th5 from '../assets/th-5.jpg';
+import s1 from '../assets/s1.jpg';
+import s2 from '../assets/s2.jpg';
+import s3 from '../assets/s3.jpg';
+import s4 from '../assets/s4.jpg';
+import { NavLink } from 'react-router';
+import { useEffect, useState } from 'react';
+import BannerDeal from '../components/banner/BannerDeal';
+
+
 
 const Home = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -31,72 +34,57 @@ const Home = () => {
     };
   }, []);
 
-  return (
-    <>
-      <div
-        className="container mx-auto p-4 bg-cover bg-center"
-        style={{ backgroundImage: `url(${libra})` }}>
-        <div className="flex flex-col xl:flex-row justify-between items-center space-y-4 xl:space-y-0 relative">
-          <div
-            className="flex flex-col space-y-2 
+    return (
+        <>
+            <div className="home banner container mx-auto p-4 bg-cover bg-center"
+                style={{ backgroundImage: `url(${libra})` }}>
+                <div className="flex flex-col xl:flex-row justify-between items-center space-y-4 xl:space-y-0 relative">
+                    <div className="flex flex-col space-y-2 
                     absolute xl:relative z-10 bottom-0 left-10 2xl:left-30
                     bg-amber-400 p-5 rounded-lg mt-auto">
-            <div className="space-y-2 border-dashed border-2 p-2 rounded-lg">
-              <p className="text-lg font-bold text-center">5000+</p>
-              <p className="text-sm">
-                Thành viên đã <br /> đọc tựa sách!!!
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col space-y-2 max-w-xl mt-10">
-            <div className="text-5xl font-semibold text-white w-3/4">
-              Độ Nhiễu: Sai Lầm Trong Phán Đoán
-            </div>
-            <div className="text-[40px] text-amber-300">Daniel Kahneman</div>
-            <div className="text-x text-white w-5/6">
-              Một lựa chọn tuyệt vời cho những ai yêu thích tìm hiểu tâm lý và khoa học hành vi.
-            </div>
-            <div className="text-x text-white w-5/6">
-              Cuốn sách phân tích sâu về “độ nhiễu” trong các quyết định, từ y tế đến kinh tế, và
-              chỉ ra cách giảm thiểu những sai lệch không cần thiết để cải thiện chất lượng phán
-              đoán…
-            </div>
-            <button
-              className="px-4 py-2 bg-amber-300 text-black font-medium rounded 
+                        <div className='space-y-2 border-dashed border-2 p-2 rounded-lg'>
+                            <p className="text-lg font-bold text-center">5000+</p>
+                            <p className="text-sm">Thành viên đã <br /> đọc tựa sách!!!</p>
+                        </div>
+                    </div>
+                    <div className="flex flex-col space-y-2 max-w-xl mt-10">
+                        <div className="text-5xl font-semibold text-white w-3/4">Độ Nhiễu: Sai Lầm Trong Phán Đoán</div>
+                        <div className="text-[40px] text-amber-300">Daniel Kahneman</div>
+                        <div className="text-x text-white w-5/6">
+                            Một lựa chọn tuyệt vời cho những ai yêu thích tìm hiểu tâm lý và khoa học hành vi.</div>
+                        <div className="text-x text-white w-5/6">Cuốn sách phân tích sâu về “độ nhiễu” trong các quyết định,
+                            từ y tế đến kinh tế, và chỉ ra cách giảm thiểu những sai
+                            lệch không cần thiết để cải thiện chất lượng phán đoán…</div>
+                        <button className="px-4 py-2 bg-amber-300 text-black font-medium rounded 
                             hover:bg-amber-500 w-28
                             cursor-pointer">
-              Mua ngay
-            </button>
-            <div className="text-xs text-white">* eBook bao gồm iBooks, PDF và các bản ePub</div>
-          </div>
-          <div className="flex-shrink-0 2xl:-translate-x-40 xl:-translate-x-25 ">
-            <img src={book} alt="Book cover" className="w-96 h-auto shadow-2xl" />
-          </div>
-        </div>
-      </div>
+                            Mua ngay
+                        </button>
+                        <div className="text-xs text-white">* eBook bao gồm iBooks, PDF và các bản ePub</div>
+                    </div>
+                    <div className="flex-shrink-0 2xl:-translate-x-40 xl:-translate-x-25 ">
+                        <img src={book} alt="Book cover" className='w-96 h-auto shadow-2xl' />
+                    </div>
+                </div>
+            </div>
 
-      <div>
-        <div className="container mx-auto space-y-2 py-16">
-          <div className="flex justify-center items-center space-x-2 text-red-600">
-            <IoBookOutline className="size-7" />
-            <div className="text-xl font-medium">CHÚNG TÔI LÀM GÌ?</div>
-          </div>
-          <div className="text-center text-4xl font-bold w-2/3 mx-auto">
-            Chúng tôi giúp bạn mở khóa tiềm năng và xây dựng một tương lai tươi sáng thông qua sức
-            mạnh của sách.
-          </div>
-        </div>
-        <div
-          className="container mx-auto grid grid-cols-1 lg:grid-cols-2
-                    xl:grid-cols-3 w-2/3 space-y-4 ">
-          <div
-            className={
-              scrollPosition >= 120
-                ? "fade-in 1 flex flex-col relative mb-20 mx-2 h-80"
-                : "opacity-0 1 flex flex-col relative mb-20 mx-2 h-80"
-            }>
-            <div
-              className="md:w-2/3 md:absolute 
+            <div className='chung toi lam gi'>
+                <div className='container mx-auto space-y-2 py-16'>
+                    <div className='flex justify-center items-center space-x-2 text-red-600'>
+                        <IoBookOutline className='size-7' />
+                        <div className='text-xl font-medium'>CHÚNG TÔI LÀM GÌ?</div>
+                    </div>
+                    <div className='text-center text-4xl font-bold w-2/3 mx-auto'>
+                        Chúng tôi giúp bạn mở khóa tiềm năng và
+                        xây dựng một tương lai tươi sáng thông qua sức mạnh của sách.
+                    </div>
+                </div>
+                <div className='container mx-auto grid grid-cols-1 lg:grid-cols-2
+                    xl:grid-cols-3 w-2/3 space-y-4 '>
+
+                    <div className={scrollPosition >= 120 ? 'fade-in 1 flex flex-col relative mb-20 mx-2 h-80'
+                        : 'opacity-0 1 flex flex-col relative mb-20 mx-2 h-80'}>
+                        <div className='md:w-2/3 md:absolute 
                                 top-0 left-0 z-10 bg-white shadow-2xl shadow-black p-5
                                 space-y-2 rounded-lg">
               <div className="text-xl font-medium">Khám Phá Cuốn Sách Mới Mỗi Ngày</div>
@@ -218,17 +206,19 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="container mx-auto p-4 bg-cover bg-center mb-20">
-        <div className="container mx-auto space-y-2 py-16">
-          <div className="flex justify-center items-center space-x-2 text-red-600">
-            <FaEarthAsia className="size-7" />
-            <div className="text-xl font-medium uppercase">Tin tức từ chúng tôi</div>
-          </div>
-          <div className="text-center text-4xl font-bold w-2/3 mx-auto">
-            Chúng tôi giúp bạn mở khóa tiềm năng và xây dựng một tương lai tươi sáng thông qua sức
-            mạnh của sách.
-          </div>
-        </div>
+            <BannerDeal />
+
+            <div className='tin tuc tu chung toi container mx-auto p-4 bg-cover bg-center mb-20'>
+                <div className='container mx-auto space-y-2 py-16'>
+                    <div className='flex justify-center items-center space-x-2 text-red-600'>
+                        <FaEarthAsia className='size-7' />
+                        <div className='text-xl font-medium uppercase'>Tin tức từ chúng tôi</div>
+                    </div>
+                    <div className='text-center text-4xl font-bold w-2/3 mx-auto'>
+                        Chúng tôi giúp bạn mở khóa tiềm năng và
+                        xây dựng một tương lai tươi sáng thông qua sức mạnh của sách.
+                    </div>
+                </div>
 
         <div className="grid md:grid-cols-2 max-w-6xl mx-auto grid-cols-1">
           <div
