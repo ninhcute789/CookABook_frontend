@@ -11,8 +11,8 @@ export const newsArticles = [
       id: 1,
       title: "Cuộc đời Steve Jobs qua những trang sách",
       author: "Nguyễn Hưng",
-      date: "05/03/2025",
-      image: s1,
+      createdAt: "05/03/2025",
+      imageURL: s1,
       content: "Hành trình từ một cậu bé mê công nghệ đến huyền thoại Apple...",
     },
     {
