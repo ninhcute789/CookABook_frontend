@@ -146,6 +146,7 @@ const Register = () => {
           <div className="input-box flex w-full h-12 relative mb-4">
             <div className="absolute top-1.5 left-6 text-xs">Ngày sinh</div>
             <input
+              id="dateRegister"
               type="date"
               placeholder=""
               onChange={(e) => {
