@@ -38,13 +38,13 @@ const ArticleList = () => {
   if (loading) return <p className="text-center">Đang tải...</p>;
 
   return (
-    <div className="p-4">
+    <div className="p-10">
       <h2 className="text-xl font-bold mb-4">Danh sách bài báo</h2>
       {articles.length === 0 ? (
         <p className="text-gray-500">Không có bài báo nào!</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {articles.map((article) => (
+          {articles.slice().reverse().map((article) => ( // Đảo ngược thứ tự bài viết
             <div key={article.id} className="border p-4 rounded shadow-lg">
               <h3 className="text-lg font-semibold">{article.title}</h3>
               <p className="text-gray-600">{article.content}</p>

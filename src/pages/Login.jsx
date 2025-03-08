@@ -9,6 +9,7 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import axios from "axios";
 
 const Login = () => {
   // const [isFormVisible, setIsFormVisible] = useState(false);
@@ -20,6 +21,26 @@ const Login = () => {
   // const handleLoginClick = () => {
   //     setIsFormVisible(!isFormVisible);
   // };
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8080/api/v1/auth/login",
+        {
+          username,
+          password,
+        }
+      );
+
+      console.log("Đăng nhập thành công!", response.data);
+      localStorage.setItem("token", response.data.token);
+    } catch (error) {
+      console.error(
+        "Lỗi đăng nhập:",
+        error.response?.data?.message || error.message
+      );
+    }
+  };
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
@@ -43,6 +64,7 @@ const Login = () => {
 
     return null;
   };
+  // localStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNvb2thYm9vayI6eyJwcmluY2lwYWwiOnsicGFzc3dvcmQiOm51bGwsInVzZXJuYW1lIjoiYWRtaW4iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IlJPTEVfVVNFUiJ9XSwiYWNjb3VudE5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25Mb2NrZWQiOnRydWUsImNyZWRlbnRpYWxzTm9uRXhwaXJlZCI6dHJ1ZSwiZW5hYmxlZCI6dHJ1ZX0sImNyZWRlbnRpYWxzIjpudWxsLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IlJPTEVfVVNFUiJ9XSwiZGV0YWlscyI6bnVsbCwiYXV0aGVudGljYXRlZCI6dHJ1ZX0sImV4cCI6MTc0MTYxOTcyMCwiaWF0IjoxNzQwNzU1NzIwfQ.Q8DS7S12QXLnwu5R1gBBTqRJ4o3iHHYvpl4NZpxbmDC5QblhA4JAEJ0oxTGte-NZWNxXXuqs8ocZwy6eVQmM2Q");
 
   return (
     <div
@@ -54,7 +76,7 @@ const Login = () => {
         className="login-box w-96 text-white rounded-xl px-7 py-10 
             bg-transparent border-2 backdrop-blur-xs"
       >
-        <form action="" onSubmit={handleOnSubmit}>
+        <form action="" onSubmit={handleLogin}>
           <h1 className="text-4xl text-center mb-4 font-bold">Đăng nhập</h1>
           <div className="input-box flex w-full h-12 relative mb-4 ">
             <input

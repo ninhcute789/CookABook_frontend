@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { LuPencilLine } from "react-icons/lu";
+import { GoTrash } from "react-icons/go";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -40,33 +42,11 @@ const UserList = () => {
   if (loading) return <p className="text-center">Đang tải...</p>;
 
   return (
-    <div className="p-4">
+    <div className="p-10">
       <h2 className="text-xl font-bold mb-4">Danh sách người dùng</h2>
       {users.length === 0 ? (
         <p className="text-gray-500">Không có người dùng nào!</p>
       ) : (
-        // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        //   {users.map((user) => (
-        //     <div key={user.id} className="border p-4 rounded shadow-lg">
-        //       <h3 className="text-lg font-semibold">{user.username}</h3>
-        //       <p className="text-gray-600">{user.name}</p>
-        //       <p className="text-gray-600">{user.gender}</p>
-        //       <p className="text-gray-600">{user.dob}</p>
-        //       <p className="text-gray-600">{user.email}</p>
-        //       <p className="text-gray-600">{user.createdAt}</p>
-        //       <p className="text-gray-600">{user.updatedAt}</p>
-        //       {/* <p className="">{user.createdBy} </p>
-        //       <p className="">{user.createdAt} </p> */}
-        //       {/* {user.imageURL && (
-        //         <img
-        //           src={user.imageURL}
-        //           alt="User"
-        //           className="w-full h-40 object-cover mt-2 rounded"
-        //         />
-        //       )} */}
-        //     </div>
-        //   ))}
-        // </div>
         <div className="rounded-lg overflow-hidden shadow-lg">
           <table className="min-w-full border-collapse border border-gray-300 rounded-xl">
             <thead>
@@ -82,11 +62,12 @@ const UserList = () => {
                   Thời gian tạo
                 </th>
                 <th className="border border-gray-300 px-4 py-2">Sửa bởi</th>
+                <th className="border border-gray-300 px-4 py-2"></th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.id} className="border border-gray-300">
+                <tr key={user.id} className="border border-gray-300 hover:bg-gray-300 transition-all">
                   <td className="border border-gray-300 px-4 py-2">
                     {user.username}
                   </td>
@@ -107,6 +88,14 @@ const UserList = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {user.updatedAt}
+                  </td>
+                  <td className=" p-2 space-x-4 justify-center flex h-10">
+                    <button className="hover:cursor-pointer">
+                      <LuPencilLine />
+                    </button>
+                    <button className="hover:cursor-pointer">
+                      <GoTrash />
+                    </button>
                   </td>
                 </tr>
               ))}

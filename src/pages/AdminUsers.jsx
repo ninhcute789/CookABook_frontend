@@ -13,7 +13,7 @@ const AdminUsers = () => {
     setIsModalOpen(false);
   };
   return (
-    <div className="w-full bg-gray-500">
+    <div className="w-full bg-gray-100">
       <AddUsers
         isOpen={isModalOpen}
         onClose={handleCloseModal}

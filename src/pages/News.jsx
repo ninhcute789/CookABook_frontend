@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { newsArticles } from "../data/dataNews.js";
+// import { newsArticles } from "../data/dataNews.js";
 import { NavLink, useLocation } from "react-router";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
-import ArticleSideBar from "../components/common/ArticleSideBar.jsx";
+// import ArticleSideBar from "../components/common/ArticleSideBar.jsx";
 import SidebarArticles from "../components/sideBar/SidebarArticles.jsx";
 
 // const newsArticles = [
@@ -190,7 +190,7 @@ const News = () => {
           // ) : (
           <div className=" w-11/12 mx-auto">
             <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-col-1 ">
-              {articles.map((article) => (
+              {articles.slice().reverse().map((article) => ( // Đảo ngược thứ tự bài viết
                 <div
                   key={article.id}
                   className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6 bg-white"
