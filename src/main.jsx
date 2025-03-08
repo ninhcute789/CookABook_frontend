@@ -24,10 +24,10 @@ ReactDOM.createRoot(root).render(
         <Route path="dang-nhap" element={<Login />} />
         <Route path="dang-ky" element={<Register />} />
         <Route index element={<Home />} />
-        <Route path="sach" element={<Books />} />
-        <Route path="ve-chung-toi" element={<About />} />
+        <Route path="sách" element={<Books />} />
+        <Route path="về-chúng-tôi" element={<About />} />
         <Route path="lien-he" element={<Contact />} />
-        <Route path="tin-tuc" element={<News />} />
+        <Route path="tin-tức" element={<News />} />
         <Route path="gio-hang" element={<Cart />} />
         {/* <Route path='admin' element={<Admin />} />
         <Route path='admin-books' element={<AdminBooks />} />

@@ -7,7 +7,7 @@ import b6 from "../../assets/books/b6.webp";
 import b7 from "../../assets/books/b7.webp";
 import b8 from "../../assets/books/b8.webp";
 import b9 from "../../assets/books/b9.webp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
 const products = [
@@ -137,7 +137,37 @@ const products = [
 
 const TopDealBanner = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+
+  // Theo dõi kích thước màn hình và cập nhật số lượng item hiển thị
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth >= 1310) {
+        setItemsPerPage(6); // Màn hình lớn: 6 item
+      } else if (window.innerWidth >= 1090) {
+        setItemsPerPage(5); // Tablet: 4 item
+      } else if (window.innerWidth >= 888) {
+        setItemsPerPage(4); // Tablet: 4 item
+      } else if (window.innerWidth >= 686) {
+        setItemsPerPage(3); // Tablet: 4 item
+      } else if (window.innerWidth >= 500) {
+        setItemsPerPage(2); // Tablet: 4 item
+      } else {
+        setItemsPerPage(1); // Mobile: 2 item
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener("resize", updateItemsPerPage);
+
+    return () => window.removeEventListener("resize", updateItemsPerPage);
+  }, []);
+  const truncateText = (text, wordLimit) => {
+    const words = text.split(" ");
+    return words.length > wordLimit
+      ? words.slice(0, wordLimit).join(" ") + "..."
+      : text;
+  };
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -190,7 +220,9 @@ const TopDealBanner = () => {
               alt={product.title}
               className="w-full h-72 object-cover "
             />
-            <h3 className="text-sm font-semibold mt-2">{product.title}</h3>
+            <h3 className="text-sm font-semibold mt-2">
+              {truncateText(product.title, 10)}
+            </h3>
             <div className="flex items-center gap-1 text-yellow-500 mt-2">
               {[...Array(product.rating)].map((_, i) => (
                 <svg
