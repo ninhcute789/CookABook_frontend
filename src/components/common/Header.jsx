@@ -1,10 +1,27 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
 
+
+
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState("");
+  const navigate = useNavigate();
+  
+  //setLoggedInUser(localStorage.getItem("username"));
+  useEffect(() => {
+    setLoggedInUser(localStorage.getItem("username"));
+  }, []);
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    setLoggedInUser(""); // Reset lại state
+    navigate("/dang-nhap"); // Chuyển về trang đăng nhập sau khi logout
+  };
 
   return (
     <header className="bg-white shadow-md top-0 z-50 px-6 md:px-10">
@@ -44,7 +61,9 @@ const Header = () => {
                   <li key={index} className="py-2 md:py-0">
                     <Link
                       to={path}
-                      className="block text-gray-600 hover:text-gray-900"
+                      className="block text-gray-600 duration-300
+                      md:px-4 md:py-2 hover:scale-130  
+                      hover:text-gray-900"
                     >
                       {item}
                     </Link>
@@ -57,9 +76,18 @@ const Header = () => {
 
         {/* Login & Cart */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/dang-nhap" className="text-gray-600 hover:text-gray-900">
+          {/* <Link to="/dang-nhap" className="text-gray-600 hover:text-gray-900 duration-300
+          hover:scale-130">
             Đăng nhập
-          </Link>
+          </Link> */}
+          {loggedInUser ? (
+            <>
+              <span>Chào, {loggedInUser}!</span>
+              <button onClick={handleLogout} className="hover:cursor-pointer">Đăng xuất</button>
+            </>
+          ) : (
+            <Link to="/dang-nhap">Đăng nhập</Link>
+          )}
           <Link to="/gio-hang" className="text-gray-700 hover:text-gray-900">
             <div className="bg-gray-400 p-2 rounded">
               <BsCart3 className="size-6" />

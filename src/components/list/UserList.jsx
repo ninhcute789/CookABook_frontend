@@ -91,10 +91,10 @@ const UserList = () => {
                   </td>
                   <td className=" p-2 space-x-4 justify-center flex h-10">
                     <button className="hover:cursor-pointer">
-                      <LuPencilLine />
+                      <LuPencilLine className="text-blue-500"/>
                     </button>
                     <button className="hover:cursor-pointer">
-                      <GoTrash />
+                      <GoTrash className="text-red-700"/>
                     </button>
                   </td>
                 </tr>

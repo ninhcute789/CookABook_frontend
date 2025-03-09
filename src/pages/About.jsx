@@ -11,7 +11,7 @@ const About = () => {
       </h2>
       <p className="text-lg text-gray-800 leading-relaxed mb-6">
         Chào mừng bạn đến với{" "}
-        <span className="font-semibold text-[#FF8C00]">Book Haven</span> – nơi
+        <span className="font-semibold text-[#FF8C00]">Cook A Book</span> – nơi
         cung cấp những cuốn sách hay nhất cho mọi lứa tuổi. Chúng tôi tin rằng
         sách không chỉ là nguồn tri thức mà còn là người bạn đồng hành trong
         cuộc sống.
@@ -26,7 +26,7 @@ const About = () => {
         mê đọc sách đến mọi người!
       </p>
       <div className="mt-8">
-        <NavLink to="/" className="px-6 py-3 bg-[#20B2AA] hover:cursor-pointer
+        <NavLink to="/sách" className="px-6 py-3 bg-[#20B2AA] hover:cursor-pointer
         text-white font-semibold rounded-full shadow-md hover:bg-[#008B8B] transition">
           Khám Phá Ngay
         </NavLink>
