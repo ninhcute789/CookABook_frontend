@@ -91,3 +91,18 @@
 /* .custom-w {
   width: calc(100% - 208px);
 } */
+
+
+@keyframes popUp {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.pop-up {
+  animation: popUp 0.5s;
+}

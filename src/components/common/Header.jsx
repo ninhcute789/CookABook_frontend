@@ -2,25 +2,53 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
-
-
-
+import axios from "axios";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
   const navigate = useNavigate();
-  
+
   //setLoggedInUser(localStorage.getItem("username"));
   useEffect(() => {
     setLoggedInUser(localStorage.getItem("username"));
   }, []);
-  
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    setLoggedInUser(""); // Reset lại state
-    navigate("/dang-nhap"); // Chuyển về trang đăng nhập sau khi logout
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("username");
+  //   setLoggedInUser(""); // Reset lại state
+  //   navigate("/dang-nhap"); // Chuyển về trang đăng nhập sau khi logout
+  // };
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("❌ Không tìm thấy token!");
+        return;
+      }
+
+      await axios.post(
+        "http://127.0.0.1:8080/api/v1/auth/logout",
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(
+        "🚀 ~ file: Header.jsx ~ line 68 ~ handleLogout ~ token",
+        token
+      );
+      // Xóa token & username sau khi logout thành công
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      setLoggedInUser(""); // Reset lại state
+      navigate("/dang-nhap"); // Chuyển về trang đăng nhập
+    } catch (error) {
+      console.error(
+        "❌ Lỗi khi đăng xuất:",
+        error.response?.data || error.message
+      );
+      alert("Không thể đăng xuất, vui lòng thử lại!");
+    }
   };
 
   return (
@@ -49,7 +77,7 @@ const Header = () => {
             isOpen ? "block" : "hidden"
           } md:flex md:items-center`}
         >
-          <ul className="md:flex md:space-x-8 text-center md:text-left">
+          <ul className="md:flex lg:space-x-8 text-center md:text-left">
             {["Trang chủ", "Sách", "Tin tức", "Về chúng tôi", "Admin"].map(
               (item, index) => {
                 const path =
@@ -62,7 +90,7 @@ const Header = () => {
                     <Link
                       to={path}
                       className="block text-gray-600 duration-300
-                      md:px-4 md:py-2 hover:scale-130  
+                      xl:px-4 lg:py-2 md:px-1 hover:scale-130  
                       hover:text-gray-900"
                     >
                       {item}
@@ -83,7 +111,12 @@ const Header = () => {
           {loggedInUser ? (
             <>
               <span>Chào, {loggedInUser}!</span>
-              <button onClick={handleLogout} className="hover:cursor-pointer">Đăng xuất</button>
+              <button
+                onClick={handleLogout}
+                className="hover:cursor-pointer hover:scale-120 duration-300"
+              >
+                Đăng xuất
+              </button>
             </>
           ) : (
             <Link to="/dang-nhap">Đăng nhập</Link>

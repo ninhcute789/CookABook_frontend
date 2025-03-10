@@ -66,7 +66,7 @@ const UserList = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {users.slice().reverse().map((user) => ( // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
                 <tr key={user.id} className="border border-gray-300 hover:bg-gray-300 transition-all">
                   <td className="border border-gray-300 px-4 py-2">
                     {user.username}

@@ -294,7 +294,9 @@ const Login = () => {
       console.log("Dữ liệu API trả về:", response.data);
   
       if (response.data.status === 200) {
+        
         localStorage.setItem("token", response.data.data.accessToken);
+        localStorage.setItem("user", JSON.stringify( response.data.data.user)); // Lưu toàn bộ user vào localStorage
         localStorage.setItem("username", response.data.data.user.username);
         setLoggedInUser(username);
         alert("Đăng nhập thành công!");

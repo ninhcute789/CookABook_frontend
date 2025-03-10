@@ -16,9 +16,25 @@ import s4 from "../assets/s4.jpg";
 import { NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import BannerDeal from "../components/banner/BannerDeal";
+import axios from "axios";
+import { IoIosArrowBack } from "react-icons/io";
+import SidebarArticles from "../components/sideBar/SidebarArticles";
 
 const Home = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  const truncateText = (text, wordLimit) => {
+    const words = text.split(" ");
+    return words.length > wordLimit
+      ? words.slice(0, wordLimit).join(" ") + "..."
+      : text;
+  };
+  const truncateDate = (text, wordLimit) => {
+    const words = text.split(" ");
+    return words.length > wordLimit
+      ? words.slice(0, wordLimit).join(" ")
+      : text;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +47,44 @@ const Home = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const [articles, setArticles] = useState([]);
+  const [article, setArticle] = useState();
+  const [Selected, setSelected] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error(
+            "❌ Không tìm thấy token! Người dùng có thể chưa đăng nhập."
+          );
+          return;
+        }
+
+        const res = await axios.get("http://localhost:8080/api/v1/articles", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log("✅ Dữ liệu API trả về:", res.data);
+        setArticles(res.data?.data?.data || []);
+      } catch (error) {
+        console.error(
+          "❌ Lỗi khi lấy danh sách bài báo:",
+          error.response?.data || error.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  if (loading) return <p className="text-center">Đang tải...</p>;
   return (
     <>
       <div
@@ -103,8 +156,8 @@ const Home = () => {
         >
           <div
             className={
-              scrollPosition >= 120
-                ? "fade-in 1 flex flex-col relative mb-20 mx-2 h-80"
+              scrollPosition >= 220
+                ? "pop-up 1 flex flex-col relative mb-20 mx-2 h-80"
                 : "opacity-0 1 flex flex-col relative mb-20 mx-2 h-80"
             }
           >
@@ -130,8 +183,8 @@ const Home = () => {
           </div>
           <div
             className={
-              scrollPosition >= 120
-                ? "fade-in 2 flex flex-col relative mb-20 mx-2 h-80"
+              scrollPosition >= 220
+                ? "pop-up 2 flex flex-col relative mb-20 mx-2 h-80"
                 : "opacity-0 2 flex flex-col relative mb-20 mx-2 h-80"
             }
           >
@@ -158,8 +211,8 @@ const Home = () => {
           </div>
           <div
             className={
-              scrollPosition >= 120
-                ? "fade-in 3 flex flex-col relative mb-20 mx-2 h-80"
+              scrollPosition >= 220
+                ? "pop-up 3 flex flex-col relative mb-20 mx-2 h-80"
                 : "opacity-0 3 flex flex-col relative mb-20 mx-2 h-80"
             }
           >
@@ -185,9 +238,9 @@ const Home = () => {
           </div>
           <div
             className={
-              scrollPosition >= 500
-                ? "fade-in 4 flex flex-col relative mb-20 mx-2 h-80"
-                : "opacity-0 4 flex flex-col relative mb-20 mx-2 h-80"
+              scrollPosition >= 600
+                ? "pop-up 4 flex flex-col relative mb-20 mx-2 h-80"
+                : "opacity-100 4 flex flex-col relative mb-20 mx-2 h-80"
             }
           >
             <div
@@ -212,9 +265,9 @@ const Home = () => {
           </div>
           <div
             className={
-              scrollPosition >= 500
-                ? "fade-in 5 flex flex-col relative mb-20 mx-2 h-80"
-                : "opacity-0 5 flex flex-col relative mb-20 mx-2 h-80"
+              scrollPosition >= 600
+                ? "pop-up 5 flex flex-col relative mb-20 mx-2 h-80"
+                : "opacity-100 5 flex flex-col relative mb-20 mx-2 h-80"
             }
           >
             <div
@@ -239,9 +292,9 @@ const Home = () => {
           </div>
           <div
             className={
-              scrollPosition >= 500
-                ? "fade-in 6 flex flex-col relative mb-20 mx-2 h-80"
-                : "opacity-0 6 flex flex-col relative mb-20 mx-2 h-80"
+              scrollPosition >= 600
+                ? "pop-up 6 flex flex-col relative mb-20 mx-2 h-80"
+                : "opacity-100 6 flex flex-col relative mb-20 mx-2 h-80"
             }
           >
             <div
@@ -268,7 +321,7 @@ const Home = () => {
 
       <BannerDeal />
 
-      <div className="tin tuc tu chung toi container mx-auto p-4 bg-cover bg-center mb-20">
+      <div className="tin tuc tu chung toi  p-4 bg-cover bg-center">
         <div className="container mx-auto space-y-2 py-16">
           <div className="flex justify-center items-center space-x-2 text-red-600">
             <FaEarthAsia className="size-7" />
@@ -282,8 +335,8 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 max-w-6xl mx-auto grid-cols-1">
-          <div
+        <div className="grid max-w-6xl mx-auto grid-cols-1">
+          {/* <div
             className="img1 flex justify-center items-center
                     w-fit shadow-md shadow-emerald-950 mr-4 mb-4 rounded
                     xl:flex-row flex-col"
@@ -371,8 +424,7 @@ const Home = () => {
                   to="#"
                   className="font-bold hover:text-yellow-300 duration-200 transition-all"
                 >
-                  Sách khoa học Một sức khỏe: Sức khỏe con người và thiên
-                  nhiên
+                  Sách khoa học Một sức khỏe: Sức khỏe con người và thiên nhiên
                 </NavLink>
               </div>
               <div className="w-3/4 xl:mb-0 mb-10">
@@ -475,7 +527,169 @@ const Home = () => {
                 phá tâm lý học và…
               </div>
             </div>
+          </div> */}
+
+          <div className=" px-10 pb-10">
+            {/* <h2 className="text-xl font-bold mb-4">Danh sách bài báo</h2> */}
+            {articles.length === 0 ? (
+              <p className="text-gray-500">Không có bài báo nào!</p>
+            ) : (
+              <div
+                className={`grid gap-2 
+                ${Selected ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}
+              >
+                {!Selected ? (
+                  articles
+                    .slice(0, 4)
+                    .reverse()
+                    .map(
+                      (
+                        article // Đảo ngược thứ tự bài viết
+                      ) => (
+                        <div
+                          key={article.id}
+                          className="img4 flex justify-center items-center
+                     shadow-xl mb-4 mr-2 bg-white p-2
+                    xl:flex-row flex-col"
+                        >
+                          <div className="flex flex-col space-y-2 ">
+                            {article.imageURL && (
+                              <img
+                                src={th2}
+                                className="h-full min-w-50 p-1 object-cover rounded-md "
+                              />
+                            )}
+                          </div>
+                          <div className="flex flex-col space-y-2 px-5 my-5">
+                            <div>
+                              <button
+                                className="bg-gray-400  
+                                text-cyan-800 font-bold py-1 
+                                text-xs px-3 rounded hover:bg-yellow-500 
+                                hover:text-black transition-all duration-200
+                                cursor-pointer"
+                                onClick={() => {
+                                  setSelected(true);
+                                  setArticle(article);
+                                }}
+                              >
+                                Tin tức
+                              </button>
+                            </div>
+                            <div className="  justify-between grid sm:grid-cols-2 grid-cols-1">
+                              <div className="flex">
+                                <div>
+                                  <LuCalendarFold className="translate-y-1 mr-1" />
+                                </div>
+                                <div>{truncateDate(article.createdAt, 1)}</div>
+                              </div>
+                              <div className="flex sm:ml-auto">
+                                <div>
+                                  <FaUser className="translate-y-1 mr-1" />
+                                </div>
+                                <div>by {article.createdBy}</div>
+                              </div>
+                            </div>
+                            <div>
+                              <NavLink
+                                to="#"
+                                className="font-bold hover:text-yellow-500 duration-200 transition-all"
+                                onClick={() => {
+                                  setSelected(true);
+                                  setArticle(article);
+                                }}
+                              >
+                                {truncateText(article.title,10)}
+                              </NavLink>
+                            </div>
+                            <div className=" xl:mb-0 mb-10">
+                              {truncateText(article.content, 10)}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )
+                ) : (
+                  <div className="flex ">
+                    <div className="w-4/5">
+                      <button
+                        onClick={() => {
+                          setSelected(null)
+                        }}
+                        className="mb-4 px-4 py-2 hover:opacity-50 mt-5
+                            bg-gray-200 rounded hover:cursor-pointer"
+                      >
+                        <IoIosArrowBack className="inline-block -translate-y-0.5 -translate-x-1" />
+                        Quay lại
+                      </button>
+                      <h2 className="text-2xl font-bold ">{article.title}</h2>
+                      <p className="text-gray-600">
+                        Bởi {article.createdBy} - {article.createdAt}
+                      </p>
+                      <img
+                        src={article.imageURL}
+                        alt={article.title}
+                        className=" max-h-96 object-cover rounded-md my-4 mx-auto"
+                      />
+                      <p className="min-h-96">{article.content}</p>
+                    </div>
+                    <SidebarArticles
+                      newsArticles={articles} // ✅ Truyền dữ liệu từ JSON
+                      setArticle={setArticle}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
+          {/* <div
+            className="img4 flex justify-center items-center
+                    w-fit shadow-emerald-950 shadow-md mr-4 mb-4 rounded
+                    xl:flex-row flex-col"
+          >
+            <div className="flex flex-col space-y-2 ">
+              <img src={s4} className="max-h-96 object-cover rounded " />
+            </div>
+            <div className="flex flex-col space-y-2 px-5 my-5">
+              <div>
+                <button
+                  className="bg-gray-400  
+                                text-cyan-800 font-bold py-1 
+                                text-xs px-3 rounded hover:bg-yellow-500 
+                                hover:text-black transition-all duration-200
+                                cursor-pointer"
+                >
+                  Tin tức
+                </button>
+              </div>
+              <div className="flex w-9/10 justify-between">
+                <div className="flex">
+                  <div>
+                    <LuCalendarFold className="translate-y-1 mr-1" />
+                  </div>
+                  <div>Th11 24, 2024</div>
+                </div>
+                <div className="flex ">
+                  <div>
+                    <FaUser className="translate-y-1 mr-1" />
+                  </div>
+                  <div>by hai múa</div>
+                </div>
+              </div>
+              <div>
+                <NavLink
+                  to="#"
+                  className="font-bold hover:text-yellow-300 duration-200 transition-all"
+                >
+                  Phá vỡ khuôn mẫu: Hành trình chữa lành từ những tổn thương
+                </NavLink>
+              </div>
+              <div className="w-3/4 xl:mb-0 mb-10">
+                Tháng 11/2024, Phá vỡ khuôn mẫu ra mắt ấn tượng. Cuốn sách khám
+                phá tâm lý học và…
+              </div>
+            </div>
+          </div> */}
         </div>
       </div>
     </>

@@ -185,9 +185,9 @@ const News = () => {
         </header>
 
         {!selectedArticle ? (
-          // {articles.length === 0 ? (
-          //   <p className="text-center">Không có bài viết nào.</p>
-          // ) : (
+          articles.length === 0 ? (
+            <p className="text-center">Không có bài viết nào.</p>
+          ) : (
           <div className=" w-11/12 mx-auto">
             <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-col-1 ">
               {articles.slice().reverse().map((article) => ( // Đảo ngược thứ tự bài viết
@@ -200,16 +200,17 @@ const News = () => {
                     alt={article.title}
                     className="h-50 object-cover mx-auto rounded shadow-gray-100 shadow-sm"
                   />
-                  <div className="text-xl font-medium my-4">
-                    {truncateText(article.title, 7)}
+                  <div className="text-xl font-medium my-4 line-clamp-1">
+                    {article.title}
                   </div>
 
-                  <p className="text-gray-700 mb-5">
-                    {truncateText(article.content, 10)}
+                  <p className="text-gray-700 mb-5 line-clamp-1">
+                    {article.content}
                   </p>
                   <div className="flex justify-between">
                     <div className="font-bold hover:underline cursor-pointer text-[12px]">
-                      {article.createdBy}
+                      {article?.user?.name || "Không rõ tác giả"}
+                      {console.log(article?.user?.name)}
                     </div>
                     <div className="font-bold text-[12px]">
                       {article.createdAt}
@@ -231,34 +232,7 @@ const News = () => {
                 </div>
               ))}
             </div>
-            {/* <aside className="mt-5 w-3/5 hidden md:block bg-gray-100 p-4 rounded-xl shadow-lg">
-              <h3 className="text-lg font-bold mt-6 mb-3">
-                🔥 Bài viết nổi bật
-              </h3>
-              <ul className="space-y-3">
-                {newsArticles.slice(0, 3).map((article) => (
-                  <li
-                    key={article.id}
-                    className="flex gap-3 items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-                    onClick={() => setSelectedArticle(article)}
-                  >
-                    <img
-                      src={article.image}
-                      alt={article.title}
-                      className="w-28 h-14 object-cover rounded-md"
-                    />
-                    <div>
-                      <p className="text-sm font-semibold">
-                        {truncateText(article.title, 5)}
-                      </p>
-                      <p className="text-xs text-gray-500">{article.date}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </aside> */}
-            {/* <ArticleSideBar/> */}
-          </div>
+          </div>)
         ) : (
           <div className="flex w-11/12 mx-auto">
             <div className="w-4/5">
@@ -278,7 +252,7 @@ const News = () => {
               </button>
               <h2 className="text-2xl font-bold ">{article.title}</h2>
               <p className="text-gray-600">
-                Bởi {article.createdBy} - {article.createdAt}
+                Bởi {article?.user?.name || "Không rõ"} - {article.createdAt}
               </p>
               <img
                 src={article.imageURL}
@@ -287,38 +261,6 @@ const News = () => {
               />
               <p className="min-h-screen">{article.content}</p>
             </div>
-            {/* <aside className="pr-20 sticky top-15 z-50 mt-5 h-fit ml-auto w-3/8 hidden md:block  p-4 rounded-xl">
-              <div className="w-fit mb-5">
-                <h3 className="text-2xl font-bold mt-6 mb-3">
-                  {" "}
-                  Bài viết nổi bật
-                </h3>
-                <hr className="text-amber-600 border-2 " />
-              </div>
-              <ul className="space-y-3">
-                {newsArticles.slice(0, 5).map((article) => (
-                  <li
-                    key={article.id}
-                    className="flex lg:flex-row flex-col text-center lg:text-left
-                    gap-3 items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-                    onClick={() => setSelectedArticle(article)}
-                  >
-                    <img
-                      src={article.image}
-                      alt={article.title}
-                      className="min-w-36 h-18 object-cover rounded-md"
-                    />
-                    <div>
-                      <p className="text-sm font-semibold">
-                        {truncateText(article.title, 10)}
-                      </p>
-                      <p className="text-xs text-gray-500">{article.date}</p>
-                    </div>
-                    <hr className="" />
-                  </li>
-                ))}
-              </ul>
-            </aside> */}
             <SidebarArticles
               newsArticles={articles} // ✅ Truyền dữ liệu từ JSON
               setArticle={setArticle}

@@ -92,9 +92,38 @@ const AddArticleModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
     }
   };
 
+  // const handleSubmit = async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const res = await axios.post(
+  //       "http://localhost:8080/api/v1/articles",
+  //       {
+  //         title: article.title,
+  //         content: article.content,
+  //         image: article.imageURL,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //         withCredentials: true,
+  //       }
+  //     );
+
+  //     console.log("✅ Bài viết mới:", res.data);
+
+  //     onArticleAdded(res.data.data); // Cập nhật danh sách bài viết trong ArticleList
+  //     onClose(); // Đóng modal
+  //   } catch (error) {
+  //     console.error("❌ Lỗi khi gửi bài viết:", error);
+  //     alert("Lỗi khi gửi bài viết! Kiểm tra lại thông tin.");
+  //   }
+  // };
+
   return (
     isOpen && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black ">
+      <div className="z-50  fixed inset-0 flex items-center justify-center bg-black ">
         <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
           <h2 className="text-lg font-semibold mb-4">Thêm bài báo</h2>
           <div className="space-y-4">
@@ -179,6 +208,7 @@ AddArticleModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  // onArticleAdded: PropTypes.func.isRequired,  // Thêm prop mới
   initialData: PropTypes.shape({
     title: PropTypes.string,
     content: PropTypes.string,
@@ -188,4 +218,3 @@ AddArticleModal.propTypes = {
 };
 
 export default AddArticleModal;
-

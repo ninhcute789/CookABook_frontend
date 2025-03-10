@@ -5,6 +5,12 @@ import ArticleList from "../components/list/ArticleList";
 
 const AdminNews = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const truncateText = (text, wordLimit) => {
+    const words = text.split(" ");
+    return words.length > wordLimit
+      ? words.slice(0, wordLimit).join(" ") + "..."
+      : text;
+  };
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -38,7 +44,7 @@ const AdminNews = () => {
       >
         Thêm bài báo
       </button>
-      <ArticleList />
+      <ArticleList truncateText={truncateText}/>
 
     </div>
   );
