@@ -2,28 +2,42 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FcPlus } from "react-icons/fc";
 import axios from "axios";
+import ImageUpload from "../common/ImageUpload";
+import { set } from "@cloudinary/url-gen/actions/variable";
+import ImageUploader from "../common/ImageUpload";
 
 const AddArticleModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
-  const [article, setArticle] = useState({
-    title: "",
-    content: "",
-    imageURL: null,
-    imagePreview: "",
-    // createdAt: new Date().toISOString().split("T")[0],
-    // createdBy: "",
-  });
+  // const [article, setArticle] = useState({
+  //   title: "",
+  //   content: "",
+  //   imageURL: null,
+  //   // imagePreview: "",
+  //   // createdAt: new Date().toISOString().split("T")[0],
+  //   // createdBy: "",
+  // });
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  // const [user, setUser] = useState({
+  //   id: "",
+  // });
 
   useEffect(() => {
     if (isOpen) {
-      setArticle({
-        title: initialData.title || "",
-        content: initialData.content || "",
-        imageURL: null,
-        imagePreview: "",
-        // createdAt:
-        //   initialData.createdAt || new Date().toISOString().split("T")[0],
-        // createdBy: initialData.createdBy || "",
-      });
+      // setArticle({
+      //   title: initialData.title || "",
+      //   content: initialData.content || "",
+      //   imageURL: null,
+      //   imagePreview: "",
+      //   // createdAt:
+      //   //   initialData.createdAt || new Date().toISOString().split("T")[0],
+      //   // createdBy: initialData.createdBy || "",
+      // });
+      setTitle(initialData.title || "");
+      setContent(initialData.content || "");
+      setImageUrl(initialData.imageURL || "");
     }
   }, [isOpen, initialData]);
 
@@ -36,42 +50,41 @@ const AddArticleModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
     }
   }, [isOpen]);
 
-  const handleChange = (e) =>
-    setArticle({ ...article, [e.target.name]: e.target.value });
+  const handleTitleChange = (e) => setTitle(e.target.value);
+  const handleContentChange = (e) => setContent(e.target.value);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setArticle((prev) => ({
-          ...prev,
-          imageURL: file,
-          imagePreview: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log(user.id);
 
-  const handleSubmit = async () => {
     try {
       const data = new FormData();
-      data.append("title", article.title);
-      data.append("content", article.content);
+      data.append("title", title);
+      data.append("content", content);
 
-      if (article.imageURL) {
-        data.append("image", article.imageURL); // Sử dụng file thật thay vì imageURL
+      if (imageUrl) {
+        data.append("image", imageUrl); // Sử dụng file thật thay vì imageURL
       }
-
+      data.append("id", user.id);
+      const article = {
+        title: title,
+        content: content,
+        imageURL: imageUrl,
+        user: {
+          id: user.id,
+        },
+      };
       const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
       const res = await axios.post(
         "http://localhost:8080/api/v1/articles",
         {
-          title: article.title,
-          content: article.content,
-          image: article.imageURL, // Nếu là URL hoặc base64
+          title: title,
+          content: content,
+          imageURL: imageUrl, // Nếu là URL hoặc base64
+          user: {
+            id: user.id,
+          },
         },
         {
           headers: {
@@ -132,8 +145,8 @@ const AddArticleModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
               <input
                 className="w-full border p-2 rounded"
                 name="title"
-                value={article.title}
-                onChange={handleChange}
+                value={title}
+                onChange={handleTitleChange}
               />
             </label>
             <label className="block">
@@ -141,51 +154,11 @@ const AddArticleModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
               <textarea
                 className="w-full border p-2 rounded"
                 name="content"
-                value={article.content}
-                onChange={handleChange}
+                value={content}
+                onChange={handleContentChange}
               />
             </label>
-
-            {/* <label className="block">
-              Người tạo
-              <input
-                className="w-full border p-2 rounded"
-                name="createdBy"
-                value={article.createdBy}
-                onChange={handleChange}
-              />
-            </label> */}
-
-            <label
-              className=" p-1 rounded flex items-center space-x-2 w-fit
-            bg-gray-300"
-              htmlFor="labelUpload"
-            >
-              <FcPlus className="text-white " />
-              Chọn hình ảnh
-              <input
-                id="labelUpload"
-                type="file"
-                hidden
-                className="w-full border p-2 rounded"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-            </label>
-
-            <div className="border p-2 rounded mt-2 h-40">
-              {article.imagePreview ? (
-                <img
-                  src={article.imagePreview}
-                  alt="Preview"
-                  className=" w-auto h-full rounded mx-auto"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  Chưa chọn ảnh
-                </div>
-              )}
-            </div>
+            <ImageUploader onUploadSuccess={(url) => setImageUrl(url)} />
           </div>
           <div className="flex justify-end mt-4 space-x-2">
             <button className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>

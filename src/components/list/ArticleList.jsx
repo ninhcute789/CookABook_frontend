@@ -97,15 +97,28 @@ const ArticleList = (props) => {
       {articles.length === 0 ? (
         <p className="text-gray-500">Không có bài báo nào!</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div
+          className="grid grid-cols-2 
+        [@media(max-width:845px)]:grid-cols-1 
+        [@media(min-width:1160px)]:grid-cols-3 gap-4"
+        >
           {articles
             .slice()
             .reverse()
             .map((article) => (
               <div key={article.id} className="border p-4 rounded shadow-lg">
-                <h3 className="text-lg font-semibold line-clamp-1">{article.title}</h3>
-                <p className="text-gray-600">
-                  {props.truncateText(article.content, 10)}
+                <h3 className="text-lg font-semibold line-clamp-1">
+                  {article.title}
+                </h3>
+                {article.imageURL && (
+                  <img
+                    src={article.imageURL}
+                    alt="Article"
+                    className="w-full h-60 object-cover mt-2 rounded"
+                  />
+                )}
+                <p className="text-gray-600 line-clamp-2 h-13">
+                  {article.content}
                 </p>
 
                 <p className="font-medium">
@@ -116,13 +129,6 @@ const ArticleList = (props) => {
                 <p className="font-medium">
                   Cập nhật - {article.updatedAt || "Chưa có"}
                 </p>
-                {article.imageURL && (
-                  <img
-                    src={article.imageURL}
-                    alt="Article"
-                    className="w-full h-40 object-cover mt-2 rounded"
-                  />
-                )}
 
                 <div className="flex space-x-2 ml-auto">
                   <LuPencilLine

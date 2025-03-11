@@ -196,7 +196,7 @@ const News = () => {
                   className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6 bg-white"
                 >
                   <img
-                    src={article.image}
+                    src={article.imageURL}
                     alt={article.title}
                     className="h-50 object-cover mx-auto rounded shadow-gray-100 shadow-sm"
                   />
@@ -213,7 +213,7 @@ const News = () => {
                       {console.log(article?.user?.name)}
                     </div>
                     <div className="font-bold text-[12px]">
-                      {article.createdAt}
+                      {article.updatedAt ? article.updatedAt : article.createdAt}
                     </div>
                   </div>
                   <NavLink

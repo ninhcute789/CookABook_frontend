@@ -96,17 +96,6 @@ const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
     }
   }, [isOpen]);
 
-
-  // const handleDelete = (index) => {
-  //   let data = [...user];
-  //   data.splice(index, 1); // Xóa 1 phần tử từ vị trí index
-  //   setUser(data);
-  //   localStorage.setItem("data", JSON.stringify(data));
-  // };
-
-  
-
-  
   return (
     isOpen && (
       <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
@@ -146,7 +135,7 @@ const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
             <label className="block mr-2">
               Ngày sinh
               <input
-              id="dateAdminUser"
+                id="dateAdminUser"
                 type="date"
                 className="w-full border p-2 rounded "
                 name="dob"
@@ -187,47 +176,6 @@ const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
                 </option>
               </select>
             </label>
-
-            {/* <label className="block">
-                Người tạo
-                <input
-                  className="w-full border p-2 rounded"
-                  name="createdBy"
-                  value={article.createdBy}
-                  onChange={handleChange}
-                />
-              </label> */} 
-
-            {/* <label
-                className=" p-1 rounded flex items-center space-x-2 w-fit
-              bg-gray-300"
-                htmlFor="labelUpload"
-              >
-                <FcPlus className="text-white " />
-                Chọn hình ảnh
-                <input
-                  id="labelUpload"
-                  type="file"
-                  hidden
-                  className="w-full border p-2 rounded"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </label>
-
-            {/* <div className="border p-2 rounded mt-2 h-40">
-                {article.imagePreview ? (
-                  <img
-                    src={article.imagePreview}
-                    alt="Preview"
-                    className=" w-auto h-full rounded mx-auto"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    Chưa chọn ảnh
-                  </div>
-                )}
-              </div> */}
           </div>
           <div className="flex justify-end mt-4 space-x-2">
             <button className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>

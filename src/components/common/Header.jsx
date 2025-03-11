@@ -40,6 +40,7 @@ const Header = () => {
       // Xóa token & username sau khi logout thành công
       localStorage.removeItem("token");
       localStorage.removeItem("username");
+      localStorage.removeItem("user");
       setLoggedInUser(""); // Reset lại state
       navigate("/dang-nhap"); // Chuyển về trang đăng nhập
     } catch (error) {

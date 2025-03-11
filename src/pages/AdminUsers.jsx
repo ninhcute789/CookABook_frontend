@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AddUsers from "../components/addForm/addUsers";
 import SideBar from "../components/common/SideBar";
 import UserList from "../components/list/UserList";
+import AddUsers from "../components/addForm/AddUsers";
 
 const AdminUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

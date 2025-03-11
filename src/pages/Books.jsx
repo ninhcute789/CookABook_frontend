@@ -38,35 +38,6 @@ const Books = () => {
             >
               Nhà sách CaB
             </NavLink>
-
-            {/* Thanh điều hướng */}
-            {/* <nav className="hidden md:flex space-x-6">
-            <a
-              href="#"
-              className="text-gray-700 hover:text-blue-600 transition"
-            >
-              Trang chủ
-            </a>
-            <a
-              href="#"
-              className="text-gray-700 hover:text-blue-600 transition"
-            >
-              Danh mục
-            </a>
-            <a
-              href="#"
-              className="text-gray-700 hover:text-blue-600 transition"
-            >
-              Bài viết nổi bật
-            </a>
-            <a
-              href="#"
-              className="text-gray-700 hover:text-blue-600 transition"
-            >
-              Liên hệ
-            </a>
-          </nav> */}
-
             {/* Ô tìm kiếm */}
             <div className="relative">
               <input
