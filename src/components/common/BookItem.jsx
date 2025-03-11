@@ -44,7 +44,7 @@ const BookItem = () => {
             />
             <div className="p-2">
               <p className="text-xl font-semibold text-black">{book.price}</p>
-              <h3 className="text-lg my-2">{truncateText(book.title, 12)}</h3>
+              <h3 className="text-lg my-2 line-clamp-2">{book.title}</h3>
               {book.isOfficial ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                   CHÍNH HÃNG
