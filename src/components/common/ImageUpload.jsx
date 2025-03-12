@@ -2,8 +2,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { FcPlus } from "react-icons/fc";
 
-const ImageUploader = ({ onUploadSuccess }) => {
-  const [imagePreview, setImagePreview] = useState(null);
+const ImageUploader = ({ onUploadSuccess, initialImageUrl }) => {
+  const [imagePreview, setImagePreview] = useState(initialImageUrl || null);
   const [loading, setLoading] = useState(false);
 
   const handleUpload = async (event) => {
@@ -40,6 +40,8 @@ const ImageUploader = ({ onUploadSuccess }) => {
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <div>
@@ -84,8 +86,9 @@ const ImageUploader = ({ onUploadSuccess }) => {
     </div>
   );
 };
+
 ImageUploader.propTypes = {
   onUploadSuccess: PropTypes.func.isRequired,
+  initialImageUrl: PropTypes.string,
 };
-
 export default ImageUploader;

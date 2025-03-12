@@ -80,7 +80,7 @@ const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
 
       console.log("Check response:", res.data);
 
-      onSubmit(user); // Cập nhật danh sách bài viết
+      onSubmit(res.data.data); // Cập nhật danh sách bài viết
       onClose(); // Đóng modal
     } catch (error) {
       console.error("Lỗi khi gửi bài viết:", error);
@@ -161,7 +161,7 @@ const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
                 value={user.gender}
                 onChange={(e) => handleChange(e)}
                 className="flex flex-col w-full  bg-transparent
-                rounded-md px-5 py-2 text-black my-auto hover:cursor-pointer
+                rounded-md px-2.5 py-2 text-black my-auto hover:cursor-pointer
                 border-1 border-cyan-950 appearance-none "
               >
                 <option value="" disabled selected hidden className=""></option>

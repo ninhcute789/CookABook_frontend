@@ -3,17 +3,17 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import ImageUploader from "../common/ImageUpload";
 
-const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose }) => {
+const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
   // const [formData, setFormData] = useState({
   //   id: articleId,
   //   title: "",
   //   content: "",
   //   // imageURL: "",
   // });
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState(article.title);
+  const [content, setContent] = useState(article.content);
   const [id, setId] = useState(articleId);
-  
+
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [imageUrl, setImageUrl] = useState("");
@@ -39,9 +39,9 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose }) => {
           title: title,
           content: content,
           imageURL: imageUrl, // Nếu là URL hoặc base64
-          user: { 
-            id: user.id
-          }
+          user: {
+            id: user.id,
+          },
         },
         {
           headers: {
@@ -63,7 +63,7 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" >
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg  w-8/22">
         <h2 className="text-xl font-semibold mb-4">Cập nhật bài báo</h2>
         <form onSubmit={handleSubmit}>
@@ -83,7 +83,10 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose }) => {
             className="w-full p-2 border rounded mb-3"
             rows="4"
           />
-          <ImageUploader onUploadSuccess={(url) => setImageUrl(url)} />
+          <ImageUploader
+            onUploadSuccess={(url) => setImageUrl(url)}
+            initialImageUrl={article.imageURL}
+          />
           <div className="flex justify-end space-x-2 mt-2">
             <button
               type="button"
@@ -106,6 +109,7 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose }) => {
 };
 
 ArticleUpdate.propTypes = {
+  article: PropTypes.object.isRequired,
   articleId: PropTypes.number.isRequired,
   onUpdateSuccess: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

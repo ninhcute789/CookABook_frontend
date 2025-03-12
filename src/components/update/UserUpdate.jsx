@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 
@@ -81,8 +81,9 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
             <label className="block mr-2">
               Mật khẩu
               <input
+                disabled
                 type="password"
-                className="w-full border p-2 rounded"
+                className="w-full border p-2 rounded bg-gray-200"
                 name="password"
                 value={password}
                 onChange={(e) => handleChangePassword(e)}

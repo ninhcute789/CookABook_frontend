@@ -72,7 +72,7 @@ const UserList = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:8080/api/v1/articles/${id}`, {
+      await axios.delete(`http://localhost:8080/api/v1/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -144,7 +144,7 @@ const UserList = () => {
                       <td className="border border-gray-300 px-4 py-2">
                         {user.updatedAt}
                       </td>
-                      <td className=" p-2 space-x-4 justify-center flex h-10">
+                      <td className=" p-2 space-x-4 items-center justify-center flex h-10">
                         <LuPencilLine
                           className="text-blue-500 hover:cursor-pointer"
                           onClick={() => setEditingUserId(user.id)}

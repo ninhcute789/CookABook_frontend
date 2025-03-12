@@ -13,6 +13,7 @@ import s1 from "../assets/s1.jpg";
 import s2 from "../assets/s2.jpg";
 import s3 from "../assets/s3.jpg";
 import s4 from "../assets/s4.jpg";
+import b3 from "../assets/books/b3.webp";
 import { NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import BannerDeal from "../components/banner/BannerDeal";
@@ -71,6 +72,7 @@ const Home = () => {
 
         console.log("✅ Dữ liệu API trả về:", res.data);
         setArticles(res.data?.data?.data || []);
+        console.log("Danh sách bài báo:", res.data?.data?.data);
       } catch (error) {
         console.error(
           "❌ Lỗi khi lấy danh sách bài báo:",
@@ -555,8 +557,8 @@ const Home = () => {
                           <div className="flex flex-col space-y-2 ">
                             {article.imageURL && (
                               <img
-                                src={th2}
-                                className="h-full min-w-50 p-1 object-cover rounded-md "
+                                src={b3}
+                                className="h-50 w-50 p-1 object-cover rounded-md "
                               />
                             )}
                           </div>
@@ -587,7 +589,7 @@ const Home = () => {
                                 <div>
                                   <FaUser className="translate-y-1 mr-1" />
                                 </div>
-                                <div>by {article.createdBy}</div>
+                                <div>by {article.user?.name}</div>
                               </div>
                             </div>
                             <div>
@@ -624,10 +626,10 @@ const Home = () => {
                       </button>
                       <h2 className="text-2xl font-bold ">{article.title}</h2>
                       <p className="text-gray-600">
-                        Bởi {article.createdBy} - {article.createdAt}
+                        Bởi {article.user?.name} - {article.createdAt}
                       </p>
                       <img
-                        src={article.imageURL}
+                        src={b3}
                         alt={article.title}
                         className=" max-h-96 object-cover rounded-md my-4 mx-auto"
                       />
