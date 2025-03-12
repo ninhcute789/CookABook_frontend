@@ -24,9 +24,9 @@ const SidebarArticles = ({ newsArticles, setArticle }) => {
             onClick={() => setArticle(article)}
           >
             <img
-              src={article.image}
+              src={article.imageURL}
               alt={article.title}
-              className="min-w-36 h-18 object-cover rounded-md"
+              className="w-36 h-20 object-cover rounded-md"
             />
             <div>
               <p className="text-sm font-semibold">

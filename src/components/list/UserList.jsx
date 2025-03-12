@@ -4,11 +4,11 @@ import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
 import UserUpdate from "../update/UserUpdate";
 import AddUsers from "../addForm/AddUsers";
+import toast from "react-hot-toast";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const [isUpdate, setIsUpdate] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
 
   const fetchUsers = async () => {
@@ -29,6 +29,7 @@ const UserList = () => {
 
       console.log("✅ Dữ liệu API trả về:", res.data);
       setUsers(res.data?.data?.data || []);
+      // toast.success(<div className="w-90">🎉 Tải danh sách người dùng thành công!</div>);
     } catch (error) {
       console.error(
         "❌ Lỗi khi lấy danh sách bài báo:",
@@ -42,11 +43,6 @@ const UserList = () => {
     fetchUsers();
   }, []);
 
-  // const handleUpdate = (updatedUser) => {
-  //   setUsers((prev) =>
-  //     prev.map((user) => (user.id === updatedUser.id ? updatedUser : user))
-  //   );
-  // };
   const handleUpdate = (updatedUser) => {
     setUsers((prev) => {
       console.log("🔄 Trước khi cập nhật:", prev);
@@ -63,8 +59,34 @@ const UserList = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa người dùng này không?")) return;
+    toast(
+      (t) => (
+        <div className="flex flex-col">
+          <span>Bạn có chắc muốn xóa người dùng này không?</span>
+          <div className="mt-2 flex justify-end space-x-2 mr-auto">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                await confirmDelete(id); // Gọi hàm xóa
+              }}
+              className="px-4 py-2 bg-red-500 text-white rounded"
+            >
+              Xóa
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-4 py-2 bg-gray-500 text-white rounded"
+            >
+              Hủy
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
+  };
 
+  const confirmDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -78,16 +100,12 @@ const UserList = () => {
 
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
 
-      alert("🗑 Xóa người dùng thành công!");
+      toast.success("🗑 Xóa người dùng thành công!");
     } catch (error) {
       console.error("❌ Lỗi khi xóa người dùng:", error);
-      alert("Không thể xóa người dùng!");
+      toast.error("Không thể xóa người dùng!");
     }
   };
-  // const handleSubmitArticle = (user) => {
-  //   console.log("User đã lưu:", user);
-  //   set;
-  // };
 
   if (loading) return <p className="text-center">Đang tải...</p>;
 

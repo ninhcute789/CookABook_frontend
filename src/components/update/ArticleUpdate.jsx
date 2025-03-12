@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import ImageUploader from "../common/ImageUpload";
+import toast from "react-hot-toast";
 
 const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
   // const [formData, setFormData] = useState({
@@ -54,8 +55,13 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
       console.log("✅ Bài báo đã được cập nhật:", res.data);
       onUpdateSuccess(res.data);
       onClose();
+      toast.success("🎉 Cập nhật bài báo thành công!");
     } catch (error) {
       console.error(
+        "❌ Lỗi khi cập nhật bài báo:",
+        error.response?.data || error.message
+      );
+      toast.error(
         "❌ Lỗi khi cập nhật bài báo:",
         error.response?.data || error.message
       );

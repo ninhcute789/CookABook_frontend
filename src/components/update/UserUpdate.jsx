@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import toast, { Toaster } from "react-hot-toast";
 
 const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
   const [password, setPassword] = useState(user.password);
@@ -10,7 +11,7 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
   const [email, setEmail] = useState(user.email);
   const [id] = useState(userId);
 
-  const handleChangePassword = (e) => setPassword(e.target.value);
+  // const handleChangePassword = (e) => setPassword(e.target.value);
   const handleChangeName = (e) => setName(e.target.value);
   const handleChangeGender = (e) => setGender(e.target.value);
   const handleChangeDob = (e) => setDob(e.target.value);
@@ -24,14 +25,6 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
         console.error("❌ Không tìm thấy token!");
         return;
       }
-      // const updatedUser = {
-      //   id: id,
-      //   password: password,
-      //   name: name,
-      //   gender: gender,
-      //   dob: dob,
-      //   email: email,
-      // };
 
       const res = await axios.put(
         "http://localhost:8080/api/v1/users",
@@ -54,8 +47,10 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
       console.log("✅ Người dùng đã được cập nhật:", res.data);
       onUpdate(res.data.data); // Cập nhật danh sách user
       onClose();
+      // alert("🎉 Cập nhật người dùng thành công!");
+      toast.success("🎉 Cập nhật người dùng thành công!");
     } catch (error) {
-      console.error(
+      toast.error(
         "❌ Lỗi khi cập nhật người dùng:",
         error.response?.data || error.message
       );
@@ -86,7 +81,7 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
                 className="w-full border p-2 rounded bg-gray-200"
                 name="password"
                 value={password}
-                onChange={(e) => handleChangePassword(e)}
+                // onChange={(e) => handleChangePassword(e)}
               />
             </label>
 
@@ -120,7 +115,7 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
                 rounded-md px-2.5 py-2 text-black my-auto hover:cursor-pointer
                 border-1 border-cyan-950 appearance-none "
               >
-                <option value="" disabled selected hidden className=""></option>
+                <option value="" disabled hidden className="">Chọn giới tính</option>
                 <option value="MALE" className="text-black">
                   Nam
                 </option>
@@ -146,9 +141,13 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
           </div>
         </form>
       </div>
+      <Toaster
+        position="top-right" 
+      />
     </div>
   );
 };
+
 UserUpdate.propTypes = {
   user: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,

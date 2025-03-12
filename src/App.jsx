@@ -5,6 +5,7 @@ import LoginRegisterHeader from "./components/common/LoginRegisterHeader.jsx";
 import { Outlet } from "react-router-dom";
 // import { useEffect } from 'react';
 import { useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 // import SideBar from "./components/common/SideBar.jsx";
 // import cr7Image from './assets/cr7.jpg';
 
@@ -43,6 +44,7 @@ const App = () => {
       <div className="footer-container">
         <Footer />
       </div>
+      <Toaster position="top-right"/>
     </div>
   );
 };

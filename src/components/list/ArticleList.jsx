@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
 import ArticleUpdate from "../update/ArticleUpdate";
 import AddArticle from "../addForm/AddAritcle";
+import toast from "react-hot-toast";
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -51,9 +51,35 @@ const ArticleList = () => {
   };
 
   // Hàm xử lý xóa bài báo
-  const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa bài viết này không?")) return;
+  const handleDelete = (id) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col">
+          <span>Bạn có chắc muốn xóa bài viết này không?</span>
+          <div className="mt-2 flex justify-end space-x-2 mr-auto">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                await confirmDelete(id); // Thực hiện xóa
+              }}
+              className="px-4 py-2 bg-red-500 text-white rounded"
+            >
+              Xóa
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-4 py-2 bg-gray-500 text-white rounded"
+            >
+              Hủy
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
+  };
 
+  const confirmDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -69,10 +95,10 @@ const ArticleList = () => {
         prevArticles.filter((article) => article.id !== id)
       );
 
-      alert("🗑 Xóa bài viết thành công!");
+      toast.success("🗑 Xóa bài viết thành công!");
     } catch (error) {
       console.error("❌ Lỗi khi xóa bài viết:", error);
-      alert("Không thể xóa bài viết!");
+      toast.error("Không thể xóa bài viết!");
     }
   };
 

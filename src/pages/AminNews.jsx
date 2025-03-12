@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import ArticleList from "../components/list/ArticleList";
 import axios from "axios";
+import toast from "react-hot-toast";
 // import SideBar from "../components/common/SideBar";
 
 const AdminNews = () => {
   const [articles, setArticles] = useState([]);
-  const truncateText = (text, wordLimit) => {
-    const words = text.split(" ");
-    return words.length > wordLimit
-      ? words.slice(0, wordLimit).join(" ") + "..."
-      : text;
-  };
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -26,8 +21,10 @@ const AdminNews = () => {
         setArticles(res.data?.data?.data || []);
         // setArticles(Array.isArray(res.data?.data?.data) ? res.data?.data?.data : []);
         console.log("Danh sách bài viết - adminNews:", res.data?.data?.data);
+        toast.success("🎉 Tải danh sách bài viết thành công!");
         // fetchArticles();
       } catch (error) {
+        toast.error("Lỗi khi tải danh sách bài viết:", error);
         console.error("Lỗi khi tải danh sách bài viết:", error);
         setArticles([]); // Nếu lỗi, đặt lại articles là mảng rỗng
       }
@@ -38,7 +35,7 @@ const AdminNews = () => {
 
   return (
     <div className=" w-full bg-gray-100">
-      <ArticleList truncateText={truncateText} articles={articles} />
+      <ArticleList />
     </div>
   );
 };

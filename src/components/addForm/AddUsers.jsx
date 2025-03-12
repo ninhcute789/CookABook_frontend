@@ -1,33 +1,19 @@
-import { set } from "@cloudinary/url-gen/actions/variable";
+
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const AddUsers = ({ onSubmit, initialData = {} }) => {
-  // const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [username, setUsername] = useState("");
-  // const [address, setAddress] = useState("");
-  // // const [users, setUsers] = useState([]);
-  // const [modal, setModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  // const [user, setUser] = useState({
-  //   username: "",
-  //   password: "",
-  //   name: "",
-  //   dob: "",
-  //   email: "",
-  //   gender: "",
-  //   // createdAt: new Date().toISOString().split("T")[0],
-  //   // createdBy: "",
-  // });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
+
   const handleChangeUsername = (e) => {
     setUsername(e.target.value);
   };
@@ -46,6 +32,7 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
   const handleChangeGender = (e) => {
     setGender(e.target.value);
   };
+
   useEffect(() => {
     if (isOpen) {
       setUsername(initialData.username || "");
@@ -53,23 +40,12 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
       setName(initialData.name || "");
       setDob(initialData.dob || "");
       setEmail(initialData.email || "");
+      setGender(initialData.gender || "");
     }
   }, [isOpen, initialData]);
 
   const handleSubmit = async () => {
     try {
-      // const data = new FormData();
-      // data.append("username", user.username);
-      // data.append("password", user.password);
-      // data.append("name", user.name);
-      // data.append("dob", user.dob);
-      // data.append("email", user.email);
-      // data.append("gender", user.gender);
-
-      // if (article.imageURL) {
-      //   data.append("image", article.imageURL); // Sử dụng file thật thay vì imageURL
-      // }
-
       const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
       const res = await axios.post(
@@ -94,13 +70,16 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
       console.log("Check response:", res.data);
 
       onSubmit(res.data.data); // Cập nhật danh sách bài viết
-      alert("Thêm người dùng thành công!");
+      // alert("Thêm người dùng thành công!");
+      toast.success("🎉 Thêm người dùng thành công!");
       setIsOpen(false); // Đóng modal
     } catch (error) {
+      toast.error("Lỗi khi gửi bài viết:", error);
       console.error("Lỗi khi gửi bài viết:", error);
-      alert("Lỗi khi gửi bài viết! Kiểm tra lại thông tin.");
+      // alert("Lỗi khi gửi bài viết! Kiểm tra lại thông tin.");
     }
   };
+
   useEffect(() => {
     // add or remove overflow-y-hidden class to body
     if (isOpen) {
