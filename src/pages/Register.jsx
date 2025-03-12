@@ -12,37 +12,87 @@ import { NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [passwordType, setPasswordType] = useState("password");
   const [rewirtePasswordType, setRewirtePasswordType] = useState("password");
   const [password, setPassword] = useState("");
   const [rewirtePassword, setRewirtePassword] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [date, setDate] = useState("");
+  const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
 
-  const handleOnSubmit = (event) => {
+  // const handleOnSubmit = (event) => {
+  //   event.preventDefault();
+  //   console.log("Name:", name);
+  //   console.log("Date:", date);
+  //   console.log("Email:", email);
+  //   console.log("Gender:", gender);
+  //   console.log("Username:", userName);
+  //   console.log("Password:", password);
+  //   console.log("RewirtePassword:", rewirtePassword);
+  //   if (password !== rewirtePassword) {
+  //     alert("Mật khẩu nhập lại không đúng");
+  //   }
+  //   const userData = {
+  //     name,
+  //     email,
+  //     password,
+  //   };
+  //   localStorage.setItem("user", JSON.stringify(userData));
+  //   console.log("User registered:", userData);
+  // };
+
+  const handleOnSubmit = async (event) => {
     event.preventDefault();
-    console.log("Name:", name);
-    console.log("Date:", date);
-    console.log("Email:", email);
-    console.log("Gender:", gender);
-    console.log("Username:", userName);
-    console.log("Password:", password);
-    console.log("RewirtePassword:", rewirtePassword);
+    const token = localStorage.getItem("token"); // Hoặc cách bạn lưu token
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Gửi token lên backend
+        "Content-Type": "application/json",
+      },
+    };
     if (password !== rewirtePassword) {
       alert("Mật khẩu nhập lại không đúng");
+      return;
     }
+
     const userData = {
-      name,
-      email,
+      username,
       password,
+      name,
+      dob,
+      email,
+      gender,
     };
-    localStorage.setItem("user", JSON.stringify(userData));
-    console.log("User registered:", userData);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8080/api/v1/users",
+        userData,
+        config
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        console.log("Đăng ký thành công:", response.data);
+        alert("Đăng ký thành công!");
+        // Chuyển hướng hoặc làm gì đó sau khi đăng ký thành công
+      }
+    } catch (error) {
+      console.error("Đăng ký thất bại:", error.response?.data || error.message);
+      if (error.response?.status >= 400) {
+        alert(error.response?.data?.error);
+      } else {
+        alert(error.response?.data?.message);
+      }
+    }
+    console.log(userData);
+    console.log("Dữ liệu gửi lên:", JSON.stringify(userData, null, 2));
+    console.log("UserName trước khi gửi:", username);
   };
 
   useEffect(() => {
@@ -76,15 +126,15 @@ const Register = () => {
 
     return null;
   };
-  localStorage.setItem("name", {
-    // 'firstName': firstName,
-    // 'lastName': lastName,
-    date: date,
-    email: email,
-    userName: userName,
-    password: password,
-    rewirtePassword: rewirtePassword,
-  });
+  // localStorage.setItem("name", {
+  //   // 'firstName': firstName,
+  //   // 'lastName': lastName,
+  //   dob: dob,
+  //   email: email,
+  //   userName: userName,
+  //   password: password,
+  //   rewirtePassword: rewirtePassword,
+  // });
 
   return (
     <div
@@ -125,13 +175,13 @@ const Register = () => {
                 <option value="" disabled selected hidden className="">
                   Chọn giới tính
                 </option>
-                <option value="male" className="text-black">
+                <option value="MALE" className="text-black">
                   Nam
                 </option>
-                <option value="female" className="text-black">
+                <option value="FEMALE" className="text-black">
                   Nữ
                 </option>
-                <option value="other" className="text-black">
+                <option value="OTHER" className="text-black">
                   Khác
                 </option>
               </select>
@@ -141,10 +191,11 @@ const Register = () => {
           <div className="input-box flex w-full h-12 relative mb-4">
             <div className="absolute top-1.5 left-6 text-xs">Ngày sinh</div>
             <input
+              id="dateRegister"
               type="date"
               placeholder=""
               onChange={(e) => {
-                setDate(e.target.value);
+                setDob(e.target.value);
               }}
               required
               className=" flex flex-col w-full h-full bg-transparent
@@ -174,7 +225,7 @@ const Register = () => {
               placeholder="Tài khoản"
               required
               onChange={(e) => {
-                setUserName(e.target.value);
+                setUsername(e.target.value);
               }}
               className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white

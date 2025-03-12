@@ -1,7 +1,7 @@
 
 import PropTypes from "prop-types";
 
-const SidebarArticles = ({ newsArticles, setSelectedArticle }) => {
+const SidebarArticles = ({ newsArticles, setArticle }) => {
 
   const truncateText = (text, wordLimit) => {
     const words = text.split(" ");
@@ -21,7 +21,7 @@ const SidebarArticles = ({ newsArticles, setSelectedArticle }) => {
             key={article.id}
             className="flex lg:flex-row flex-col text-center lg:text-left
                     gap-3 items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-            onClick={() => setSelectedArticle(article)}
+            onClick={() => setArticle(article)}
           >
             <img
               src={article.image}
@@ -52,6 +52,6 @@ SidebarArticles.propTypes = {
           content: PropTypes.string.isRequired, // content là chuỗi và bắt buộc
         })
       ).isRequired, // Mảng này là bắt buộc
-      setSelectedArticle: PropTypes.func.isRequired, // ✅ Thêm kiểm tra prop này
+      setArticle: PropTypes.func.isRequired, // ✅ Thêm kiểm tra prop này
   };
 export default SidebarArticles;

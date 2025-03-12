@@ -74,16 +74,16 @@ const SideBar = () => {
                     </div>
                     <hr className="my-5 w-5/6 mx-auto " />
                     <div className="space-y-4 goes-out mx-auto">
-                        <NavLink to='/admin-books' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
+                        <NavLink to='/admin/admin-books' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
                             <RiBookShelfLine className="translate-y size-7 mx-auto" />
                         </NavLink>
-                        <NavLink to='/admin-orders' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
+                        <NavLink to='/admin/admin-orders' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
                             <BsCart3 className="translate-y size-7 mx-auto" />
                         </NavLink>
-                        <NavLink to='/admin-users' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
+                        <NavLink to='/admin/admin-users' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
                             <FaRegCircleUser className="translate-y size-7 mx-auto" />
                         </NavLink>
-                        <NavLink to='/admin-users' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
+                        <NavLink to='/admin/admin-news' className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1">
                             <FaNewspaper className="translate-y size-7 mx-auto" />
                         </NavLink>
 

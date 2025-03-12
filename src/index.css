@@ -28,7 +28,19 @@
   animation: fadeOut 1s ease-out;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
+#dateRegister::-webkit-calendar-picker-indicator {
+  background-size: contain;
+  background-image: url();
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border: none;
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#dateAdimnUser::-webkit-calendar-picker-indicator {
   background-size: contain;
   background-image: url();
   cursor: pointer;
@@ -79,3 +91,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* .custom-w {
   width: calc(100% - 208px);
 } */
+
+
+@keyframes popUp {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.pop-up {
+  animation: popUp 0.5s;
+}
