@@ -146,11 +146,11 @@ const News = () => {
                         {article.content}
                       </p>
                       <div className="flex justify-between mb-2">
-                        <div className="font-bold hover:underline cursor-pointer text-[12px]">
-                          {article?.user?.name || "Không rõ tác giả"}
+                        <div className="font-medium hover:underline cursor-pointer text-[12px]">
+                          Tác giả - {article?.user?.name || "Không rõ tác giả"}
                         </div>
-                        <div className="font-bold text-[12px]">
-                          {article.updatedAt
+                        <div className="font-medium text-[12px]">
+                          Từ - {article.updatedAt
                             ? truncateDate(article.updatedAt, 1)
                             : truncateDate(article.createdAt, 1)}
                         </div>

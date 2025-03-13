@@ -14,7 +14,7 @@ import th5 from "../assets/th-5.jpg";
 // import s3 from "../assets/s3.jpg";
 // import s4 from "../assets/s4.jpg";
 // import b3 from "../assets/books/b3.webp";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import BannerDeal from "../components/banner/BannerDeal";
 // import axios from "axios";
@@ -121,13 +121,14 @@ const Home = () => {
               tế đến kinh tế, và chỉ ra cách giảm thiểu những sai lệch không cần
               thiết để cải thiện chất lượng phán đoán…
             </div>
-            <button
+            <Link
               className="px-4 py-2 bg-amber-300 text-black font-medium rounded 
-                            hover:bg-amber-500 w-28
+                            hover:bg-amber-500 w-28 text-center duration-300
                             cursor-pointer"
+              to="/sách"
             >
               Mua ngay
-            </button>
+            </Link>
             <div className="text-xs text-white">
               * eBook bao gồm iBooks, PDF và các bản ePub
             </div>
@@ -353,7 +354,7 @@ const Home = () => {
                 }`}
               >
                 {!Selected ? (
-                  articles.slice(0,4).map(
+                  articles.slice(0, 4).map(
                     (
                       article // Đảo ngược thứ tự bài viết
                     ) => (

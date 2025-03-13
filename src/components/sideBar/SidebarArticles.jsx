@@ -25,7 +25,10 @@ const SidebarArticles = ({ newsArticles, setArticle }) => {
             key={article.id}
             className="grid xl:grid-cols-2 grid-cols-1 text-center lg:text-left
                     items-center cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-            onClick={() => setArticle(article)}
+            onClick={() => {
+              setArticle(article);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
           >
             <img
               src={article.imageURL}

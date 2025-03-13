@@ -8,7 +8,7 @@ const AdminUsers = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const fetchArticles = async () => {
+    const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axiosInstance.get("/users", {
@@ -19,7 +19,7 @@ const AdminUsers = () => {
 
         // Đảm bảo dữ liệu từ API là một mảng
         setUsers(res.data?.data?.data || []);
-        // setArticles(Array.isArray(res.data?.data?.data) ? res.data?.data?.data : []);
+        // setUsers(Array.isArray(res.data?.data?.data) ? res.data?.data?.data : []);
         // console.log("Danh sách người dùng - adminNews:", res.data?.data?.data);
         toast.success(<div className="w-90">🎉 Tải danh sách người dùng thành công!</div>);
       } catch (error) {
@@ -29,7 +29,7 @@ const AdminUsers = () => {
       }
     };
 
-    fetchArticles();
+    fetchUsers();
   }, []);
   return (
     <div className="w-full bg-gray-100">

@@ -34,10 +34,10 @@ const Header = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(
-        "🚀 ~ file: Header.jsx ~ line 68 ~ handleLogout ~ token",
-        token
-      );
+      // console.log(
+      //   "🚀 ~ file: Header.jsx ~ line 68 ~ handleLogout ~ token",
+      //   token
+      // );
       // Xóa token & username sau khi logout thành công
       localStorage.removeItem("token");
       localStorage.removeItem("username");
@@ -133,15 +133,18 @@ const Header = () => {
             Đăng nhập
           </Link> */}
           {loggedInUser ? (
-            <>
-              <span>Chào, {loggedInUser}!</span>
+            <div className="flex items-center space-x-6">
+              <button className="hover:-translate-x-2 duration-300 hover:cursor-pointer"
+              onClick={() => navigate("/user-profile")}>
+                Chào, {loggedInUser}!
+              </button>
               <button
                 onClick={handleLogout}
                 className="hover:cursor-pointer hover:scale-130 duration-300"
               >
                 Đăng xuất
               </button>
-            </>
+            </div>
           ) : (
             <Link to="/dang-nhap">Đăng nhập</Link>
           )}

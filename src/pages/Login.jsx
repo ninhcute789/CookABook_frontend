@@ -73,10 +73,11 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify(response.data.data.user)); // Lưu toàn bộ user vào localStorage
         localStorage.setItem("username", response.data.data.user.username);
         setLoggedInUser(username);
+        // console.log(response.data.data.user);
         toast.success("Đăng nhập thành công!");
         setTimeout(() => {
           window.location.href = "/";
-        }, 1000);
+        }, 1500);
         // window.location.reload();
       } else {
         toast.error("Đăng nhập thất bại! Kiểm tra lại thông tin đăng nhập.");

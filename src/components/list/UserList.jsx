@@ -55,7 +55,8 @@ const UserList = () => {
       // console.log("Danh sách người dùng:", res.data?.data?.data);
       // setCurrentPage(res.data?.data?.meta?.page || 1);
       // console.log("current page", res.data?.data?.meta?.page);
-      setTotalPages(res.data?.data?.meta?.totalPage || 1);
+
+      setTotalPages(res.data?.data?.meta?.totalPages || 1);
       // console.log("total page", res.data?.data?.meta?.totalPage);
       // console.log("📌 API response meta:", res.data?.data?.meta);
       // console.log("📌 page nhận từ API:", res.data?.data?.meta?.page);
@@ -186,58 +187,57 @@ const UserList = () => {
                 </tr>
               </thead>
               <tbody>
-                {users
-                  .map(
-                    (
-                      user // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
-                    ) => (
-                      <tr
-                        key={user.id}
-                        className="border border-gray-300 hover:bg-gray-300 transition-all"
-                      >
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.username}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.name}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.gender}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {new Date(user.dob).toLocaleDateString("vi-VN")}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.email}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.createdAt}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.updatedAt}
-                        </td>
-                        <td className=" p-2 space-x-4 items-center justify-center flex h-10">
-                          <LuPencilLine
-                            className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
-                            onClick={() => setEditingUserId(user.id)}
-                          />
+                {users.map(
+                  (
+                    user // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
+                  ) => (
+                    <tr
+                      key={user.id}
+                      className="border border-gray-300 hover:bg-gray-300 transition-all"
+                    >
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.username}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.name}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.gender}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(user.dob).toLocaleDateString("vi-VN")}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.email}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.createdAt}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.updatedAt}
+                      </td>
+                      <td className=" p-2 space-x-4 items-center justify-center flex h-10">
+                        <LuPencilLine
+                          className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
+                          onClick={() => setEditingUserId(user.id)}
+                        />
 
-                          <GoTrash
-                            className="text-red-700 hover:cursor-pointer hover:scale-150 duration-200"
-                            onClick={() => handleDelete(user.id)}
+                        <GoTrash
+                          className="text-red-700 hover:cursor-pointer hover:scale-150 duration-200"
+                          onClick={() => handleDelete(user.id)}
+                        />
+                        {editingUserId === user.id && (
+                          <UserUpdate
+                            user={user}
+                            onUpdate={handleUpdate}
+                            onClose={handleClose}
+                            userId={user.id}
                           />
-                          {editingUserId === user.id && (
-                            <UserUpdate
-                              user={user}
-                              onUpdate={handleUpdate}
-                              onClose={handleClose}
-                              userId={user.id}
-                            />
-                          )}
-                        </td>
-                      </tr>
-                    )
-                  )}
+                        )}
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
@@ -245,7 +245,9 @@ const UserList = () => {
             <button
               onClick={() => {
                 setPage((prev) => Math.max(prev - 1, 1));
-                scrollTo(0, 0);
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
               }}
               className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                 page === 1
@@ -263,12 +265,10 @@ const UserList = () => {
 
             <button
               onClick={() => {
-                setPage((prev) => {
-                  console.log("📌 prev:", prev);
-                  console.log("📌 totalPages:", totalPages);
-                  return Math.min(prev + 1, totalPages);
-                });
-                scrollTo(0, 0);
+                setPage((prev) => Math.min(prev + 1, totalPages));
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
               }}
               className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                 page === totalPages
