@@ -61,7 +61,7 @@ const AddArticle = ({ onSubmit, initialData = {} }) => {
     <>
       <button
         onClick={() => setIsModalOpen(!isModalOpen)}
-        className="bg-blue-500 hover:cursor-pointer mb-5 w-50
+        className="bg-blue-500 hover:cursor-pointer mb-5 w-50 duration-300
           hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         Thêm bài báo

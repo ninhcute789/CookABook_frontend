@@ -12,7 +12,7 @@ const ArticleList = () => {
   const [editingArticleId, setEditingArticleId] = useState(null);
   const [page, setPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
-  const pageSize = 10; // Số bài viết mỗi trang
+  const size = 9; // Số bài viết mỗi trang
 
   const fetchArticles = async (pageNumber) => {
     try {
@@ -23,7 +23,7 @@ const ArticleList = () => {
       }
 
       const res = await axios.get(
-        `http://localhost:8080/api/v1/articles?page=${pageNumber}&pageSize=${pageSize}`,
+        `http://localhost:8080/api/v1/articles?page=${pageNumber}&size=${size}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -132,55 +132,55 @@ const ArticleList = () => {
         [@media(max-width:845px)]:grid-cols-1 
         [@media(min-width:1160px)]:grid-cols-3 gap-4"
           >
-            {articles
-              .slice()
-              .reverse()
-              .map((article) => (
-                <div key={article.id} className="border p-4 rounded shadow-lg">
-                  <h3 className="text-lg font-semibold line-clamp-1">
-                    {article.title}
-                  </h3>
-                  {article.imageURL && (
-                    <img
-                      src={article.imageURL}
-                      alt="Article"
-                      className="w-full h-60 object-cover mt-2 rounded"
+            {articles.map((article) => (
+              <div
+                key={article.id}
+                className=" p-4 rounded shadow-lg shadow-[#696969]"
+              >
+                <h3 className="text-lg font-semibold line-clamp-1">
+                  {article.title}
+                </h3>
+                {article.imageURL && (
+                  <img
+                    src={article.imageURL}
+                    alt="Article"
+                    className="w-full h-60 object-cover mt-2 rounded"
+                  />
+                )}
+                <p className="text-gray-600 line-clamp-2 h-13">
+                  {article.content}
+                </p>
+
+                <p className="font-medium">
+                  {/* {console.log(article?.user?.name)} */}
+                  Tạo bởi - {article?.user?.name || "K có biết"}
+                </p>
+                <p className="font-medium">Thời gian - {article.createdAt}</p>
+                <p className="font-medium">
+                  Cập nhật - {article.updatedAt || "Chưa có"}
+                </p>
+
+                <div className="flex space-x-2 ml-auto mt-2">
+                  <LuPencilLine
+                    className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
+                    onClick={() => setEditingArticleId(article.id)}
+                  />
+                  <GoTrash
+                    className="text-red-500 hover:cursor-pointer hover:scale-150 duration-200"
+                    onClick={() => handleDelete(article.id)}
+                  />
+
+                  {editingArticleId === article.id && (
+                    <ArticleUpdate
+                      articleId={article.id}
+                      onUpdateSuccess={handleUpdateSuccess}
+                      onClose={handleClose} // Đóng form khi cập nhật xong hoặc bấm "Hủy"
+                      article={article}
                     />
                   )}
-                  <p className="text-gray-600 line-clamp-2 h-13">
-                    {article.content}
-                  </p>
-
-                  <p className="font-medium">
-                    {/* {console.log(article?.user?.name)} */}
-                    Tạo bởi - {article?.user?.name || "K có biết"}
-                  </p>
-                  <p className="font-medium">Thời gian - {article.createdAt}</p>
-                  <p className="font-medium">
-                    Cập nhật - {article.updatedAt || "Chưa có"}
-                  </p>
-
-                  <div className="flex space-x-2 ml-auto">
-                    <LuPencilLine
-                      className="text-blue-500 hover:cursor-pointer"
-                      onClick={() => setEditingArticleId(article.id)}
-                    />
-                    <GoTrash
-                      className="text-red-500 hover:cursor-pointer"
-                      onClick={() => handleDelete(article.id)}
-                    />
-
-                    {editingArticleId === article.id && (
-                      <ArticleUpdate
-                        articleId={article.id}
-                        onUpdateSuccess={handleUpdateSuccess}
-                        onClose={handleClose} // Đóng form khi cập nhật xong hoặc bấm "Hủy"
-                        article={article}
-                      />
-                    )}
-                  </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
           {/* Phân trang */}
           <div className="flex justify-center mt-4 space-x-2">
@@ -189,17 +189,17 @@ const ArticleList = () => {
                 setPage((prev) => Math.max(prev - 1, 1));
                 scrollTo(0, 0);
               }}
-              className={`px-4 py-2 border rounded-lg ${
+              className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                 page === 1
                   ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
               }`}
               disabled={page === 1}
             >
               Trước
             </button>
 
-            <span className="px-4 py-2 border rounded-lg">
+            <span className="px-4 py-2 rounded-lg shadow-md">
               {page} / {totalPages}
             </span>
 
@@ -208,10 +208,10 @@ const ArticleList = () => {
                 setPage((prev) => Math.min(prev + 1, totalPages));
                 scrollTo(0, 0);
               }}
-              className={`px-4 py-2 border rounded-lg ${
+              className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                 page === totalPages
                   ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer" 
               }`}
               disabled={page === totalPages}
             >

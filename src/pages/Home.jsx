@@ -70,9 +70,9 @@ const Home = () => {
           },
         });
 
-        console.log("✅ Dữ liệu API trả về:", res.data);
+        // console.log("✅ Dữ liệu API trả về:", res.data);
         setArticles(res.data?.data?.data || []);
-        console.log("Danh sách bài báo:", res.data?.data?.data);
+        // console.log("Danh sách bài báo:", res.data?.data?.data);
       } catch (error) {
         console.error(
           "❌ Lỗi khi lấy danh sách bài báo:",

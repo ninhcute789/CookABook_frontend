@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [passwordType, setPasswordType] = useState("password");
@@ -25,30 +26,11 @@ const Register = () => {
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
 
-  // const handleOnSubmit = (event) => {
-  //   event.preventDefault();
-  //   console.log("Name:", name);
-  //   console.log("Date:", date);
-  //   console.log("Email:", email);
-  //   console.log("Gender:", gender);
-  //   console.log("Username:", userName);
-  //   console.log("Password:", password);
-  //   console.log("RewirtePassword:", rewirtePassword);
-  //   if (password !== rewirtePassword) {
-  //     alert("Mật khẩu nhập lại không đúng");
-  //   }
-  //   const userData = {
-  //     name,
-  //     email,
-  //     password,
-  //   };
-  //   localStorage.setItem("user", JSON.stringify(userData));
-  //   console.log("User registered:", userData);
-  // };
-
   const handleOnSubmit = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem("token"); // Hoặc cách bạn lưu token
+    // const token = localStorage.getItem("token"); // Hoặc cách bạn lưu token
+    const token =
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1MDQ2OTMyNiwiaWF0IjoxNzQxODI5MzI2LCJ1c2VyIjp7ImlkIjoxMCwidXNlcm5hbWUiOiJhZG1pbiIsIm5hbWUiOiJhZG1pbiJ9LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVJfQ1JFQVRFIiwiUk9MRV9VU0VSX1VQREFURSJdfQ.3vayKQfnqeeuOsUKOCKiXCB9u3GiPk0Uuwv0WCmGY12m5_l_qcwCzQ6L4z9KsOUWH9dB_7ioBYqK_cX7OoI_eA"; // Hoặc cách bạn lưu token
 
     const config = {
       headers: {
@@ -57,7 +39,7 @@ const Register = () => {
       },
     };
     if (password !== rewirtePassword) {
-      alert("Mật khẩu nhập lại không đúng");
+      toast.error("Mật khẩu nhập lại không đúng");
       return;
     }
 
@@ -79,21 +61,56 @@ const Register = () => {
 
       if (response.status === 201 || response.status === 200) {
         console.log("Đăng ký thành công:", response.data);
-        alert("Đăng ký thành công!");
+        toast.success("Đăng ký thành công!");
         // Chuyển hướng hoặc làm gì đó sau khi đăng ký thành công
       }
     } catch (error) {
       console.error("Đăng ký thất bại:", error.response?.data || error.message);
       if (error.response?.status >= 400) {
-        alert(error.response?.data?.error);
+        toast.error(error.response?.data?.error);
       } else {
-        alert(error.response?.data?.message);
+        toast.success(error.response?.data?.message);
       }
     }
-    console.log(userData);
-    console.log("Dữ liệu gửi lên:", JSON.stringify(userData, null, 2));
-    console.log("UserName trước khi gửi:", username);
+    // console.log(userData);
+    // console.log("Dữ liệu gửi lên:", JSON.stringify(userData, null, 2));
+    // console.log("UserName trước khi gửi:", username);
   };
+
+  //   const handleOnSubmit = async (event) => {
+  //     event.preventDefault();
+
+  //     if (password !== rewirtePassword) {
+  //         alert("Mật khẩu nhập lại không đúng");
+  //         return;
+  //     }
+
+  //     const userData = {
+  //         username,
+  //         password,
+  //         name,
+  //         dob,
+  //         email,
+  //         gender,
+  //     };
+
+  //     try {
+  //         const response = await axios.post(
+  //             "http://127.0.0.1:8080/api/v1/users",
+  //             userData,
+  //             { headers: { "Content-Type": "application/json" } } // Không cần token
+  //         );
+
+  //         if (response.status === 201 || response.status === 200) {
+  //             console.log("Đăng ký thành công:", response.data);
+  //             alert("Đăng ký thành công!");
+  //             // Chuyển hướng hoặc xử lý sau khi đăng ký thành công
+  //         }
+  //     } catch (error) {
+  //         console.error("Đăng ký thất bại:", error.response?.data || error.message);
+  //         toast.error(error.response?.data?.error || "Có lỗi xảy ra khi đăng ký!");
+  //     }
+  // };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -156,7 +173,7 @@ const Register = () => {
               <input
                 type="text"
                 placeholder="Họ tên"
-                required
+                // required
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -164,12 +181,12 @@ const Register = () => {
                                 rounded-4xl pl-5 pr-14 placeholder:text-white
                                 border-2 border-cyan-950 "
               />
-              <GiFrozenArrow className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+              <GiFrozenArrow className="flex flex-col size-6 my-auto absolute right-4 top-3" />
             </div>
 
             <div className="input-box flex-col w-1/2 h-12 relative mb-4">
               <select
-                required
+                // required
                 onChange={(e) => {
                   setGender(e.target.value);
                 }}
@@ -177,7 +194,7 @@ const Register = () => {
                 rounded-4xl pl-5 pr-14 text-white
                 border-2 border-cyan-950 appearance-none pt-2.5"
               >
-                <option value="" disabled selected hidden className="">
+                <option value="" hidden className="">
                   Chọn giới tính
                 </option>
                 <option value="MALE" className="text-black">
@@ -190,7 +207,7 @@ const Register = () => {
                   Khác
                 </option>
               </select>
-              <RiMoneyCnyBoxFill className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+              <RiMoneyCnyBoxFill className="flex flex-col size-6 my-auto absolute right-4 top-3" />
             </div>
           </div>
           <div className="input-box flex w-full h-12 relative mb-4">
@@ -202,19 +219,19 @@ const Register = () => {
               onChange={(e) => {
                 setDob(e.target.value);
               }}
-              required
+              // required
               className=" flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
                         border-2 border-cyan-950 py-4 uppercase z-10"
             />
-            <LuCalendarFold className=" size-6  my-auto absolute right-4 top-2.5 cursor-pointer" />
+            <LuCalendarFold className=" size-6  my-auto absolute right-4 top-3 cursor-pointer" />
           </div>
 
           <div className="input-box flex w-full h-12 relative mb-4">
             <input
               type="email"
               placeholder="Email"
-              required
+              // required
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -222,44 +239,46 @@ const Register = () => {
                         rounded-4xl pl-5 pr-14 placeholder:text-white
                         border-2 border-cyan-950 "
             />
-            <MdOutlineMail className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+            <MdOutlineMail className="flex flex-col size-6 my-auto absolute right-4 top-3" />
           </div>
           <div className="input-box flex w-full h-12 relative mb-4">
             <input
               type="text"
               placeholder="Tài khoản"
-              required
+              // required
               onChange={(e) => {
                 setUsername(e.target.value);
               }}
               className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
                         border-2 border-cyan-950 "
+              autoComplete="username"
             />
-            <FaUser className="flex flex-col size-6 my-auto absolute right-4 top-2.5" />
+            <FaUser className="flex flex-col size-6 my-auto absolute right-4 top-3" />
           </div>
           <div className="input-box flex w-full h-12 relative mb-4">
             <input
               type={passwordType}
               placeholder="Mật khẩu"
-              required
+              // required
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
               className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
                         border-2 border-cyan-950"
+              autoComplete="new-password"
             />
             {passwordType === "password" ? (
               <FaEyeSlash
-                className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer"
+                className="flex flex-col size-6 my-auto absolute right-4 top-3 cursor-pointer"
                 onClick={() => {
                   setPasswordType("text");
                 }}
               />
             ) : (
               <FaEye
-                className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer"
+                className="flex flex-col size-6 my-auto absolute right-4 top-3 cursor-pointer"
                 onClick={() => {
                   setPasswordType("password");
                 }}
@@ -270,24 +289,25 @@ const Register = () => {
             <input
               type={rewirtePasswordType}
               placeholder="Nhập lại mật khẩu"
-              required
+              // required
               onChange={(e) => {
                 setRewirtePassword(e.target.value);
               }}
               className="flex flex-col w-full h-full bg-transparent
                         rounded-4xl pl-5 pr-14 placeholder:text-white
                         border-2 border-cyan-950"
+              autoComplete="new-password"
             />
             {rewirtePasswordType === "password" ? (
               <FaEyeSlash
-                className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer"
+                className="flex flex-col size-6 my-auto absolute right-4 top-3 cursor-pointer"
                 onClick={() => {
                   setRewirtePasswordType("text");
                 }}
               />
             ) : (
               <FaEye
-                className="flex flex-col size-6 my-auto absolute right-4 top-2.5 cursor-pointer"
+                className="flex flex-col size-6 my-auto absolute right-4 top-3 cursor-pointer"
                 onClick={() => {
                   setRewirtePasswordType("password");
                 }}

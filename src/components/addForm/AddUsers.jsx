@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -70,6 +69,7 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
       console.log("Check response:", res.data);
 
       onSubmit(res.data.data); // Cập nhật danh sách bài viết
+      console.log("✅ Thêm người dùng thành công:", res.data);
       // alert("Thêm người dùng thành công!");
       toast.success("🎉 Thêm người dùng thành công!");
       setIsOpen(false); // Đóng modal
@@ -93,7 +93,7 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="bg-blue-500 hover:cursor-pointer mb-5 w-50
+        className="bg-blue-500 hover:cursor-pointer mb-5 w-50 duration-300
           hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         Thêm user
@@ -162,15 +162,10 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
                   value={gender}
                   onChange={(e) => handleChangeGender(e)}
                   className="flex flex-col w-full  bg-transparent
-                rounded-md px-2.5 py-2 text-black my-auto hover:cursor-pointer
+                rounded px-2.5 py-2 text-black my-auto hover:cursor-pointer
                 border-1 border-cyan-950 appearance-none "
                 >
-                  <option
-                    value=""
-                    disabled
-                    hidden
-                    className=""
-                  ></option>
+                  <option value="" disabled hidden className=""></option>
                   <option value="MALE" className="text-black">
                     Nam
                   </option>
