@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
 import UserUpdate from "../update/UserUpdate";
 import AddUsers from "../addForm/AddUsers";
 import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
+// import { refreshAccessToken } from "../../api/AuthApi";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -16,8 +18,17 @@ const UserList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const size = 10; // Số lượng người dùng trên mỗi trang
 
+  // const handleRefresh = async () => {
+  //   const newAccessToken = await refreshAccessToken();
+  //   if (newAccessToken) {
+  //     console.log("Access token mới:", newAccessToken);
+  //   } else {
+  //     console.log("Lỗi khi làm mới token!");
+  //   }
+  // };
+
   const fetchUsers = async (page = 1) => {
-    console.log("📌 Giá trị page:", page); // Kiểm tra giá trị `page`
+    // console.log("📌 Giá trị page:", page); // Kiểm tra giá trị `page`
 
     if (typeof page !== "number") {
       toast.error("❌ Lỗi: page không phải số!", page);
@@ -33,24 +44,21 @@ const UserList = () => {
         return;
       }
 
-      const res = await axios.get(
-        `http://localhost:8080/api/v1/users?page=${page}&size=${size}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axiosInstance.get(`/users?page=${page}&size=${size}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      console.log("✅ Dữ liệu API trả về:", res.data);
+      // console.log("✅ Dữ liệu API trả về:", res.data);
       setUsers(res.data?.data?.data || []);
-      console.log("Danh sách người dùng:", res.data?.data?.data);
+      // console.log("Danh sách người dùng:", res.data?.data?.data);
       // setCurrentPage(res.data?.data?.meta?.page || 1);
       // console.log("current page", res.data?.data?.meta?.page);
       setTotalPages(res.data?.data?.meta?.totalPage || 1);
       // console.log("total page", res.data?.data?.meta?.totalPage);
-      console.log("📌 API response meta:", res.data?.data?.meta);
-      console.log("📌 page nhận từ API:", res.data?.data?.meta?.page);
+      // console.log("📌 API response meta:", res.data?.data?.meta);
+      // console.log("📌 page nhận từ API:", res.data?.data?.meta?.page);
 
       // toast.success(<div className="w-90">🎉 Tải danh sách người dùng thành công!</div>);
     } catch (error) {
@@ -63,7 +71,7 @@ const UserList = () => {
     }
   };
   useEffect(() => {
-    console.log("🔄 useEffect đang gọi fetchUsers với page =", page);
+    // console.log("🔄 useEffect đang gọi fetchUsers với page =", page);
     fetchUsers(page);
   }, [page]);
 
@@ -87,7 +95,7 @@ const UserList = () => {
       (t) => (
         <div className="flex flex-col">
           <span>Bạn có chắc muốn xóa người dùng này không?</span>
-          <div className="mt-2 flex justify-end space-x-2 mr-auto">
+          <div className="mt-2 flex justify-end space-x-2 mr-auto ">
             <button
               onClick={async () => {
                 toast.dismiss(t.id);
@@ -118,7 +126,7 @@ const UserList = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:8080/api/v1/users/${id}`, {
+      await axiosInstance.delete(`/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -136,7 +144,7 @@ const UserList = () => {
   return (
     <div className="p-10">
       <AddUsers
-        onSubmit={fetchUsers}
+        onSubmit={() => fetchUsers()}
         initialData={{
           username: "",
           password: "",
@@ -179,8 +187,6 @@ const UserList = () => {
               </thead>
               <tbody>
                 {users
-                  .slice()
-                  .reverse()
                   .map(
                     (
                       user // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
@@ -260,7 +266,8 @@ const UserList = () => {
                 setPage((prev) => {
                   console.log("📌 prev:", prev);
                   console.log("📌 totalPages:", totalPages);
-                  return Math.min(prev + 1, totalPages);});
+                  return Math.min(prev + 1, totalPages);
+                });
                 scrollTo(0, 0);
               }}
               className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${

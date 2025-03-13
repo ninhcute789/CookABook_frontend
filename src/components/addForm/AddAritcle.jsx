@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+// import axios from "axios";
 import ImageUploader from "../common/ImageUpload";
 import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
 
-const AddArticle = ({ onSubmit, initialData = {} }) => {
+const AddArticle = (props) => {
+  const { onSubmit, initialData = {} } = props;
+  
   const user = JSON.parse(localStorage.getItem("user")); // Lấy thông tin user từ localStorage
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -35,8 +38,8 @@ const AddArticle = ({ onSubmit, initialData = {} }) => {
     event.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post(
-        "http://localhost:8080/api/v1/articles",
+      const res = await axiosInstance.post(
+        "/articles",
         { title, content, imageURL: imageUrl, user: { id: user.id } },
         {
           headers: {

@@ -48,7 +48,6 @@ const Books = () => {
                 ${isFocused ? "w-80 border-gray-400" : "w-48 border-gray-300"}`}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                
               />
               <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
             </div>

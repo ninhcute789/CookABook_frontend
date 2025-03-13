@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
 import ArticleUpdate from "../update/ArticleUpdate";
 import AddArticle from "../addForm/AddAritcle";
 import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -12,9 +13,10 @@ const ArticleList = () => {
   const [editingArticleId, setEditingArticleId] = useState(null);
   const [page, setPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
-  const size = 9; // Số bài viết mỗi trang
+  const size = 6; // Số bài viết mỗi trang
+  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
 
-  const fetchArticles = async (pageNumber) => {
+  const fetchArticles = async (page = 1) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -22,8 +24,8 @@ const ArticleList = () => {
         return;
       }
 
-      const res = await axios.get(
-        `http://localhost:8080/api/v1/articles?page=${pageNumber}&size=${size}`,
+      const res = await axiosInstance.get(
+        `/articles?size=${size}&page=${page}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -32,7 +34,10 @@ const ArticleList = () => {
       // console.log("✅ API trả về:", res.data);
       setArticles(res.data?.data?.data || []);
       console.log("Danh sách bài viết:", res.data?.data?.data);
-      setTotalPages(res.data?.data?.meta?.totalPage);
+      setTotalPages(res.data?.data?.meta?.totalPages);
+      setTotalElements(res.data?.data?.meta?.totalElements);
+      console.log("Tổng số trang:", res.data?.data?.meta?.totalPages);
+      console.log("Tổng số bài viết:", res.data?.data?.meta?.totalElements);
     } catch (error) {
       console.error(
         "❌ Lỗi khi lấy danh sách:",
@@ -87,7 +92,7 @@ const ArticleList = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:8080/api/v1/articles/${id}`, {
+      await axiosInstance.delete(`/articles/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -119,10 +124,19 @@ const ArticleList = () => {
   return (
     <div className="p-10">
       <AddArticle
-        onSubmit={fetchArticles}
+        onSubmit={(e) => fetchArticles(e)}
         initialData={{ title: "", content: "", imageURL: "", createdBy: "" }}
       />
-      <h2 className="text-xl font-bold mb-4">Danh sách bài báo</h2>
+      <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
+        <h2 className="text-xl font-bold">Danh sách bài báo</h2>
+        <p
+          className="text-md 
+          hover:-translate-2 duration-300 hover:cursor-context-menu
+          font-medium ml-auto [@media(max-width:600px)]:mx-auto bg-[#7dd237] p-2 rounded-md"
+        >
+          Số lượng bài báo: {totalElements}
+        </p>
+      </div>
       {articles.length === 0 ? (
         <p className="text-gray-500">Không có bài báo nào!</p>
       ) : (
@@ -135,7 +149,7 @@ const ArticleList = () => {
             {articles.map((article) => (
               <div
                 key={article.id}
-                className=" p-4 rounded shadow-lg shadow-[#696969]"
+                className=" p-4 rounded shadow-md hover:scale-102 hover:shadow-xl duration-300 shadow-[#6969]"
               >
                 <h3 className="text-lg font-semibold line-clamp-1">
                   {article.title}
@@ -211,7 +225,7 @@ const ArticleList = () => {
               className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                 page === totalPages
                   ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer" 
+                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
               }`}
               disabled={page === totalPages}
             >

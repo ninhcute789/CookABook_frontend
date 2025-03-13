@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "react";
 // import { newsArticles } from "../data/dataNews.js";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
-import axios from "axios";
+// import axios from "axios";
 import SidebarArticles from "../components/sideBar/SidebarArticles.jsx";
 import { NavLink } from "react-router";
+import axiosInstance from "../services/axiosInstance.jsx";
+import toast from "react-hot-toast";
 
 // const ScrollToTop = () => {
 //   const { pathname } = useLocation();
@@ -27,8 +29,9 @@ const News = () => {
   const [page, setPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const size = 12; // Số bài viết mỗi trang
+  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
 
-  const fetchArticles = async (page) => {
+  const fetchArticles = async (page = 1) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -36,8 +39,8 @@ const News = () => {
         return;
       }
 
-      const res = await axios.get(
-        `http://localhost:8080/api/v1/articles?page=${page}&size=${size}`,
+      const res = await axiosInstance.get(
+        `/articles?size=${size}&page=${page}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -46,7 +49,9 @@ const News = () => {
       // console.log("✅ API trả về:", res.data);
       setArticles(res.data?.data?.data || []);
       console.log("Danh sách bài viết:", res.data?.data?.data);
-      setTotalPages(res.data?.data?.meta?.totalPage);
+      setTotalPages(res.data?.data?.meta?.totalPages);
+      setTotalElements(res.data?.data?.meta?.totalElements);
+      // toast.success("🎉 Tải danh sách bài viết thành công!");
     } catch (error) {
       console.error(
         "❌ Lỗi khi lấy danh sách:",
@@ -60,45 +65,13 @@ const News = () => {
     fetchArticles(page);
   }, [page]);
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        // if (!token) {
-        //   console.error(
-        //     "❌ Không tìm thấy token! Người dùng có thể chưa đăng nhập."
-        //   );
-        //   return;
-        // }
-
-        const res = await axios.get("http://localhost:8080/api/v1/articles", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        // console.log("✅ Dữ liệu API trả về:", res.data);
-        setArticles(res.data?.data?.data || []);
-      } catch (error) {
-        console.error(
-          "❌ Lỗi khi lấy danh sách bài báo:",
-          error.response?.data || error.message
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
-  }, []);
-
   const [selectedArticle, setSelectedArticle] = useState(null);
-  const truncateText = (text, wordLimit) => {
-    const words = text.split(" ");
-    return words.length > wordLimit
-      ? words.slice(0, wordLimit).join(" ") + "..."
-      : text;
-  };
+  // const truncateText = (text, wordLimit) => {
+  //   const words = text.split(" ");
+  //   return words.length > wordLimit
+  //     ? words.slice(0, wordLimit).join(" ") + "..."
+  //     : text;
+  // };
   const truncateDate = (text, wordLimit) => {
     const words = text.split(" ");
     return words.length > wordLimit
@@ -178,8 +151,8 @@ const News = () => {
                         </div>
                         <div className="font-bold text-[12px]">
                           {article.updatedAt
-                            ? truncateDate(article.updatedAt,1)
-                            : truncateDate(article.createdAt,1)}
+                            ? truncateDate(article.updatedAt, 1)
+                            : truncateDate(article.createdAt, 1)}
                         </div>
                       </div>
                       <NavLink
@@ -238,8 +211,8 @@ const News = () => {
             </div>
           )
         ) : (
-          <div className="flex w-11/12 mx-auto">
-            <div className="w-4/5">
+          <div className="flex md:w-11/12 mx-auto w-full">
+            <div className="w-4/5 [@media(max-width:767px)]:mx-auto">
               <button
                 onClick={() => {
                   setSelectedArticle(null),

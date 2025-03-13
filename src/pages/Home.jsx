@@ -9,17 +9,18 @@ import th2 from "../assets/th-2.jpg";
 import th3 from "../assets/th-3.jpg";
 import th4 from "../assets/th-4.jpg";
 import th5 from "../assets/th-5.jpg";
-import s1 from "../assets/s1.jpg";
-import s2 from "../assets/s2.jpg";
-import s3 from "../assets/s3.jpg";
-import s4 from "../assets/s4.jpg";
-import b3 from "../assets/books/b3.webp";
+// import s1 from "../assets/s1.jpg";
+// import s2 from "../assets/s2.jpg";
+// import s3 from "../assets/s3.jpg";
+// import s4 from "../assets/s4.jpg";
+// import b3 from "../assets/books/b3.webp";
 import { NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import BannerDeal from "../components/banner/BannerDeal";
-import axios from "axios";
+// import axios from "axios";
 import { IoIosArrowBack } from "react-icons/io";
 import SidebarArticles from "../components/sideBar/SidebarArticles";
+import axiosInstance from "../services/axiosInstance";
 
 const Home = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -64,7 +65,7 @@ const Home = () => {
           return;
         }
 
-        const res = await axios.get("http://localhost:8080/api/v1/articles", {
+        const res = await axiosInstance.get("/articles", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -345,86 +346,86 @@ const Home = () => {
             ) : (
               <div
                 className={`grid gap-2 
-                ${Selected ? "grid-cols-1" : 
-                  "grid-cols-1 [@media(min-width:910px)]:grid-cols-2 [@media(max-width:910px)]:w-2/3 [@media(max-width:910px)]:mx-auto"}`}
+                ${
+                  Selected
+                    ? "grid-cols-1"
+                    : "grid-cols-1 [@media(min-width:910px)]:grid-cols-2 [@media(max-width:910px)]:w-2/3 [@media(max-width:910px)]:mx-auto"
+                }`}
               >
                 {!Selected ? (
-                  articles
-                    .slice(0, 4)
-                    .reverse()
-                    .map(
-                      (
-                        article // Đảo ngược thứ tự bài viết
-                      ) => (
-                        <div
-                          key={article.id}
-                          className="img4 flex justify-center items-center
+                  articles.slice(0,4).map(
+                    (
+                      article // Đảo ngược thứ tự bài viết
+                    ) => (
+                      <div
+                        key={article.id}
+                        className="img4 flex justify-center items-center
                      shadow-xl mb-4 mr-2 bg-white p-2
                     xl:flex-row flex-col"
-                        >
-                          <div className="flex flex-col space-y-2 ">
-                            {article.imageURL && (
-                              <img
-                                src={article.imageURL}
-                                className="h-50 w-50 p-1 object-cover rounded-md "
-                              />
-                            )}
-                          </div>
-                          <div className="flex flex-col space-y-2 px-5 my-5 w-2/3">
-                            <div>
-                              <button
-                                className="bg-gray-400  
+                      >
+                        <div className="flex flex-col space-y-2 ">
+                          {article.imageURL && (
+                            <img
+                              src={article.imageURL}
+                              className="h-50 [@media(min-width:1280px)]:w-90 w-fit p-1 object-cover rounded-md "
+                            />
+                          )}
+                        </div>
+                        <div className="flex flex-col space-y-2 px-5 my-5 w-full">
+                          <div>
+                            <button
+                              className="bg-gray-400  
                                 text-cyan-800 font-bold py-1 
                                 text-xs px-3 rounded hover:bg-yellow-500 
                                 hover:text-black transition-all duration-200
                                 cursor-pointer"
-                                onClick={() => {
-                                  setSelected(true);
-                                  setArticle(article);
-                                }}
-                              >
-                                Tin tức
-                              </button>
-                            </div>
-                            <div className="  justify-between grid sm:grid-cols-2 grid-cols-1">
-                              <div className="flex">
-                                <div>
-                                  <LuCalendarFold className="translate-y-1 mr-1" />
-                                </div>
-                                <div>{truncateDate(article.createdAt, 1)}</div>
+                              onClick={() => {
+                                setSelected(true);
+                                setArticle(article);
+                              }}
+                            >
+                              Tin tức
+                            </button>
+                          </div>
+                          <div className="  justify-between grid sm:grid-cols-2 grid-cols-1">
+                            <div className="flex">
+                              <div>
+                                <LuCalendarFold className="translate-y-1 mr-1" />
                               </div>
-                              <div className="flex sm:ml-auto">
-                                <div>
-                                  <FaUser className="translate-y-1 mr-1" />
-                                </div>
-                                <div>By {article.user?.name}</div>
+                              <div>{truncateDate(article.createdAt, 1)}</div>
+                            </div>
+                            <div className="flex sm:ml-auto">
+                              <div>
+                                <FaUser className="translate-y-1 mr-1" />
                               </div>
-                            </div>
-                            <div>
-                              <NavLink
-                                to="#"
-                                className="font-bold hover:text-yellow-500 duration-200 transition-all"
-                                onClick={() => {
-                                  setSelected(true);
-                                  setArticle(article);
-                                }}
-                              >
-                                {truncateText(article.title,10)}
-                              </NavLink>
-                            </div>
-                            <div className=" xl:mb-0 mb-10">
-                              {truncateText(article.content, 10)}
+                              <div>By {article.user?.name}</div>
                             </div>
                           </div>
+                          <div>
+                            <NavLink
+                              to="#"
+                              className="font-bold hover:text-yellow-500 duration-200 transition-all"
+                              onClick={() => {
+                                setSelected(true);
+                                setArticle(article);
+                              }}
+                            >
+                              {truncateText(article.title, 10)}
+                            </NavLink>
+                          </div>
+                          <div className=" xl:mb-0 mb-10">
+                            {truncateText(article.content, 10)}
+                          </div>
                         </div>
-                      )
+                      </div>
                     )
+                  )
                 ) : (
                   <div className="flex ">
                     <div className="w-4/5">
                       <button
                         onClick={() => {
-                          setSelected(null)
+                          setSelected(null);
                         }}
                         className="mb-4 px-4 py-2 hover:opacity-50 mt-5
                             bg-gray-200 rounded hover:cursor-pointer"

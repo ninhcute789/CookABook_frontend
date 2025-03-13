@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
-import axios from "axios";
+// import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,8 +29,8 @@ const Header = () => {
         return;
       }
 
-      await axios.post(
-        "http://127.0.0.1:8080/api/v1/auth/logout",
+      await axiosInstance.post(
+        "/auth/logout",
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -79,27 +80,49 @@ const Header = () => {
           } md:flex md:items-center`}
         >
           <ul className="md:flex lg:space-x-8 text-center md:text-left">
-            {["Trang chủ", "Sách", "Tin tức", "Về chúng tôi", "Admin"].map(
-              (item, index) => {
-                const path =
-                  item === "Trang chủ"
-                    ? "/"
-                    : `/${item.toLowerCase().replace(/\s/g, "-")}`;
+            {loggedInUser === "admin" // Nếu tài khoản là Admin thì có phần header Admin
+              ? ["Trang chủ", "Sách", "Tin tức", "Về chúng tôi", "Admin"].map(
+                  (item, index) => {
+                    const path =
+                      item === "Trang chủ"
+                        ? "/"
+                        : `/${item.toLowerCase().replace(/\s/g, "-")}`;
 
-                return (
-                  <li key={index} className="py-2 md:py-0">
-                    <Link
-                      to={path}
-                      className="block text-gray-600 duration-300
+                    return (
+                      <li key={index} className="py-2 md:py-0">
+                        <Link
+                          to={path}
+                          className="block text-gray-600 duration-300
                       xl:px-4 lg:py-2 md:px-1 hover:scale-130  
                       hover:text-gray-900"
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                );
-              }
-            )}
+                        >
+                          {item}
+                        </Link>
+                      </li>
+                    );
+                  }
+                )
+              : ["Trang chủ", "Sách", "Tin tức", "Về chúng tôi"].map(
+                  (item, index) => {
+                    const path =
+                      item === "Trang chủ"
+                        ? "/"
+                        : `/${item.toLowerCase().replace(/\s/g, "-")}`;
+
+                    return (
+                      <li key={index} className="py-2 md:py-0">
+                        <Link
+                          to={path}
+                          className="block text-gray-600 duration-300
+                    xl:px-4 lg:py-2 md:px-1 hover:scale-130  
+                    hover:text-gray-900"
+                        >
+                          {item}
+                        </Link>
+                      </li>
+                    );
+                  }
+                )}
           </ul>
         </nav>
 
@@ -114,7 +137,7 @@ const Header = () => {
               <span>Chào, {loggedInUser}!</span>
               <button
                 onClick={handleLogout}
-                className="hover:cursor-pointer hover:scale-120 duration-300"
+                className="hover:cursor-pointer hover:scale-130 duration-300"
               >
                 Đăng xuất
               </button>

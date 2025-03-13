@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import bg from "../assets/bg-10.jpg";
 import toast from "react-hot-toast";
+import axiosInstance from "../services/axiosInstance";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -60,13 +61,10 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8080/api/v1/auth/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axiosInstance.post("/auth/login", {
+        username,
+        password,
+      });
 
       console.log("Dữ liệu API trả về:", response.data);
 

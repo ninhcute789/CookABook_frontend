@@ -12,8 +12,9 @@ import { NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import toast from "react-hot-toast";
+import axiosInstance from "../services/axiosInstance";
 
 const Register = () => {
   const [passwordType, setPasswordType] = useState("password");
@@ -53,8 +54,8 @@ const Register = () => {
     };
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8080/api/v1/users",
+      const response = await axiosInstance.post(
+        "/users",
         userData,
         config
       );

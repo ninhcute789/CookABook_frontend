@@ -1,8 +1,10 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+// import axios from "axios";
 import ImageUploader from "../common/ImageUpload";
 import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
+// import { refreshToken } from "../../api/AuthApi";
 
 const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
   // const [formData, setFormData] = useState({
@@ -33,8 +35,8 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
         return;
       }
 
-      const res = await axios.put(
-        "http://localhost:8080/api/v1/articles",
+      const res = await axiosInstance.put(
+        "/articles",
         {
           id: id,
           title: title,
@@ -67,6 +69,13 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
       );
     }
   };
+  // refreshToken().then((data) => {
+  //   if (data) {
+  //     console.log("Access Token mới:", data.accessToken);
+  //   } else {
+  //     console.log("Refresh token không hợp lệ hoặc đã hết hạn!");
+  //   }
+  // });
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

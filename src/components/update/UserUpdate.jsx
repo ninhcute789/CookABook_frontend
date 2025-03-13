@@ -1,9 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
 
-const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
+const UserUpdate = (props) => {
+  const { user, onUpdate, onClose, userId } = props;
+
   const [password, setPassword] = useState(user.password);
   const [name, setName] = useState(user.name);
   const [gender, setGender] = useState(user.gender);
@@ -26,8 +29,8 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
         return;
       }
 
-      const res = await axios.put(
-        "http://localhost:8080/api/v1/users",
+      const res = await axiosInstance.put(
+        "/users",
         {
           id: id,
           password: password,
@@ -61,7 +64,7 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
         <h2 className="text-lg font-semibold mb-4">Cập nhật thông tin</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e)=>handleSubmit(e)}>
           <div className="space-y-4 grid grid-cols-2 text-left">
             <label className="block mr-2">
               Họ và tên
@@ -115,7 +118,9 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
                 rounded-md px-2.5 py-2 text-black my-auto hover:cursor-pointer
                 border-1 border-cyan-950 appearance-none "
               >
-                <option value="" disabled hidden className="">Chọn giới tính</option>
+                <option value="" disabled hidden className="">
+                  Chọn giới tính
+                </option>
                 <option value="MALE" className="text-black">
                   Nam
                 </option>
@@ -141,9 +146,6 @@ const UserUpdate = ({ user, onUpdate, onClose, userId }) => {
           </div>
         </form>
       </div>
-      <Toaster
-        position="top-right" 
-      />
     </div>
   );
 };

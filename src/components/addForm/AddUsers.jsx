@@ -1,9 +1,12 @@
-import axios from "axios";
+// import axios from "axios";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
 
-const AddUsers = ({ onSubmit, initialData = {} }) => {
+const AddUsers = (props) => {
+  const { onSubmit, initialData = {} } = props;
+
   const [isOpen, setIsOpen] = useState(false);
 
   const [username, setUsername] = useState("");
@@ -47,8 +50,8 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
     try {
       const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
-      const res = await axios.post(
-        "http://localhost:8080/api/v1/users",
+      const res = await axiosInstance.post(
+        "/users",
         {
           username: username,
           password: password,
@@ -198,6 +201,7 @@ const AddUsers = ({ onSubmit, initialData = {} }) => {
     </>
   );
 };
+
 AddUsers.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   initialData: PropTypes.shape({
@@ -209,4 +213,5 @@ AddUsers.propTypes = {
     email: PropTypes.string,
   }),
 };
+
 export default AddUsers;
