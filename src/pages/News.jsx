@@ -40,7 +40,7 @@ const News = () => {
       }
 
       const res = await axiosInstance.get(
-        `/articles?size=${size}&page=${page}`,
+        `/articles/all?size=${size}&page=${page}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

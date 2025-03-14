@@ -17,6 +17,7 @@ const UserList = () => {
   // const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const size = 10; // Số lượng người dùng trên mỗi trang
+  const [totalElements, setTotalElements] = useState(0); // Tổng số người dùng
 
   // const handleRefresh = async () => {
   //   const newAccessToken = await refreshAccessToken();
@@ -55,7 +56,7 @@ const UserList = () => {
       // console.log("Danh sách người dùng:", res.data?.data?.data);
       // setCurrentPage(res.data?.data?.meta?.page || 1);
       // console.log("current page", res.data?.data?.meta?.page);
-
+      setTotalElements(res.data?.data?.meta?.totalElements || 0);
       setTotalPages(res.data?.data?.meta?.totalPages || 1);
       // console.log("total page", res.data?.data?.meta?.totalPage);
       // console.log("📌 API response meta:", res.data?.data?.meta);
@@ -155,7 +156,16 @@ const UserList = () => {
           gender: "",
         }}
       />
-      <h2 className="text-xl font-bold mb-4">Danh sách người dùng</h2>
+      <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
+        <h2 className="text-xl font-bold">Danh sách người dùng</h2>
+        <p
+          className="text-md 
+          hover:-translate-2 duration-300 hover:cursor-context-menu
+          font-medium ml-auto [@media(max-width:600px)]:mx-auto bg-[#7dd237] p-2 rounded-md"
+        >
+          Số lượng người dùng: {totalElements}
+        </p>
+      </div>
       {users.length === 0 ? (
         <p className="text-gray-500">Không có người dùng nào!</p>
       ) : (

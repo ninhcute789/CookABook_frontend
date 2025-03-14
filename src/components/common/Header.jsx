@@ -4,6 +4,7 @@ import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
 // import axios from "axios";
 import axiosInstance from "../../services/axiosInstance";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,7 @@ const Header = () => {
         return;
       }
 
-      await axiosInstance.post(
+      const response = await axiosInstance.post(
         "/auth/logout",
         {},
         { headers: { Authorization: `Bearer ${token}` } }
@@ -39,10 +40,11 @@ const Header = () => {
       //   token
       // );
       // Xóa token & username sau khi logout thành công
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       localStorage.removeItem("username");
       localStorage.removeItem("user");
       setLoggedInUser(""); // Reset lại state
+      toast.success(response.data.message);
       navigate("/dang-nhap"); // Chuyển về trang đăng nhập
     } catch (error) {
       console.error(

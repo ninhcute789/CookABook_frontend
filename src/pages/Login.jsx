@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 // import axios from "axios";
 import bg from "../assets/bg-10.jpg";
 import toast from "react-hot-toast";
@@ -14,6 +14,8 @@ const Login = () => {
   const [loggedInUser, setLoggedInUser] = useState(
     localStorage.getItem("username") || ""
   );
+  const navigate = useNavigate();
+
 
   // Xử lý scroll lên đầu trang khi thay đổi route
   const ScrollToTop = () => {
@@ -74,10 +76,8 @@ const Login = () => {
         localStorage.setItem("username", response.data.data.user.username);
         setLoggedInUser(username);
         // console.log(response.data.data.user);
-        toast.success("Đăng nhập thành công!");
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 1500);
+        toast.success(response.data.message);
+        navigate("/");
         // window.location.reload();
       } else {
         toast.error("Đăng nhập thất bại! Kiểm tra lại thông tin đăng nhập.");

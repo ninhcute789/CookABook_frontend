@@ -29,9 +29,9 @@ const Register = () => {
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
-    // const token = localStorage.getItem("token"); // Hoặc cách bạn lưu token
-    const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1MDQ2OTMyNiwiaWF0IjoxNzQxODI5MzI2LCJ1c2VyIjp7ImlkIjoxMCwidXNlcm5hbWUiOiJhZG1pbiIsIm5hbWUiOiJhZG1pbiJ9LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVJfQ1JFQVRFIiwiUk9MRV9VU0VSX1VQREFURSJdfQ.3vayKQfnqeeuOsUKOCKiXCB9u3GiPk0Uuwv0WCmGY12m5_l_qcwCzQ6L4z9KsOUWH9dB_7ioBYqK_cX7OoI_eA"; // Hoặc cách bạn lưu token
+    const token = localStorage.getItem("token"); // Hoặc cách bạn lưu token
+    // const token =
+    //   "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1MDQ2OTMyNiwiaWF0IjoxNzQxODI5MzI2LCJ1c2VyIjp7ImlkIjoxMCwidXNlcm5hbWUiOiJhZG1pbiIsIm5hbWUiOiJhZG1pbiJ9LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVJfQ1JFQVRFIiwiUk9MRV9VU0VSX1VQREFURSJdfQ.3vayKQfnqeeuOsUKOCKiXCB9u3GiPk0Uuwv0WCmGY12m5_l_qcwCzQ6L4z9KsOUWH9dB_7ioBYqK_cX7OoI_eA"; // Hoặc cách bạn lưu token
 
     const config = {
       headers: {
@@ -55,7 +55,7 @@ const Register = () => {
 
     try {
       const response = await axiosInstance.post(
-        "/users",
+        "/users/register",
         userData,
         config
       );
@@ -64,6 +64,9 @@ const Register = () => {
         console.log("Đăng ký thành công:", response.data);
         toast.success("Đăng ký thành công!");
         // Chuyển hướng hoặc làm gì đó sau khi đăng ký thành công
+        setTimeout(() => {
+          window.location.href = "/dang-nhap";
+        }, 1500);
       }
     } catch (error) {
       console.error("Đăng ký thất bại:", error.response?.data || error.message);

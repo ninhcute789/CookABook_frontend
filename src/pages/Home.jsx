@@ -65,7 +65,7 @@ const Home = () => {
           return;
         }
 
-        const res = await axiosInstance.get("/articles", {
+        const res = await axiosInstance.get("/articles/all", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

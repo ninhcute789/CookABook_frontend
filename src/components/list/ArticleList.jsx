@@ -25,7 +25,7 @@ const ArticleList = () => {
       }
 
       const res = await axiosInstance.get(
-        `/articles?size=${size}&page=${page}`,
+        `/articles/all?size=${size}&page=${page}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -99,6 +99,7 @@ const ArticleList = () => {
       setArticles((prevArticles) =>
         prevArticles.filter((article) => article.id !== id)
       );
+      setTotalElements((prevTotal) => Math.max(prevTotal - 1, 0));
 
       toast.success("🗑 Xóa bài viết thành công!");
     } catch (error) {

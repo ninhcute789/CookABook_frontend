@@ -11,7 +11,7 @@ const AdminNews = () => {
   const fetchArticles = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axiosInstance.get("/articles", {
+      const res = await axiosInstance.get("/articles/all", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
