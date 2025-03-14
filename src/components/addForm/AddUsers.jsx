@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
+import ImageUploader from "../common/ImageUpload";
 
 const AddUsers = (props) => {
   const { onSubmit, initialData = {} } = props;
@@ -15,6 +16,7 @@ const AddUsers = (props) => {
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
+  const [avatar, setAvatar] = useState("");
 
   const handleChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -43,6 +45,7 @@ const AddUsers = (props) => {
       setDob(initialData.dob || "");
       setEmail(initialData.email || "");
       setGender(initialData.gender || "");
+      setAvatar(initialData.avatar || "");
     }
   }, [isOpen, initialData]);
 

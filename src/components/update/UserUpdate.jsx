@@ -3,6 +3,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
+import ImageUploader from "../common/ImageUpload";
 
 const UserUpdate = (props) => {
   const { user, onUpdate, onClose, userId } = props;
@@ -12,6 +13,7 @@ const UserUpdate = (props) => {
   const [gender, setGender] = useState(user.gender);
   const [dob, setDob] = useState(user.dob);
   const [email, setEmail] = useState(user.email);
+  const [avatar, setAvatar] = useState(user.avatar);
   const [id] = useState(userId);
 
   // const handleChangePassword = (e) => setPassword(e.target.value);
@@ -19,6 +21,8 @@ const UserUpdate = (props) => {
   const handleChangeGender = (e) => setGender(e.target.value);
   const handleChangeDob = (e) => setDob(e.target.value);
   const handleChangeEmail = (e) => setEmail(e.target.value);
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +42,7 @@ const UserUpdate = (props) => {
           gender: gender || null,
           dob: dob,
           email: email,
+          avatar: avatar,
         },
         {
           headers: {
@@ -46,7 +51,8 @@ const UserUpdate = (props) => {
           },
         }
       );
-
+      setAvatar(res.data.data.avatar);
+      console.log("avatar đã được cập nhật:",res.data.data.avatar);
       console.log("✅ Người dùng đã được cập nhật:", res.data);
       onUpdate(res.data.data); // Cập nhật danh sách user
       onClose();
@@ -64,8 +70,8 @@ const UserUpdate = (props) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
         <h2 className="text-lg font-semibold mb-4">Cập nhật thông tin</h2>
-        <form onSubmit={(e)=>handleSubmit(e)}>
-          <div className="space-y-4 grid grid-cols-2 text-left">
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <div className="space-y-4 grid grid-cols-2 text-left mb-2">
             <label className="block mr-2">
               Họ và tên
               <input
@@ -133,6 +139,10 @@ const UserUpdate = (props) => {
               </select>
             </label>
           </div>
+          <ImageUploader
+            onUploadSuccess={(url) => setAvatar(url)}
+            initialImageUrl={user.avatar}
+          />
           <div className="flex justify-end mt-4 space-x-2">
             <button className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>
               Hủy

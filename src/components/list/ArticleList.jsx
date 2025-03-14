@@ -150,7 +150,7 @@ const ArticleList = () => {
             {articles.map((article) => (
               <div
                 key={article.id}
-                className=" p-4 rounded shadow-md hover:scale-102 hover:shadow-xl duration-300 shadow-[#6969]"
+                className=" p-4 rounded shadow-md hover:shadow-xl duration-300 shadow-[#6969]"
               >
                 <h3 className="text-lg font-semibold line-clamp-1">
                   {article.title}

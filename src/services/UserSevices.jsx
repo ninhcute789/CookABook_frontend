@@ -9,7 +9,7 @@ const getUserById = async (id) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    toast.success("🎉 Lấy thông tin người dùng thành công!");
+    // toast.success("🎉 Lấy thông tin người dùng thành công!");
     return response.data.data;
   } catch (error) {
     console.error("❌ Error in getUser:", error);
