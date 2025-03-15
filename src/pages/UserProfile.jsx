@@ -2,12 +2,22 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import axiosInstance from "../services/axiosInstance";
-import { getUserById } from "../services/UserSevices";
+import { getUsersById } from "../services/UserSevices";
 import UserUpdate from "../components/update/UserUpdate";
+import { getAllArticles, handleDelete } from "../services/ArticleServices";
+import { LuPencilLine } from "react-icons/lu";
+import { GoTrash } from "react-icons/go";
+import ArticleUpdate from "../components/update/ArticleUpdate";
+import { truncateText } from "../services/CommonServices";
 
 const UserProfile = () => {
   const [user, setUser] = useState(localStorage.getItem("user"));
   const [editingUserId, setEditingUserId] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [editingArticleId, setEditingArticleId] = useState(null);
+
+  const parsedUser = JSON.parse(localStorage.getItem("user"));
+  const currentUserId = parsedUser.id;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -16,7 +26,7 @@ const UserProfile = () => {
         if (!storedUser) return;
 
         const parsedUser = JSON.parse(storedUser);
-        const res = await getUserById(parsedUser.id);
+        const res = await getUsersById(parsedUser.id);
         setUser(res);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu user:", error);
@@ -27,16 +37,44 @@ const UserProfile = () => {
   }, []);
 
   useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const res = await getAllArticles();
+        console.log("📜 Dữ liệu bài báo:", res);
+        setArticles(res);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu bài báo:", error);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  useEffect(() => {
     // add or remove overflow-y-hidden class to body
-    if (editingUserId) {
+    if (editingUserId || editingArticleId) {
       document.body.classList.add("overflow-y-hidden");
     } else {
       document.body.classList.remove("overflow-y-hidden");
     }
-  }, [editingUserId]);
+  }, [editingUserId, editingArticleId]);
 
-  const handleClose = () => {
+  const handleCloseArticle = () => {
+    setEditingArticleId(null);
+  };
+  const handleCloseUser = () => {
     setEditingUserId(null);
+  };
+
+  const handleUpdateSuccess = (updatedArticle) => {
+    setEditingArticleId(null); // Đóng form chỉnh sửa
+    setArticles((prevArticles) =>
+      prevArticles.map((article) =>
+        article.id === updatedArticle.data.id
+          ? { ...article, ...updatedArticle.data }
+          : article
+      )
+    );
   };
 
   const handleUpdate = (updatedUser) => {
@@ -49,22 +87,33 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white min-h-fit p-6 flex">
+    <div className="m-4 bg-white shadow-2xl shadow-neutral-600 rounded text-black min-h-fit p-6 flex lg:flex-row flex-col">
       {/* Profile Section */}
-      <div className="IMAGE py-8 flex flex-col items-center w-2/5 px-10">
-        <img
-          src={user.avatar} // Thay bằng avatar thực tế
-          alt="User Avatar"
-          className="w-45 h-60 rounded-full border-4 border-gray-600 object-cover"
-        />
-        <h2 className="mt-3 text-xl font-bold">Đoàn Hải Ninh</h2>
-        <p className="text-gray-400">@ninhcute789 · he/him</p>
-        <p className="mt-2 text-sm">siuuuuuuuuuuu</p>
+      <div className="IMAGE py-4 flex flex-col items-center lg:w-2/5 px-10">
+        <div className="relative">
+          <img
+            src={user.avatar} // Thay bằng avatar thực tế
+            alt=""
+            className="w-65 h-65 my-4 rounded-full border-2 border-gray-600 object-cover shadow-2xl shadow-neutral-900"
+          />
+          {!user.avatar && (
+            <p className="absolute left-1/2 -translate-1/2  top-1/2 font-bold text-center text-gray-500 w-full">
+              Ảnh đại diện
+            </p>
+          )}
+        </div>
+        <h2 className="mt-3 text-2xl font-bold">{user.name}</h2>
+        <p className="text-gray-400 text-lg">
+          {user.email} · {user.gender === "MALE" && "he/him"}
+          {user.gender === "FEMALE" && "she/her"}
+          {user.gender === "OTHER" && "they/them"}
+        </p>
         {/* <button className="mt-3 px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
           Edit Profile
         </button> */}
         <button
-          className="mt-3 px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600"
+          className="mt-3 px-4 py-2 hover:cursor-pointer hover:text-white border
+          bg-white duration-300 rounded-md hover:bg-gray-600 text-lg"
           onClick={() => setEditingUserId(user.id)}
         >
           Chỉnh sửa
@@ -73,12 +122,85 @@ const UserProfile = () => {
           <UserUpdate
             user={user}
             onUpdate={handleUpdate}
-            onClose={handleClose}
+            onClose={handleCloseUser}
             userId={user.id}
           />
         )}
       </div>
       <div className="CONTENT w-full">
+        {/* Bio */}
+        <div className="mt-6">
+          <div className="bg-gray-800 p-4 rounded-md shadow-md shadow-neutral-700">
+            <div className="text-white text-center font-semibold text-2xl">
+              Những bài báo bạn đã đăng
+            </div>
+          </div>
+          <div className=" overflow-hidden rounded-lg mt-4 border border-gray-300">
+            {articles.filter((article) => article.user?.id === currentUserId).length === 0 ? (
+              <div className="text-center p-4 text-gray-400">
+                Bạn chưa đăng bài nào
+              </div>
+            ) : (
+              <table className="min-w-full border-collapse border border-gray-300 shadow-md">
+                {/* Header */}
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="border border-gray-300 p-2">Tiêu đề</th>
+                    <th className="border border-gray-300 p-2">Nội dung</th>
+                    <th className="border border-gray-300 p-2">Ngày tạo</th>
+                    <th className="border border-gray-300 p-2">Cập nhật</th>
+                    {/* <th className="border border-gray-300 p-2">Hành động</th> */}
+                  </tr>
+                </thead>
+
+                {/* Body */}
+                <tbody>
+                  {articles
+                    ?.filter((article) => article.user?.id === currentUserId)
+                    .map((article) => (
+                      <tr
+                        key={article.id}
+                        className="border border-gray-300 hover:bg-gray-100"
+                      >
+                        <td className="border border-gray-300 p-2">
+                          {article.title}
+                        </td>
+                        <td className="border border-gray-300 p-2 text-center">
+                          {/* {article?.user?.name || "Không rõ"} */}
+                          {truncateText(article.content, 5)}
+                        </td>
+                        <td className="border border-gray-300 p-2 text-center">
+                          {article.createdAt}
+                        </td>
+                        <td className="border border-gray-300 p-2 text-center">
+                          {article.updatedAt || "Chưa cập nhật"}
+                        </td>
+                        <td className="items-center p-2 flex h-10 justify-center space-x-2">
+                          <LuPencilLine
+                            className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
+                            onClick={() => setEditingArticleId(article.id)}
+                          />
+                          <GoTrash
+                            className="text-red-500 hover:cursor-pointer hover:scale-150 duration-200"
+                            onClick={() => handleDelete(article.id)}
+                          />
+                          {editingArticleId === article.id && (
+                            <ArticleUpdate
+                              articleId={article.id}
+                              onUpdateSuccess={handleUpdateSuccess}
+                              onClose={handleCloseArticle}
+                              article={article}
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+
         {/* Popular Repositories */}
         <div className="mt-6 flex flex-col">
           <h3 className="text-lg font-semibold">Popular repositories</h3>
@@ -105,12 +227,12 @@ const UserProfile = () => {
           <h3 className="text-lg font-semibold">
             280 contributions in the last year
           </h3>
-          <div className="mt-3 grid grid-cols-70 gap-1">
+          <div className="mt-3 grid grid-cols-70 gap-1 bg-gray-800 p-4 rounded">
             {Array.from({ length: 280 }).map((_, index) => (
               <div
                 key={index}
                 className="w-3 h-3 bg-green-500 rounded-sm"
-                style={{ opacity: Math.random() * 0.8  }}
+                style={{ opacity: Math.random() * 0.8 + 0.2 }}
               />
             ))}
           </div>

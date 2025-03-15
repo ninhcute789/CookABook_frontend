@@ -133,6 +133,7 @@ const UserList = () => {
       });
 
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+      setTotalElements((prev) => prev - 1);
 
       toast.success("🗑 Xóa người dùng thành công!");
     } catch (error) {
@@ -224,7 +225,7 @@ const UserList = () => {
                         {user.createdAt}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
-                        {user.updatedAt}
+                        {user.updatedAt || "Chưa cập nhật"}
                       </td>
                       <td className=" p-2 space-x-4 items-center justify-center flex h-10">
                         <LuPencilLine

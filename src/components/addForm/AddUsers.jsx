@@ -186,7 +186,7 @@ const AddUsers = (props) => {
             </div>
             <div className="flex justify-end mt-4 space-x-2">
               <button
-                className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer"
+                className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
                 onClick={() => setIsOpen(false)}
               >
                 Hủy

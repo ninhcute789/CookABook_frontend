@@ -54,7 +54,7 @@ const ImageUploader = ({ onUploadSuccess, initialImageUrl }) => {
       /> */}
       <label
         className=" p-1 rounded flex items-center space-x-2 w-fit
-            bg-gray-300 hover:cursor-pointer mb-2"
+            bg-gray-300 hover:cursor-pointer mb-2 hover:bg-gray-400 duration-300"
         htmlFor="labelUpload"
       >
         <FcPlus className="text-white " />

@@ -361,7 +361,7 @@ const Home = () => {
                       <div
                         key={article.id}
                         className="img4 flex justify-center items-center
-                     shadow-xl mb-4 mr-2 bg-white p-2
+                     shadow-xl mb-4 mr-2 bg-white p-2 
                     xl:flex-row flex-col"
                       >
                         <div className="flex flex-col space-y-2 ">
@@ -388,7 +388,7 @@ const Home = () => {
                               Tin tức
                             </button>
                           </div>
-                          <div className="  justify-between grid sm:grid-cols-2 grid-cols-1">
+                          <div className="grid sm:grid-cols-2 grid-cols-1 w-10/10">
                             <div className="flex">
                               <div>
                                 <LuCalendarFold className="translate-y-1 mr-1" />
@@ -399,7 +399,7 @@ const Home = () => {
                               <div>
                                 <FaUser className="translate-y-1 mr-1" />
                               </div>
-                              <div>By {article.user?.name}</div>
+                              <div>{article.user?.name}</div>
                             </div>
                           </div>
                           <div>

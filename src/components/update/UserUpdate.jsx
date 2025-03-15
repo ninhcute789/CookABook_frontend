@@ -143,14 +143,14 @@ const UserUpdate = (props) => {
           />
           <div className="flex justify-end mt-4 space-x-2">
             <button
-              className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer"
+              className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400 duration-300"
               onClick={onClose}
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:cursor-pointer"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:cursor-pointer hover:bg-blue-600 duration-300"
             >
               Cập nhật
             </button>

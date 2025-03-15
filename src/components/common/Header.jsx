@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
-import { getUserById } from "../../services/UserSevices";
+import { getUsersById } from "../../services/UserSevices";
 import axiosInstance from "../../services/axiosInstance";
 import toast from "react-hot-toast";
 
@@ -42,7 +42,7 @@ const Header = () => {
       try {
         if (!user) return;
 
-        const res = await getUserById(user.id);
+        const res = await getUsersById(user.id);
         if (JSON.stringify(res) !== JSON.stringify(user)) {
           // Kiểm tra trước khi cập nhật
           setUser(res);
@@ -85,7 +85,7 @@ const Header = () => {
         "❌ Lỗi khi đăng xuất:",
         error.response?.data || error.message
       );
-      alert("Không thể đăng xuất, vui lòng thử lại!");
+      toast.error("Không thể đăng xuất, vui lòng thử lại!");
     }
   };
 

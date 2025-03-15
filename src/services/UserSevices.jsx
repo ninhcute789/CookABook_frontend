@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import axiosInstance from "./axiosInstance";
 
-const getUserById = async (id) => {
+const getUsersById = async (id) => {
   try {
     const token = localStorage.getItem("token");
     const response = await axiosInstance.get(`/users/${id}`, {
@@ -40,4 +40,4 @@ const fetchUsers = async () => {
   }
 };
 
-export { getUserById, fetchUsers };
+export { getUsersById, fetchUsers };

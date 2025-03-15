@@ -105,14 +105,16 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
           <div className="flex justify-end space-x-2 mt-2">
             <button
               type="button"
-              className="bg-gray-400 text-white px-4 py-2 rounded hover:cursor-pointer"
+              className="bg-gray-400 hover:bg-gray-500 duration-300
+              text-white px-4 py-2 rounded hover:cursor-pointer"
               onClick={onClose}
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:cursor-pointer"
+              className="bg-blue-500 hover:bg-blue-600 duration-300
+              text-white px-4 py-2 rounded hover:cursor-pointer"
             >
               Cập nhật
             </button>
