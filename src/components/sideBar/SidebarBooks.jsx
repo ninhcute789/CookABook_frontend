@@ -65,8 +65,8 @@ const SidebarBooks = () => {
             )}
           </div>
           <div
-            className={`pl-4 text-gray-700 transition-max-height duration-700 ease-in-out overflow-hidden ${
-              openCategory === index ? "max-h-96" : "max-h-0"
+            className={`pl-4 text-gray-700 transition-max-height duration-700 overflow-hidden ${
+              openCategory === index ? "max-h-[535px]" : "max-h-0"
             }`}
           >
             {category.subcategories.map((sub, i) => (

@@ -1,56 +1,11 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { FiMenu, FiX, FiUser, FiLogOut, FiFileText } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import axiosInstance from "../services/axiosInstance";
 import { getUserById } from "../services/UserSevices";
 import UserUpdate from "../components/update/UserUpdate";
 
-const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
-  return (
-    <div
-      className={`fixed top-18 left-0 h-full w-64 bg-gray-900 text-white shadow-lg transform ${
-        isOpen ? "translate-x-0" : "-translate-x-64"
-      } transition-transform duration-300`}
-    >
-      <div className="p-3 h-14 flex justify-between items-center border-b border-gray-700">
-        <h2 className="text-lg font-semibold">Dashboard</h2>
-        <FiX className="cursor-pointer" size={24} onClick={toggleSidebar} />
-      </div>
-      <nav className="mt-5 space-y-3">
-        <a href="#" className=" flex items-center space-x-2 hover:bg-gray-700">
-          <div className="px-5 py-2 hover:translate-x-3 w-full flex items-center space-x-2 duration-300">
-            <FiUser /> <span>Hồ sơ</span>
-          </div>
-        </a>
-        <a href="#" className=" flex items-center space-x-2 hover:bg-gray-700">
-          <div className="px-5 py-2 hover:translate-x-3 w-full flex items-center space-x-2 duration-300">
-            <FiFileText /> <span>Bài viết</span>
-          </div>
-        </a>
-        <a
-          href="#"
-          className=" flex items-center space-x-2 hover:bg-red-600"
-          onClick={handleLogout}
-        >
-          <div className="px-5 py-2 hover:translate-x-3 w-full flex items-center space-x-2 duration-300">
-            <FiLogOut /> <span>Đăng xuất</span>
-          </div>
-        </a>
-      </nav>
-    </div>
-  );
-};
-Sidebar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
-  handleLogout: PropTypes.func.isRequired,
-};
-
-export default function UserDashboard() {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+const UserProfile = () => {
   const [user, setUser] = useState(localStorage.getItem("user"));
   const [editingUserId, setEditingUserId] = useState(null);
 
@@ -59,7 +14,7 @@ export default function UserDashboard() {
       try {
         const storedUser = localStorage.getItem("user");
         if (!storedUser) return;
-  
+
         const parsedUser = JSON.parse(storedUser);
         const res = await getUserById(parsedUser.id);
         setUser(res);
@@ -67,7 +22,7 @@ export default function UserDashboard() {
         console.error("Lỗi khi lấy dữ liệu user:", error);
       }
     };
-  
+
     fetchUser();
   }, []);
 
@@ -79,7 +34,6 @@ export default function UserDashboard() {
       document.body.classList.remove("overflow-y-hidden");
     }
   }, [editingUserId]);
-
 
   const handleClose = () => {
     setEditingUserId(null);
@@ -94,88 +48,90 @@ export default function UserDashboard() {
     });
   };
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
-
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("❌ Không tìm thấy token!");
-        return;
-      }
-
-      const response = await axiosInstance.post(
-        "/auth/logout",
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      // console.log(
-      //   "🚀 ~ file: Header.jsx ~ line 68 ~ handleLogout ~ token",
-      //   token
-      // );
-      // Xóa token & username sau khi logout thành công
-      // localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("user");
-      setUser(""); // Reset lại state
-      toast.success(response.data.message);
-      navigate("/dang-nhap"); // Chuyển về trang đăng nhập
-    } catch (error) {
-      console.error(
-        "❌ Lỗi khi đăng xuất:",
-        error.response?.data || error.message
-      );
-      alert("Không thể đăng xuất, vui lòng thử lại!");
-    }
-  };
-
   return (
-    <div className="flex h-fit">
-      <Sidebar
-        isOpen={isOpen}
-        toggleSidebar={toggleSidebar}
-        handleLogout={handleLogout}
-      />
-      <div className="flex-1 bg-gray-100">
-        <header className="bg-white shadow p-4 h-14 flex justify-between items-center">
-          <FiMenu className="text-2xl cursor-pointer" onClick={toggleSidebar} />
-          {/* <h1 className="text-xl font-semibold">Bảng điều khiển</h1> */}
-        </header>
-        <main className={`p-6 ${isOpen ? "ml-64" : "ml-0"} duration-300`}>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-2">Chào mừng bạn!</h2>
-            <p className="text-gray-600">Đây là bảng điều khiển người dùng.</p>
+    <div className="bg-gray-900 text-white min-h-fit p-6 flex">
+      {/* Profile Section */}
+      <div className="IMAGE py-8 flex flex-col items-center w-2/5 px-10">
+        <img
+          src={user.avatar} // Thay bằng avatar thực tế
+          alt="User Avatar"
+          className="w-45 h-60 rounded-full border-4 border-gray-600 object-cover"
+        />
+        <h2 className="mt-3 text-xl font-bold">Đoàn Hải Ninh</h2>
+        <p className="text-gray-400">@ninhcute789 · he/him</p>
+        <p className="mt-2 text-sm">siuuuuuuuuuuu</p>
+        {/* <button className="mt-3 px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
+          Edit Profile
+        </button> */}
+        <button
+          className="mt-3 px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600"
+          onClick={() => setEditingUserId(user.id)}
+        >
+          Chỉnh sửa
+        </button>
+        {editingUserId === user.id && (
+          <UserUpdate
+            user={user}
+            onUpdate={handleUpdate}
+            onClose={handleClose}
+            userId={user.id}
+          />
+        )}
+      </div>
+      <div className="CONTENT w-full">
+        {/* Popular Repositories */}
+        <div className="mt-6 flex flex-col">
+          <h3 className="text-lg font-semibold">Popular repositories</h3>
+          <div className="mt-3 space-y-3">
+            <div className="bg-gray-800 p-4 rounded-md">
+              <h4 className="text-blue-400 font-semibold">CookABook_backend</h4>
+              <p className="text-gray-400 text-sm">
+                Thiết kế trang web TMĐT làm đề án
+              </p>
+              <p className="text-gray-400 text-xs mt-1">🔶 Java · ⭐ 2</p>
+            </div>
+            <div className="bg-gray-800 p-4 rounded-md">
+              <h4 className="text-yellow-400 font-semibold">
+                CookABook_frontend
+              </h4>
+              <p className="text-gray-400 text-sm">React + Tailwind</p>
+              <p className="text-gray-400 text-xs mt-1">🟡 JavaScript · ⭐ 1</p>
+            </div>
           </div>
-          <div className="mt-10 border mx-auto bg-white shadow-lg rounded-2xl p-6 text-center">
-            {/* <Test /> */}
-            <img
-              src={user && user.avatar}
-              alt="User Avatar"
-              className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-gray-200 object-center object-cover"
-            />
-            <h2 className="text-xl font-bold text-gray-800">{user?.name}</h2>
-            <p className="text-gray-600">{user?.email}</p>
-            <p className="text-gray-600">{user?.gender}</p>
-            <p className="text-gray-600">{user?.dob}</p>
-            <p className="text-gray-600">{user?.username}</p>
+        </div>
 
-            <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 hover:cursor-pointer"
-              onClick={() => setEditingUserId(user.id)}
-            >
-              Chỉnh sửa
-            </button>
-            {editingUserId === user.id && (
-              <UserUpdate
-                user={user}
-                onUpdate={handleUpdate}
-                onClose={handleClose}
-                userId={user.id}
+        {/* Contribution Graph (Giả lập) */}
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold">
+            280 contributions in the last year
+          </h3>
+          <div className="mt-3 grid grid-cols-70 gap-1">
+            {Array.from({ length: 280 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-3 h-3 bg-green-500 rounded-sm"
+                style={{ opacity: Math.random() * 0.8  }}
               />
-            )}
+            ))}
           </div>
-        </main>
+        </div>
+
+        {/* Contribution Activity */}
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold">Contribution Activity</h3>
+          <div className="bg-gray-800 p-4 mt-3 rounded-md">
+            <p className="text-gray-400">📅 March 2025</p>
+            <p className="mt-1 text-sm">
+              🟢 Created 12 commits in 1 repository
+            </p>
+            <p className="text-blue-400 text-sm">
+              CookABook_backend (12 commits)
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default UserProfile;

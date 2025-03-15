@@ -3,14 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
 import { getUserById } from "../../services/UserSevices";
-// import axios from "axios";
-// import axiosInstance from "../../services/axiosInstance";
-// import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
   // const [user, setUser] = useState(localStorage.getItem("user"));
+  const [isHovered, setIsHovered] = useState(false);
+
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -54,6 +55,39 @@ const Header = () => {
 
     fetchUser();
   }, [user]);
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("❌ Không tìm thấy token!");
+        return;
+      }
+
+      const response = await axiosInstance.post(
+        "/auth/logout",
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // console.log(
+      //   "🚀 ~ file: Header.jsx ~ line 68 ~ handleLogout ~ token",
+      //   token
+      // );
+      // Xóa token & username sau khi logout thành công
+      // localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("user");
+      setUser(""); // Reset lại state
+      toast.success(response.data.message);
+      navigate("/dang-nhap"); // Chuyển về trang đăng nhập
+    } catch (error) {
+      console.error(
+        "❌ Lỗi khi đăng xuất:",
+        error.response?.data || error.message
+      );
+      alert("Không thể đăng xuất, vui lòng thử lại!");
+    }
+  };
 
   // useEffect(() => {
   //   const Test = async () => {
@@ -178,24 +212,59 @@ const Header = () => {
         </nav>
 
         {/* Login & Cart */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center ">
           {/* <Link to="/dang-nhap" className="text-gray-600 hover:text-gray-900 duration-300
           hover:scale-130">
             Đăng nhập
           </Link> */}
           {loggedInUser ? (
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center">
               <img
                 src={user?.avatar}
                 alt="Avatar"
-                className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                className="w-10 h-10 mr-6 rounded-full object-cover border-2 border-gray-200"
               />
-              <button
-                className="hover:-translate-x-2 duration-300 hover:cursor-pointer"
-                onClick={() => navigate("/user-profile")}
+              <div
+                className="flex items-center relative"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
               >
-                Chào, {loggedInUser}!
-              </button>
+                <button
+                  className=" hover:scale-120 duration-300 hover:cursor-pointer py-2"
+                  // onClick={() => navigate("/user-profile")}
+                >
+                  Chào, {loggedInUser}!
+                </button>
+                {isHovered && (
+                  <div
+                    className=" z-50 absolute duration-300 top-9 shadow-lg shadow-neutral-400
+                  left-1/2 -translate-x-1/2 mt-2 bg-white p-2 rounded-md text-left w-44 "
+                  >
+                    <div className="space-y-2">
+                      <div
+                        className="hover:bg-gray-100 p-2 cursor-pointer 
+                      duration-150 rounded"
+                        onClick={() => navigate("/user-profile")}
+                      >
+                        Thông tin tài khoản
+                      </div>
+                      <div
+                        className="hover:bg-gray-100 p-2 cursor-pointer 
+                      duration-150 rounded"
+                      >
+                        Đơn hàng của tôi
+                      </div>
+                      <div
+                        className="hover:bg-gray-100 p-2 cursor-pointer 
+                        duration-150 rounded"
+                        onClick={handleLogout}
+                      >
+                        Đăng xuất
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
               {/* <button
                 onClick={handleLogout}
                 className="hover:cursor-pointer hover:scale-130 duration-300"
@@ -208,8 +277,8 @@ const Header = () => {
               Đăng nhập
             </Link>
           )}
-          <Link to="/gio-hang" className="text-gray-700 hover:text-gray-900">
-            <div className="bg-gray-400 p-2 rounded">
+          <Link to="/gio-hang" className="ml-6 text-gray-700 hover:text-white">
+            <div className="hover:bg-gray-400 p-2 rounded duration-300">
               <BsCart3 className="size-6" />
             </div>
           </Link>

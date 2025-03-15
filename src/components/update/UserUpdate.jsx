@@ -22,8 +22,6 @@ const UserUpdate = (props) => {
   const handleChangeDob = (e) => setDob(e.target.value);
   const handleChangeEmail = (e) => setEmail(e.target.value);
 
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -52,7 +50,7 @@ const UserUpdate = (props) => {
         }
       );
       setAvatar(res.data.data.avatar);
-      console.log("avatar đã được cập nhật:",res.data.data.avatar);
+      console.log("avatar đã được cập nhật:", res.data.data.avatar);
       console.log("✅ Người dùng đã được cập nhật:", res.data);
       onUpdate(res.data.data); // Cập nhật danh sách user
       onClose();
@@ -68,7 +66,7 @@ const UserUpdate = (props) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-8/22 text-black">
         <h2 className="text-lg font-semibold mb-4">Cập nhật thông tin</h2>
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-4 grid grid-cols-2 text-left mb-2">
@@ -144,7 +142,10 @@ const UserUpdate = (props) => {
             initialImageUrl={user.avatar}
           />
           <div className="flex justify-end mt-4 space-x-2">
-            <button className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>
+            <button
+              className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer"
+              onClick={onClose}
+            >
               Hủy
             </button>
             <button
