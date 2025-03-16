@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
-import axiosInstance from "../services/axiosInstance";
+// import toast from "react-hot-toast";
+// import { useNavigate } from "react-router";
+// import axiosInstance from "../services/axiosInstance";
 import { getUsersById } from "../services/UserSevices";
 import UserUpdate from "../components/update/UserUpdate";
-import { getAllArticles, handleDelete } from "../services/ArticleServices";
+import {
+  getAllArticlesWithSizeAndPage,
+  getArticlesById,
+  handleDelete,
+} from "../services/ArticleServices";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
 import ArticleUpdate from "../components/update/ArticleUpdate";
 import { truncateText } from "../services/CommonServices";
+import AddArticle from "../components/addForm/AddAritcle";
 
 const UserProfile = () => {
   const [user, setUser] = useState(localStorage.getItem("user"));
@@ -16,38 +21,33 @@ const UserProfile = () => {
   const [articles, setArticles] = useState([]);
   const [editingArticleId, setEditingArticleId] = useState(null);
 
+  const [totalElements, setTotalElements] = useState(0); // Tổng số người dùng
+
   const parsedUser = JSON.parse(localStorage.getItem("user"));
   const currentUserId = parsedUser.id;
+  const fetchUser = async () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return;
+
+      const parsedUser = JSON.parse(storedUser);
+      const res = await getUsersById(parsedUser.id);
+      setUser(res);
+      // setArticles(res.articles);
+      // console.log("👤 Ids bài báo:", res.articles);
+      // const id = await res.articles.map((article) => getArticlesById(article.id));
+      // console.log("👤 Dữ liệu bài báo:", id);
+      const id = await Promise.all(
+        res.articles.map((article) => getArticlesById(article.id))
+      );
+      setArticles(id);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu user:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const storedUser = localStorage.getItem("user");
-        if (!storedUser) return;
-
-        const parsedUser = JSON.parse(storedUser);
-        const res = await getUsersById(parsedUser.id);
-        setUser(res);
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu user:", error);
-      }
-    };
-
     fetchUser();
-  }, []);
-
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const res = await getAllArticles();
-        console.log("📜 Dữ liệu bài báo:", res);
-        setArticles(res);
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu bài báo:", error);
-      }
-    };
-
-    fetchArticles();
   }, []);
 
   useEffect(() => {
@@ -129,14 +129,24 @@ const UserProfile = () => {
       </div>
       <div className="CONTENT w-full">
         {/* Bio */}
-        <div className="mt-6">
-          <div className="bg-gray-800 p-4 rounded-md shadow-md shadow-neutral-700">
+        <div className="ARTICLES mt-6">
+          <div className="bg-gray-800 p-4 rounded-md shadow-md shadow-neutral-700 mb-6">
             <div className="text-white text-center font-semibold text-2xl">
               Những bài báo bạn đã đăng
             </div>
           </div>
-          <div className=" overflow-hidden rounded-lg mt-4 border border-gray-300">
-            {articles.filter((article) => article.user?.id === currentUserId).length === 0 ? (
+          <AddArticle
+            onSubmit={() => fetchUser()}
+            initialData={{
+              title: "",
+              content: "",
+              imageURL: "",
+              createdBy: "",
+            }}
+          />
+          <div className=" overflow-hidden rounded-lg border border-gray-300">
+            {articles.filter((article) => article.user?.id === currentUserId)
+              .length === 0 ? (
               <div className="text-center p-4 text-gray-400">
                 Bạn chưa đăng bài nào
               </div>
@@ -155,46 +165,50 @@ const UserProfile = () => {
 
                 {/* Body */}
                 <tbody>
-                  {articles
-                    ?.filter((article) => article.user?.id === currentUserId)
-                    .map((article) => (
-                      <tr
-                        key={article.id}
-                        className="border border-gray-300 hover:bg-gray-100"
-                      >
-                        <td className="border border-gray-300 p-2">
-                          {article.title}
-                        </td>
-                        <td className="border border-gray-300 p-2 text-center">
-                          {/* {article?.user?.name || "Không rõ"} */}
-                          {truncateText(article.content, 5)}
-                        </td>
-                        <td className="border border-gray-300 p-2 text-center">
-                          {article.createdAt}
-                        </td>
-                        <td className="border border-gray-300 p-2 text-center">
-                          {article.updatedAt || "Chưa cập nhật"}
-                        </td>
-                        <td className="items-center p-2 flex h-10 justify-center space-x-2">
-                          <LuPencilLine
-                            className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
-                            onClick={() => setEditingArticleId(article.id)}
+                  {articles.map((article) => (
+                    <tr
+                      key={article.id}
+                      className="border border-gray-300 hover:bg-gray-100"
+                    >
+                      <td className="border border-gray-300 p-2">
+                        {article.title}
+                      </td>
+                      <td className="border border-gray-300 p-2 text-center">
+                        {/* {article?.user?.name || "Không rõ"} */}
+                        {truncateText(article.content, 5)}
+                      </td>
+                      <td className="border border-gray-300 p-2 text-center">
+                        {article.createdAt}
+                      </td>
+                      <td className="border border-gray-300 p-2 text-center">
+                        {article.updatedAt || "Chưa cập nhật"}
+                      </td>
+                      <td className="items-center p-2 flex h-10 justify-center space-x-3">
+                        <LuPencilLine
+                          className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
+                          onClick={() => setEditingArticleId(article.id)}
+                        />
+                        <GoTrash
+                          className="text-red-500 hover:cursor-pointer hover:scale-150 duration-200"
+                          onClick={() =>
+                            handleDelete(
+                              article.id,
+                              setArticles,
+                              setTotalElements
+                            )
+                          }
+                        />
+                        {editingArticleId === article.id && (
+                          <ArticleUpdate
+                            articleId={article.id}
+                            onUpdateSuccess={handleUpdateSuccess}
+                            onClose={handleCloseArticle}
+                            article={article}
                           />
-                          <GoTrash
-                            className="text-red-500 hover:cursor-pointer hover:scale-150 duration-200"
-                            onClick={() => handleDelete(article.id)}
-                          />
-                          {editingArticleId === article.id && (
-                            <ArticleUpdate
-                              articleId={article.id}
-                              onUpdateSuccess={handleUpdateSuccess}
-                              onClose={handleCloseArticle}
-                              article={article}
-                            />
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                        )}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             )}

@@ -241,7 +241,9 @@ const ArticleList = () => {
                   />
                   <GoTrash
                     className="text-red-500 hover:cursor-pointer hover:scale-150 duration-200"
-                    onClick={() => handleDelete(article.id, setArticles, setTotalElements)}
+                    onClick={() =>
+                      handleDelete(article.id, setArticles, setTotalElements)
+                    }
                   />
 
                   {editingArticleId === article.id && (
@@ -261,7 +263,9 @@ const ArticleList = () => {
             <button
               onClick={() => {
                 setPage((prev) => Math.max(prev - 1, 1));
-                scrollTo(0, 0);
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
               }}
               className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                 page === 1
@@ -280,7 +284,9 @@ const ArticleList = () => {
             <button
               onClick={() => {
                 setPage((prev) => Math.min(prev + 1, totalPages));
-                scrollTo(0, 0);
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
               }}
               className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                 page === totalPages
