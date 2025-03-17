@@ -16,6 +16,7 @@ import Cart from "./pages/Cart.jsx";
 import Books from "./pages/Books.jsx";
 import Contact from "./pages/Contact.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
+import BookDetail from "./pages/BookDetail.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -26,10 +27,12 @@ ReactDOM.createRoot(root).render(
         <Route path="dang-ky" element={<Register />} />
         <Route index element={<Home />} />
         <Route path="sách" element={<Books />} />
+        <Route path="sách/:id" element={<BookDetail />} />
+
         <Route path="về-chúng-tôi" element={<About />} />
         <Route path="lien-he" element={<Contact />} />
         <Route path="tin-tức" element={<News />} />
-        <Route path="user-profile" element={<UserProfile/>} />
+        <Route path="user-profile" element={<UserProfile />} />
         <Route path="gio-hang" element={<Cart />} />
         {/* <Route path='admin' element={<Admin />} />
         <Route path='admin-books' element={<AdminBooks />} />

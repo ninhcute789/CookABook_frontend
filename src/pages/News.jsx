@@ -147,12 +147,10 @@ const News = () => {
                       </p>
                       <div className="flex justify-between mb-2">
                         <div className="font-medium hover:underline cursor-pointer text-[12px]">
-                          Tác giả - {article?.user?.name || "Không rõ tác giả"}
+                          {article?.user?.name || "Không rõ tác giả"}
                         </div>
                         <div className="font-medium text-[12px]">
-                          Từ - {article.updatedAt
-                            ? truncateDate(article.updatedAt, 1)
-                            : truncateDate(article.createdAt, 1)}
+                          {truncateDate(article.createdAt, 2)}
                         </div>
                       </div>
                       <NavLink
@@ -228,15 +226,15 @@ const News = () => {
                 Quay lại
               </button>
               <h2 className="text-2xl font-bold ">{article.title}</h2>
-              <p className="text-gray-600">
-                Bởi {article?.user?.name || "Không rõ"} - {article.createdAt}
+              <p className="text-gray-600"> 
+                Bởi {article?.user?.name || "Không rõ"} <br/> Lúc {truncateDate(article.createdAt,2)}
               </p>
               <img
                 src={article.imageURL}
                 alt={article.title}
                 className=" max-h-96 object-cover rounded-md my-4 mx-auto"
               />
-              <p className="min-h-screen">{article.content}</p>
+              <p className="min-h-screen text-lg">{article.content}</p>
             </div>
             <SidebarArticles
               newsArticles={articles} // ✅ Truyền dữ liệu từ JSON
