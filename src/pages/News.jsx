@@ -175,7 +175,9 @@ const News = () => {
                 <button
                   onClick={() => {
                     setPage((prev) => Math.max(prev - 1, 1));
-                    scrollTo(0, 0);
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
                   }}
                   className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                     page === 1
@@ -194,7 +196,9 @@ const News = () => {
                 <button
                   onClick={() => {
                     setPage((prev) => Math.min(prev + 1, totalPages));
-                    scrollTo(0, 0);
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
                   }}
                   className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
                     page === totalPages
@@ -226,8 +230,9 @@ const News = () => {
                 Quay lại
               </button>
               <h2 className="text-2xl font-bold ">{article.title}</h2>
-              <p className="text-gray-600"> 
-                Bởi {article?.user?.name || "Không rõ"} <br/> Lúc {truncateDate(article.createdAt,2)}
+              <p className="text-gray-600">
+                Bởi {article?.user?.name || "Không rõ"} <br /> Lúc{" "}
+                {truncateDate(article.createdAt, 2)}
               </p>
               <img
                 src={article.imageURL}

@@ -47,7 +47,7 @@ const SidebarBooks = () => {
   };
 
   return (
-    <div className="w-1/2 h-fit p-4 rounded-lg shadow-lg bg-white sticky top-4">
+    <div className="w-fit h-fit p-4 rounded-lg shadow-lg bg-white sticky top-4">
       <h2 className="text-md font-medium border-b w-fit pb-2">Khám phá theo danh mục</h2>
       
       {categories.map((category, index) => (
