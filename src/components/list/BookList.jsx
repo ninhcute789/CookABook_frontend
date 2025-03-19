@@ -34,13 +34,13 @@ const BookList = () => {
 
       // console.log("✅ API trả về:", res.data);
       setBooks(res.data?.data?.data || []);
-      console.log("Danh sách bài viết:", res.data?.data?.data);
+      console.log("Danh sách sách:", res.data?.data?.data);
       setTotalPages(res.data?.data?.meta?.totalPages);
       // setPage(res.data?.data?.meta?.page);
       // console.log("trang hien tai:", res.data?.data?.meta?.page);
       setTotalElements(res.data?.data?.meta?.totalElements);
       console.log("Tổng số trang:", res.data?.data?.meta?.totalPages);
-      console.log("Tổng số bài viết:", res.data?.data?.meta?.totalElements);
+      console.log("Tổng số sách:", res.data?.data?.meta?.totalElements);
     } catch (error) {
       console.error(
         "❌ Lỗi khi lấy danh sách:",
@@ -91,7 +91,7 @@ const BookList = () => {
           available: null,
           description: "",
           coverType: "",
-          author: { id: null },
+          author: { id: "" },
         }}
       />
       <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
@@ -133,7 +133,8 @@ const BookList = () => {
                 </p>
 
                 <p className="font-medium">
-                  Tạo bởi - {book?.user?.name || "K có biết"}
+                  Tạo bởi - {book?.author?.name || "K có biết"}
+                  {/* {console.log("author", book?.author?.name)} */}
                 </p>
                 <p className="font-medium">Thời gian - {book.createdAt}</p>
                 <p className="font-medium">

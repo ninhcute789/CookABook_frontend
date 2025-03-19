@@ -79,7 +79,7 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
           description,
           coverType,
           imageURL: imageUrl,
-          author: { id },
+          author: { id: author.id },
         },
         {
           headers: {
