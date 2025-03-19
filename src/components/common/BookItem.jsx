@@ -41,7 +41,7 @@ const BookItem = () => {
             bg-white hover:shadow-2xl transition duration-200"
           >
             <img
-              src="https://salt.tikicdn.com/cache/750x750/ts/product/5e/cd/08/7c2853c447bec11c57cb66dccb0cdd32.jpg.webp"
+              src={book.imageURL}
               alt={book.title}
               className="w-full h-70 object-cover rounded-lg"
             />
