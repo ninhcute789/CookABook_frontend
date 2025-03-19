@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import axiosInstance from "./axiosInstance";
 
 const getBooksById = async (id) => {
@@ -53,5 +54,55 @@ const getAllBooksWithSizeAndPage = async (
     );
   }
 };
+const handleDeleteBook = async (id, setBooks, setTotalElements) => {
+  const confirmToast = toast(
+    (t) => (
+      <div className="flex flex-col">
+        <span>Bạn có chắc muốn xóa quyển sách này không?</span>
+        <div className="mt-2 flex justify-end space-x-2 mr-auto">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                  console.error("❌ Không tìm thấy token!");
+                  toast.error("Bạn chưa đăng nhập!");
+                  return;
+                }
 
-export { getBooksById, getAllBooksWithSizeAndPage };
+                await axiosInstance.delete(`/books/${id}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+
+                setBooks((prevBooks) =>
+                  prevBooks.filter((book) => book.id !== id)
+                );
+                if (setTotalElements) {
+                  setTotalElements((prevTotal) => Math.max(prevTotal - 1, 0));
+                }
+                toast.success("🗑 Xóa sách thành công!");
+              } catch (error) {
+                console.error("❌ Lỗi khi xóa sách:", error);
+                toast.error("Không thể xóa sách!");
+              }
+            }}
+            className="px-4 py-2 bg-red-500 text-white rounded"
+          >
+            Xóa
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-500 text-white rounded"
+          >
+            Hủy
+          </button>
+        </div>
+      </div>
+    ),
+    { duration: Infinity }
+  );
+  confirmToast();
+};
+
+export { getBooksById, getAllBooksWithSizeAndPage, handleDeleteBook };

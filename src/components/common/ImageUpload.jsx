@@ -73,7 +73,7 @@ const ImageUploader = ({ onUploadSuccess, initialImageUrl }) => {
         <img
           src={imagePreview}
           alt="Preview"
-          className="w-5/6 h-60 object-cover rounded mx-auto"
+          className="w-5/6 h-fit object-cover rounded mx-auto"
         />
       ) : (
         <div className="h-40 border-1 rounded w-full">

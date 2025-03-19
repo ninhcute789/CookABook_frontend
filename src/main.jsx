@@ -17,6 +17,7 @@ import Books from "./pages/Books.jsx";
 import Contact from "./pages/Contact.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import BookDetail from "./pages/BookDetail.jsx";
+import AdminAuthors from "./pages/AdminAuthors.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -45,6 +46,7 @@ ReactDOM.createRoot(root).render(
           <Route path="admin-orders" element={<AdminOrders />} />
           <Route path="admin-users" element={<AdminUsers />} />
           <Route path="admin-news" element={<AdminNews />} />
+          <Route path="admin-authors" element={<AdminAuthors />} />
         </Route>
       </Route>
     </Routes>

@@ -23,7 +23,7 @@ const Books = () => {
       {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
       <SidebarBooks />
       <div>
-        <header className="news-header mb-5 shadow-xl sticky top-4 z-10 backdrop-blur-lg rounded-2xl opacity-100 bg-white">
+        <header className="news-header shadow-xl sticky top-4 z-10 backdrop-blur-lg rounded-2xl opacity-100 bg-white">
           <div className=" mx-auto flex items-center justify-between p-4">
             {/* Logo / Tên trang */}
             <NavLink

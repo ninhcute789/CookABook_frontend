@@ -31,12 +31,14 @@ const BookItem = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex-col gap-4">
+    <div className="flex-col gap-4 mt-5">
       <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
         {books.map((book) => (
           <div
+            onClick={() => navigate(`/sách/${book.id}`)}
             key={book.id}
-            className=" p-4 rounded-md shadow-lg bg-white hover:shadow-2xl transition duration-200"
+            className=" p-4 rounded-md shadow-lg hover:cursor-pointer
+            bg-white hover:shadow-2xl transition duration-200"
           >
             <img
               src="https://salt.tikicdn.com/cache/750x750/ts/product/5e/cd/08/7c2853c447bec11c57cb66dccb0cdd32.jpg.webp"
@@ -49,14 +51,15 @@ const BookItem = () => {
                   {book.discountPrice?.toLocaleString("vi-VN")}
                   <p className="text-[15px]">₫</p>
                 </div>
-                
+
                 {book.discountPercentage && (
                   <p className="text-green-500 font-semibold bg-gray-100 px-1 rounded-md text-sm h-fit">
                     -{book.discountPercentage}%
                   </p>
                 )}
               </div>
-              <h3 className="text-lg my-2 line-clamp-2">{book.title}</h3>
+              <h3 className="text-lg mt-2 line-clamp-2 text-gray-500">{book.title}</h3>
+              <div className="mb-2 line-clamp-2 h-13">{book.description}</div>
               {!book.isOfficial ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                   CHÍNH HÃNG
@@ -80,14 +83,6 @@ const BookItem = () => {
                   (Đã bán {book.sold || 200})
                 </span>
               </div>
-              <button
-                className="mt-3 w-full bg-blue-600 hover:cursor-pointer
-                text-white py-2 rounded-lg hover:bg-blue-700"
-                // onClick={navigate("/sách:id")}
-                onClick={() => navigate(`/sách/${book.id}`)}
-              >
-                Mua ngay
-              </button>
             </div>
           </div>
         ))}
