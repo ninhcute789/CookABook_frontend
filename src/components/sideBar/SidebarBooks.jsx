@@ -48,12 +48,14 @@ const SidebarBooks = () => {
 
   return (
     <div className="w-fit h-fit p-4 rounded-lg shadow-lg bg-white sticky top-4">
-      <h2 className="text-md font-medium border-b w-fit pb-2">Khám phá theo danh mục</h2>
-      
+      <h2 className="text-md font-medium border-b w-fit pb-2">
+        Khám phá theo danh mục
+      </h2>
+
       {categories.map((category, index) => (
         <div key={index}>
           <div
-            className="py-3 border-b border-gray-400 cursor-pointer hover:text-blue-500 flex 
+            className="py-3 border-b border-gray-400 cursor-pointer hover:text-blue-500 flex
             items-center justify-between"
             onClick={() => toggleCategory(index)}
           >

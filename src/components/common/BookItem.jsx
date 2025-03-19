@@ -37,7 +37,7 @@ const BookItem = () => {
           <div
             onClick={() => navigate(`/sách/${book.id}`)}
             key={book.id}
-            className=" p-4 rounded-md shadow-lg hover:cursor-pointer
+            className=" p-4 rounded-md shadow-lg hover:cursor-pointer w-full max-w-[300px] h-[500px]
             bg-white hover:shadow-2xl transition duration-200"
           >
             <img
@@ -58,7 +58,9 @@ const BookItem = () => {
                   </p>
                 )}
               </div>
-              <h3 className="text-lg mt-2 line-clamp-2 text-gray-500">{book.title}</h3>
+              <h3 className="text-lg mt-2 text-gray-500 line-clamp-1">
+                {book.title}
+              </h3>
               <div className="mb-2 line-clamp-2 h-13">{book.description}</div>
               {!book.isOfficial ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
