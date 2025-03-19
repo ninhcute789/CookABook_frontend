@@ -1,7 +1,7 @@
 import { useState } from "react";
 // import axios from "axios";
 import PropTypes from "prop-types";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
 import ImageUploader from "../common/ImageUpload";
 
@@ -66,81 +66,85 @@ const UserUpdate = (props) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-8/22 text-black">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-13/22 text-black">
         <h2 className="text-lg font-semibold mb-4">Cập nhật thông tin</h2>
         <form onSubmit={(e) => handleSubmit(e)}>
-          <div className="space-y-4 grid grid-cols-2 text-left mb-2">
-            <label className="block mr-2">
-              Họ và tên
-              <input
-                type="text"
-                className="w-full border p-2 rounded"
-                name="name"
-                value={name}
-                onChange={(e) => handleChangeName(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Mật khẩu
-              <input
-                disabled
-                type="password"
-                className="w-full border p-2 rounded bg-gray-200"
-                name="password"
-                value={password}
-                // onChange={(e) => handleChangePassword(e)}
-              />
-            </label>
+          <div className="space-x-4 text-left mb-2 grid grid-cols-2">
+            <div className="space-y-4 flex flex-col text-left mb-2">
+              <label className="block mr-2">
+                Họ và tên
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded"
+                  name="name"
+                  value={name}
+                  onChange={(e) => handleChangeName(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Mật khẩu
+                <input
+                  disabled
+                  type="password"
+                  className="w-full border p-2 rounded bg-gray-200"
+                  name="password"
+                  value={password}
+                  // onChange={(e) => handleChangePassword(e)}
+                />
+              </label>
 
-            <label className="block mr-2">
-              Ngày sinh
-              <input
-                type="date"
-                className="w-full border p-2 rounded "
-                name="dob"
-                value={dob}
-                onChange={(e) => handleChangeDob(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Email
-              <input
-                type="email"
-                className="w-full border p-2 rounded"
-                name="email"
-                value={email}
-                onChange={(e) => handleChangeEmail(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Giới tính
-              <select
-                name="gender"
-                value={gender}
-                onChange={(e) => handleChangeGender(e)}
-                className="flex flex-col w-full  bg-transparent
+              <label className="block mr-2">
+                Ngày sinh
+                <input
+                  type="date"
+                  className="w-full border p-2 rounded "
+                  name="dob"
+                  value={dob}
+                  onChange={(e) => handleChangeDob(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Email
+                <input
+                  type="email"
+                  className="w-full border p-2 rounded"
+                  name="email"
+                  value={email}
+                  onChange={(e) => handleChangeEmail(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Giới tính
+                <select
+                  name="gender"
+                  value={gender}
+                  onChange={(e) => handleChangeGender(e)}
+                  className="flex flex-col w-full  bg-transparent
                 rounded-md px-2.5 py-2 text-black my-auto hover:cursor-pointer
                 border-1 border-cyan-950 appearance-none "
-              >
-                <option value="" disabled hidden className="">
-                  Chọn giới tính
-                </option>
-                <option value="MALE" className="text-black">
-                  Nam
-                </option>
-                <option value="FEMALE" className="text-black">
-                  Nữ
-                </option>
-                <option value="OTHER" className="text-black">
-                  Khác
-                </option>
-              </select>
-            </label>
+                >
+                  <option value="" disabled hidden className="">
+                    Chọn giới tính
+                  </option>
+                  <option value="MALE" className="text-black">
+                    Nam
+                  </option>
+                  <option value="FEMALE" className="text-black">
+                    Nữ
+                  </option>
+                  <option value="OTHER" className="text-black">
+                    Khác
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div className=" w-full ">
+              <ImageUploader
+                onUploadSuccess={(url) => setAvatar(url)}
+                initialImageUrl={user.avatar}
+              />
+            </div>
           </div>
-          <ImageUploader
-            onUploadSuccess={(url) => setAvatar(url)}
-            initialImageUrl={user.avatar}
-          />
           <div className="flex justify-end mt-4 space-x-2">
             <button
               className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400 duration-300"

@@ -58,7 +58,6 @@ const AddBook = (props) => {
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handlePublisherChange = (e) => setPublisher(e.target.value);
   const handlePublishYearChange = (e) => setPublishYear(e.target.value);
-  const handleAuthorChange = (e) => setAuthor(e.target.value);
   const handleSizeChange = (e) => setSize(e.target.value);
   const handleNumberOfPagesChange = (e) => setNumberOfPages(e.target.value);
   const handleWeightChange = (e) => setWeight(e.target.value);
@@ -70,7 +69,10 @@ const AddBook = (props) => {
   const handleAvailableChange = (e) => setAvailable(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleCoverTypeChange = (e) => setCoverType(e.target.value);
-
+  const handleAuthorChange = (e) => {
+    setAuthor({ ...author, id: e.target.value });
+  };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -145,7 +147,7 @@ const AddBook = (props) => {
                   <input
                     className="w-full border p-2 rounded"
                     name="author"
-                    value={author}
+                    value={author?.id || ""}
                     onChange={handleAuthorChange}
                   />
                 </label>

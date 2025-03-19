@@ -50,7 +50,9 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
   const handleAvailableChange = (e) => setAvailable(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleCoverTypeChange = (e) => setCoverType(e.target.value);
-  const handleAuthorChange = (e) => setAuthor(e.target.value);
+  const handleAuthorChange = (e) => {
+    setAuthor({ ...author, id: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +81,7 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
           description,
           coverType,
           imageURL: imageUrl,
-          author: { id: author.id },
+          author: { id: Number(author.id) || null },
         },
         {
           headers: {
@@ -123,7 +125,7 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
                 <input
                   className="w-full border p-2 rounded"
                   name="author"
-                  value={author}
+                  value={author?.id || ""}
                   onChange={handleAuthorChange}
                 />
               </label>

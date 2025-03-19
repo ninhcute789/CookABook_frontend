@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 // import { newsArticles } from "../data/dataNews.js";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
@@ -29,7 +29,8 @@ const News = () => {
   const [page, setPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const size = 12; // Số bài viết mỗi trang
-  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
+  const [totalElements, setTotalElements] = useState(0); // Tổng số bài 
+  
 
   const fetchArticles = async (page = 1) => {
     try {

@@ -133,7 +133,7 @@ const BookList = () => {
                 </p>
 
                 <p className="font-medium">
-                  Tạo bởi - {book?.author?.name || "K có biết"}
+                  Tác giả - {book?.author?.name || "K có biết"}
                   {/* {console.log("author", book?.author?.name)} */}
                 </p>
                 <p className="font-medium">Thời gian - {book.createdAt}</p>

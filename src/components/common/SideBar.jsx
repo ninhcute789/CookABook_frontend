@@ -6,6 +6,7 @@ import { BsCart3 } from "react-icons/bs";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaNewspaper } from "react-icons/fa";
 import { FiPenTool } from "react-icons/fi";
+import { MdOutlineCategory } from "react-icons/md";
 
 const SideBar = () => {
   const [outlineState, setOutlineState] = useState(false);
@@ -62,6 +63,13 @@ const SideBar = () => {
               <FiPenTool className="translate-y size-7 mr-3" />
               Authors
             </NavLink>
+            <NavLink
+              to="/admin/admin-categories"
+              className="text-xl flex hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1"
+            >
+              <MdOutlineCategory className="translate-y size-7 mr-3" />
+              Categories
+            </NavLink>
           </div>
           <hr className="my-5 w-5/6 mx-auto fade-in transition-all" />
         </div>
@@ -105,6 +113,12 @@ const SideBar = () => {
               className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1"
             >
               <FiPenTool className="translate-y size-7 mx-auto" />
+            </NavLink>
+            <NavLink
+              to="/admin/admin-categories"
+              className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1"
+            >
+              <MdOutlineCategory className="translate-y size-7 mx-auto" />
             </NavLink>
           </div>
           <hr className="my-5 w-5/6 mx-auto " />
