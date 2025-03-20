@@ -37,7 +37,7 @@ const BookItem = () => {
           <div
             onClick={() => navigate(`/sách/${book.id}`)}
             key={book.id}
-            className=" p-4 rounded-md shadow-lg hover:cursor-pointer w-full max-w-[300px] h-[500px]
+            className=" p-4 rounded-md shadow-lg hover:cursor-pointer w-full max-w-[300px] h-fit
             bg-white hover:shadow-2xl transition duration-200"
           >
             <img
@@ -46,16 +46,23 @@ const BookItem = () => {
               className="w-full h-70 object-cover rounded-lg"
             />
             <div className="p-2">
-              <div className="flex space-x-2 items-center">
-                <div className="text-xl font-semibold text-black flex">
+              <div className="flex-col space-x-2 items-center">
+                <div className="text-xl font-semibold text-red-600 flex">
                   {book.discountPrice?.toLocaleString("vi-VN")}
                   <p className="text-[15px]">₫</p>
                 </div>
 
                 {book.discountPercentage && (
-                  <p className="text-green-500 font-semibold bg-gray-100 px-1 rounded-md text-sm h-fit">
-                    -{book.discountPercentage}%
-                  </p>
+                  <div className="flex space-x-2 items-center">
+                    <div className="w-fit text-green-500 font-semibold bg-gray-100 px-1 rounded-md text-sm h-fit">
+                      -{book.discountPercentage}%
+                    </div>
+                    <div>
+                      <span className="text-gray-400 line-through">
+                        {book.originalPrice?.toLocaleString("vi-VN")}₫
+                      </span>
+                    </div>
+                  </div>
                 )}
               </div>
               <h3 className="text-lg mt-2 text-gray-500 line-clamp-1">
