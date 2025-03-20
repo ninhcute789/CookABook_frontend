@@ -12,7 +12,6 @@ const AddBook = (props) => {
   const [imageUrl, setImageUrl] = useState("");
   const [publisher, setPublisher] = useState("");
   const [publishYear, setPublishYear] = useState("");
-  const [author, setAuthor] = useState("");
   const [size, setSize] = useState("");
   const [numberOfPages, setNumberOfPages] = useState("");
   const [weight, setWeight] = useState("");
@@ -23,6 +22,7 @@ const AddBook = (props) => {
   const [available, setAvailable] = useState("");
   const [description, setDescription] = useState("");
   const [coverType, setCoverType] = useState("");
+  const [author, setAuthor] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -70,7 +70,7 @@ const AddBook = (props) => {
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleCoverTypeChange = (e) => setCoverType(e.target.value);
   const handleAuthorChange = (e) => {
-    setAuthor({ ...author, id: e.target.value });
+    setAuthor({ ...author, name: e.target.value });
   };
   
   const handleSubmit = async (event) => {
@@ -94,7 +94,7 @@ const AddBook = (props) => {
           description,
           coverType,
           imageURL: imageUrl,
-          author: { id: author.id },
+          author: { name: author.name },
         },
         {
           headers: {
@@ -147,7 +147,7 @@ const AddBook = (props) => {
                   <input
                     className="w-full border p-2 rounded"
                     name="author"
-                    value={author?.id || ""}
+                    value={author?.name || ""}
                     onChange={handleAuthorChange}
                   />
                 </label>
