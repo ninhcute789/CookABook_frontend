@@ -28,7 +28,7 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
   const [available, setAvailable] = useState(book.available);
   const [description, setDescription] = useState(book.description);
   const [coverType, setCoverType] = useState(book.coverType);
-  const [author, setAuthor] = useState(book.author);
+  const [author, setAuthor] = useState(book.author || { name: "" });
 
   const [id, setId] = useState(bookId);
 
@@ -50,8 +50,8 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
   const handleAvailableChange = (e) => setAvailable(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleCoverTypeChange = (e) => setCoverType(e.target.value);
-  const handleAuthorChange = (e) => {
-    setAuthor({ ...author, id: e.target.value });
+  const handleAuthorChange = (event) => {
+    setAuthor({ name: event.target.value }); // Chỉ cập nhật name
   };
 
   const handleSubmit = async (e) => {
@@ -81,7 +81,10 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
           description,
           coverType,
           imageURL: imageUrl,
-          author: { id: Number(author.id) || null },
+          author: {
+            id: author.id,
+            name: author.name,
+          },
         },
         {
           headers: {
@@ -125,7 +128,7 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
                 <input
                   className="w-full border p-2 rounded"
                   name="author"
-                  value={author?.id || ""}
+                  value={author.name}
                   onChange={handleAuthorChange}
                 />
               </label>
