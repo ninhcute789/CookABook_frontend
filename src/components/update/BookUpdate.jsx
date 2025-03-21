@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 // import axios from "axios";
 import ImageUploader from "../common/ImageUpload";
 import toast from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
+import { cat } from "@cloudinary/url-gen/qualifiers/focusOn";
+import { getAllCategoriesWithSizeAndPage } from "../../services/CategoryServices";
+import { name } from "@cloudinary/url-gen/actions/namedTransformation";
 // import { refreshToken } from "../../api/AuthApi";
 
 const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
@@ -25,11 +28,19 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
     book.discountPercentage
   );
   const [stockQuantity, setStockQuantity] = useState(book.stockQuantity);
-  const [available, setAvailable] = useState(book.available);
   const [description, setDescription] = useState(book.description);
   const [coverType, setCoverType] = useState(book.coverType);
+  const [available, setAvailable] = useState(book.available);
+  const [official, setOfficial] = useState(book.official);
   const [author, setAuthor] = useState(book.author || { name: "" });
 
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(book.categories);
+
+  const [page, setPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const sizeCategories = 10; // Số bài viết mỗi trang
+  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
   const [id, setId] = useState(bookId);
 
   const [imageUrl, setImageUrl] = useState("");
@@ -48,14 +59,72 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
     setDiscountPercentage(e.target.value);
   const handleStockQuantityChange = (e) => setStockQuantity(e.target.value);
   const handleAvailableChange = (e) => setAvailable(e.target.value);
+  const handleOfficialChange = (e) => setOfficial(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleCoverTypeChange = (e) => setCoverType(e.target.value);
   const handleAuthorChange = (event) => {
     setAuthor({ name: event.target.value }); // Chỉ cập nhật name
   };
+  const handleCategoryChange = (e) => {
+    const selectedIds = Array.from(e.target.selectedOptions, (option) =>
+      parseInt(option.value, 10)
+    );
+    setSelectedCategories(
+      selectedIds.map((id) => ({ id })) // Chỉ giữ lại ID, không cần name
+    );
+  };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await getAllCategoriesWithSizeAndPage(
+          page,
+          sizeCategories,
+          setCategories,
+          setTotalPages,
+          setTotalElements
+        );
+        console.log("Danh sách thể loại sách:", res);
+
+        // console.log("Tổng số bài viết:", totalElements);
+
+        // toast.success("🎉 Tải danh sách thể loại sách thành công!");
+      } catch (error) {
+        toast.error("Lỗi khi tải danh sách thể loại sách:", error);
+        console.error("Lỗi khi tải danh sách thể loại sách:", error);
+        setCategories([]);
+      }
+    };
+    fetchCategories();
+  }, [page]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const data = {
+      id: id,
+      title,
+      publisher,
+      publishYear,
+      size,
+      numberOfPages,
+      weight,
+      language,
+      originalPrice,
+      discountPercentage,
+      stockQuantity,
+      available,
+      official,
+      description,
+      coverType,
+      imageURL: imageUrl,
+      author: {
+        name: author.name,
+      },
+      categories: selectedCategories.map((category) => ({
+        id: category.id,
+      })),
+    };
+    console.log("data", data);
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -63,36 +132,12 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
         return;
       }
 
-      const res = await axiosInstance.put(
-        "/books",
-        {
-          id: id,
-          title,
-          publisher,
-          publishYear,
-          size,
-          numberOfPages,
-          weight,
-          language,
-          originalPrice,
-          discountPercentage,
-          stockQuantity,
-          available,
-          description,
-          coverType,
-          imageURL: imageUrl,
-          author: {
-            id: author.id,
-            name: author.name,
-          },
+      const res = await axiosInstance.put("/books", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
 
       console.log("✅ Bài báo đã được cập nhật:", res.data);
       onUpdateSuccess(res.data);
@@ -252,6 +297,47 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
                   onChange={handleStockQuantityChange}
                 />
               </label>
+              <label className="block">
+                Chính hãng hay không
+                <select
+                  required
+                  name="official"
+                  value={official}
+                  onChange={handleOfficialChange}
+                  className="flex flex-col w-full  bg-transparent
+                  border p-2 rounded"
+                >
+                  <option value="" disabled hidden className=""></option>
+                  <option value="true" className="text-black">
+                    Chính hãng
+                  </option>
+                  <option value="false" className="text-black">
+                    Không chính hãng
+                  </option>
+                </select>
+              </label>
+              <label className="block">
+                Thể loại sách
+                <select
+                  multiple
+                  required
+                  name="categories"
+                  value={selectedCategories.map((c) => c.id)} // Chỉ lấy danh sách ID
+                  onChange={handleCategoryChange}
+                  className="flex flex-col w-full bg-transparent border p-2 rounded"
+                >
+                  {categories?.map((category) => (
+                    <option
+                      key={category.id}
+                      value={category.id}
+                      className="text-black"
+                    >
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {/* {console.log("selectedCategories", selectedCategories)} */}
               <label className="block">
                 Còn hàng hay hết hàng
                 <select

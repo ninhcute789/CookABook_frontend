@@ -103,7 +103,7 @@ const BookDetail = () => {
             {/* Giá tiền */}
             <div className="bg-white shadow-md space-y-4 p-4 rounded-lg h-fit mb-5">
               <p className="text-gray-600">
-                <span className="font-semibold">Tác giả:</span> {book.author}
+                <span className="font-semibold">Tác giả:</span> {book.author?.name}
               </p>
               <h1 className="text-xl font-bold">{book.title}</h1>
 

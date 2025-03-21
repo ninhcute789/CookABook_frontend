@@ -3,14 +3,22 @@ import { FaSearch } from "react-icons/fa";
 // import SideBar from "../components/common/SideBar";
 import { NavLink } from "react-router";
 // import { IoIosArrowBack } from "react-icons/io";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { newsArticles } from "../data/dataBooks";
 import BookItem from "../components/common/BookItem";
 import SidebarBooks from "../components/sideBar/sideBarBooks";
+import { getAllBooksWithSizeAndPage } from "../services/BookServices";
 
 const Books = () => {
+  const [books, setBooks] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [page, setPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const size = 8; // Số bài viết mỗi trang
+  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
+
   const [isFocused, setIsFocused] = useState(false);
+
   const inputRef = useRef(null);
   const truncateText = (text, wordLimit) => {
     const words = text.split(" ");
@@ -18,10 +26,33 @@ const Books = () => {
       ? words.slice(0, wordLimit).join(" ") + "..."
       : text;
   };
+  const fetchData = async () => {
+    try {
+      const res = await getAllBooksWithSizeAndPage(
+        page,
+        size,
+        setBooks,
+        setTotalPages,
+        setTotalElements
+      );
+      console.log("danh sách sách", res);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu sách:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className=" mx-auto py-5 px-[5%] flex gap-4 bg-gray-100">
       {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
-      <SidebarBooks />
+      <SidebarBooks
+        onClick={() => {
+          fetchData();
+          setPage(1);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      />
       <div>
         <header className="news-header shadow-xl sticky top-4 z-10 backdrop-blur-lg rounded-2xl opacity-100 bg-white">
           <div className=" mx-auto flex items-center justify-between p-4">
@@ -54,7 +85,12 @@ const Books = () => {
           </div>
         </header>
 
-        <BookItem />
+        <BookItem
+          books={books}
+          setBooks={setBooks}
+          page={page}
+          setPage={setPage}
+        />
       </div>
     </div>
   );

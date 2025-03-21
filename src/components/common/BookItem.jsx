@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router";
 // import { books } from "../../data/dataBooks";
 import { use, useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import { getAllBooksWithSizeAndPage } from "../../services/BookServices";
+import { getAllCategoriesWithSizeAndPage } from "../../services/CategoryServices";
 
-const BookItem = () => {
-  const [books, setBooks] = useState([]);
-  const [page, setPage] = useState(1); // Trang hiện tại
+const BookItem = (props) => {
+  const { books, setBooks, page, setPage } = props;
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const size = 8; // Số bài viết mỗi trang
   const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
@@ -26,7 +27,7 @@ const BookItem = () => {
       }
     };
     fetchData();
-  }, [page]);
+  }, [page, setBooks]);
 
   const navigate = useNavigate();
 
@@ -40,6 +41,7 @@ const BookItem = () => {
             className=" p-4 rounded-md shadow-lg hover:cursor-pointer w-full max-w-[300px] h-fit
             bg-white hover:shadow-2xl transition duration-200"
           >
+            {/* {console.log("official", book.official)} */}
             <img
               src={book.imageURL}
               alt={book.title}
@@ -65,11 +67,13 @@ const BookItem = () => {
                   </div>
                 )}
               </div>
-              <h3 className="text-lg mt-2 text-gray-500 line-clamp-1">
-                {book.title}
+
+              <h3 className="text-md mt-2 text-gray-500 line-clamp-1">
+                {book.author?.name && book.author.name}
               </h3>
-              <div className="mb-2 line-clamp-2 h-13">{book.description}</div>
-              {!book.isOfficial ? (
+              <div className="mb-2 line-clamp-2 h-14 text-xl">{book.title}</div>
+
+              {!book.official ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                   CHÍNH HÃNG
                 </span>
@@ -138,6 +142,12 @@ const BookItem = () => {
       </div>
     </div>
   );
+};
+BookItem.propTypes = {
+  books: PropTypes.array.isRequired,
+  setBooks: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired
 };
 
 export default BookItem;

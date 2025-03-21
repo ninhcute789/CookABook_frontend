@@ -34,13 +34,14 @@ const BookList = () => {
 
       // console.log("✅ API trả về:", res.data);
       setBooks(res.data?.data?.data || []);
-      console.log("Danh sách sách:", res.data?.data?.data);
+      // console.log("Danh sách sách:", res.data?.data?.data);
       setTotalPages(res.data?.data?.meta?.totalPages);
       // setPage(res.data?.data?.meta?.page);
       // console.log("trang hien tai:", res.data?.data?.meta?.page);
       setTotalElements(res.data?.data?.meta?.totalElements);
-      console.log("Tổng số trang:", res.data?.data?.meta?.totalPages);
-      console.log("Tổng số sách:", res.data?.data?.meta?.totalElements);
+      // toast.success("🎉 Tải danh sách sách thành công!");
+      // console.log("Tổng số trang:", res.data?.data?.meta?.totalPages);
+      // console.log("Tổng số sách:", res.data?.data?.meta?.totalElements);
     } catch (error) {
       console.error(
         "❌ Lỗi khi lấy danh sách:",
@@ -68,6 +69,7 @@ const BookList = () => {
           : book
       )
     );
+    console.log("sach luc sau khi update", updatedBook);
   };
 
   if (loading) return <p className="text-center">Đang tải...</p>;
@@ -89,9 +91,11 @@ const BookList = () => {
           discountPercentage: null,
           stockQuantity: null,
           available: null,
+          official: "",
           description: "",
           coverType: "",
           author: { id: "" },
+          categories: [{ id: "", name: "" }],
         }}
       />
       <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
@@ -118,9 +122,6 @@ const BookList = () => {
                 key={book.id}
                 className=" p-4 rounded shadow-md hover:shadow-xl duration-300 shadow-[#6969]"
               >
-                <h3 className="text-lg font-semibold line-clamp-1">
-                  {book.title}
-                </h3>
                 {book.imageURL && (
                   <img
                     src={book.imageURL}
@@ -128,14 +129,51 @@ const BookList = () => {
                     className="w-full h-60 object-cover mt-2 rounded"
                   />
                 )}
+                <h3 className="text-lg font-semibold line-clamp-1">
+                  {book.title}
+                </h3>
                 <p className="text-gray-600 line-clamp-2 h-13">
                   {book.description}
                 </p>
-
+                <div className="">
+                  <hr className="border-1 my-1 text-gray-300" />
+                  <div className="flex justify-between">
+                    <div>
+                      Giá gốc -{" "}
+                      <span className="line-through text-red-500 font-medium">
+                        {book.originalPrice?.toLocaleString("vi-VN")}đ
+                      </span>
+                    </div>
+                    <p> - {book.discountPercentage}%</p>
+                    <div>
+                      Giá giảm -{" "}
+                      <span className="text-green-500 font-medium">
+                        {book.discountPrice?.toLocaleString("vi-VN")}đ
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-center"> </p>
+                  <hr className="border-1 my-1 text-gray-300" />
+                  <div className="flex justify-between">
+                    <p className={book.official ? "font-medium" : ""}>
+                      {book.official ? "Chính hãng" : "Không chính hãng"}
+                    </p>
+                    <p className={book.available ? "font-medium" : ""}>
+                      {book.available ? "Còn hàng" : "Đã bán hết"}
+                    </p>
+                  </div>
+                  <hr className="border-1 my-1 text-gray-300" />
+                </div>
                 <p className="font-medium">
                   Tác giả - {book?.author?.name || "K có biết"}
                   {/* {console.log("author", book?.author?.name)} */}
                 </p>
+                <p className="font-medium">
+                  Thể loại sách -{" "}
+                  {book.categories?.map((category) => category.name).join(", ")}
+                </p>
+
+                {/* {console.log("book", book)}  */}
                 <p className="font-medium">Thời gian - {book.createdAt}</p>
                 <p className="font-medium">
                   Cập nhật - {book.updatedAt || "Chưa có"}

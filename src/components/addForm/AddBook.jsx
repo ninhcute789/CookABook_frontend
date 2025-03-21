@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import ImageUploader from "../common/ImageUpload";
 import toast from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
+import { getAllCategoriesWithSizeAndPage } from "../../services/CategoryServices";
+import { set } from "@cloudinary/url-gen/actions/variable";
 
 const AddBook = (props) => {
   const { onSubmit, initialData = {} } = props;
@@ -23,7 +25,16 @@ const AddBook = (props) => {
   const [description, setDescription] = useState("");
   const [coverType, setCoverType] = useState("");
   const [author, setAuthor] = useState("");
+  const [official, setOfficial] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]); // String, không phải array
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
+
+  const [page, setPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const sizeCategories = 10; // Số bài viết mỗi trang
+  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -43,6 +54,9 @@ const AddBook = (props) => {
       setCoverType(initialData.coverType || "");
       setImageUrl(initialData.imageURL || "");
       setAuthor(initialData.author || "");
+      setOfficial(initialData.official || "");
+      setCategories(initialData.categories || "");
+      setSelectedCategory(initialData.categories?.id || "");
     }
   }, [isModalOpen, initialData]);
 
@@ -54,6 +68,31 @@ const AddBook = (props) => {
       document.body.classList.remove("overflow-y-hidden");
     }
   }, [isModalOpen]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await getAllCategoriesWithSizeAndPage(
+          page,
+          sizeCategories,
+          setCategories,
+          setTotalPages,
+          setTotalElements
+        );
+        console.log("Danh sách thể loại sách:", res.data?.data?.data);
+
+        // console.log("Tổng số bài viết:", totalElements);
+
+        // toast.success("🎉 Tải danh sách thể loại sách thành công!");
+      } catch (error) {
+        toast.error("Lỗi khi tải danh sách thể loại sách:", error);
+        console.error("Lỗi khi tải danh sách thể loại sách:", error);
+        setCategories([]);
+      }
+    };
+    fetchCategories();
+  }, [isModalOpen, page]);
+  // console.log("danh sach the loai:", categories);
 
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handlePublisherChange = (e) => setPublisher(e.target.value);
@@ -69,10 +108,21 @@ const AddBook = (props) => {
   const handleAvailableChange = (e) => setAvailable(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleCoverTypeChange = (e) => setCoverType(e.target.value);
+  const handleOfficialChange = (e) => setOfficial(e.target.value);
   const handleAuthorChange = (e) => {
     setAuthor({ ...author, name: e.target.value });
   };
-  
+  const handleCategoriesChange = (e) => setCategories(e.target.value);
+
+  const handleCategoryChange = (e) => {
+    const selectedIds = Array.from(e.target.selectedOptions, (option) =>
+      parseInt(option.value, 10)
+    );
+    setSelectedCategories(
+      selectedIds.map((id) => ({ id })) // Chỉ giữ lại ID, không cần name
+    );
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -81,6 +131,7 @@ const AddBook = (props) => {
         "/books",
         {
           title,
+          available,
           publisher,
           publishYear,
           size,
@@ -90,11 +141,14 @@ const AddBook = (props) => {
           originalPrice,
           discountPercentage,
           stockQuantity,
-          available,
+          official,
           description,
           coverType,
           imageURL: imageUrl,
           author: { name: author.name },
+          categories: selectedCategories.map((category) => ({
+            id: category.id,
+          })),
         },
         {
           headers: {
@@ -117,6 +171,7 @@ const AddBook = (props) => {
 
   return (
     <>
+      {/* {console.log("categories", categories)} */}
       <button
         onClick={() => setIsModalOpen(!isModalOpen)}
         className="bg-blue-500 hover:cursor-pointer mb-5 w-50 duration-300
@@ -271,6 +326,47 @@ const AddBook = (props) => {
                     onChange={handleStockQuantityChange}
                   />
                 </label>
+                <label className="block">
+                  Chính hãng hay không
+                  <select
+                    required
+                    name="official"
+                    value={official}
+                    onChange={handleOfficialChange}
+                    className="flex flex-col w-full  bg-transparent
+                  border p-2 rounded"
+                  >
+                    <option value="" disabled hidden className=""></option>
+                    <option value="true" className="text-black">
+                      Chính hãng
+                    </option>
+                    <option value="false" className="text-black">
+                      Không chính hãng
+                    </option>
+                  </select>
+                </label>
+                <label className="block">
+                  Thể loại sách
+                  <select
+                    multiple
+                    required
+                    name="categories"
+                    value={selectedCategories.map((c) => c.id)} // Chỉ lấy danh sách ID
+                    onChange={handleCategoryChange}
+                    className="flex flex-col w-full bg-transparent border p-2 rounded"
+                  >
+                    {categories?.map((category) => (
+                      <option
+                        key={category.id}
+                        value={category.id}
+                        className="text-black"
+                      >
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
                 <label className="block">
                   Còn hàng hay hết hàng
                   <select
