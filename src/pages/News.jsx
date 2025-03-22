@@ -7,6 +7,8 @@ import SidebarArticles from "../components/sideBar/SidebarArticles.jsx";
 import { NavLink } from "react-router";
 import axiosInstance from "../services/axiosInstance.jsx";
 import toast from "react-hot-toast";
+import { getAllArticlesWithSizeAndPage } from "../services/ArticleServices.jsx";
+// import { filterAllArticlesWithTitle } from "../services/ArticleServices.jsx";
 
 // const ScrollToTop = () => {
 //   const { pathname } = useLocation();
@@ -25,14 +27,24 @@ const News = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [article, setArticle] = useState();
+  const [content, setContent] = useState("");
+  const [change, setChange] = useState("desc");
 
   const [page, setPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const size = 12; // Số bài viết mỗi trang
-  const [totalElements, setTotalElements] = useState(0); // Tổng số bài 
-  
+  const [totalElements, setTotalElements] = useState(0); // Tổng số bài
 
-  const fetchArticles = async (page = 1) => {
+  // const filter = filterAllArticlesWithTitle({
+  //   page,
+  //   size,
+  //   setArticles,
+  //   setTotalPages,
+  //   setTotalElements,
+  //   content,
+  // });
+
+  const fetchArticles = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -41,7 +53,7 @@ const News = () => {
       }
 
       const res = await axiosInstance.get(
-        `/articles/all?size=${size}&page=${page}`,
+        `/articles/all?size=${size}&page=${page}&sort=createdAt,${change}&filter=title ~ '${content}'`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -64,7 +76,12 @@ const News = () => {
   };
   useEffect(() => {
     fetchArticles(page);
-  }, [page]);
+    // setPage(1);
+  }, [ page]);
+  useEffect(() => {
+    fetchArticles(page);
+    setPage(1);
+  }, [content]);
 
   const [selectedArticle, setSelectedArticle] = useState(null);
   // const truncateText = (text, wordLimit) => {
@@ -104,11 +121,28 @@ const News = () => {
               📚 Tin tức
             </NavLink>
 
+            <select
+              onChange={(e) => {
+                setChange(e.target.value);
+              }}
+              className="transition-all border-gray-300
+              duration-300 ease-in-out border text-gray-400
+              rounded-full px-4 py-2 shadow-sm outline-none  ml-auto mr-2"
+              onClick={() => fetchArticles()}
+            >
+              <option value="" className="hidden bg-gray-400">
+                Sắp xếp theo thời gian
+              </option>
+              <option value="desc">Mới nhất</option>
+              <option value="asc">Cũ nhất</option>
+            </select>
             {/* Ô tìm kiếm */}
             <div className="relative ">
               <input
                 ref={inputRef} // Ref cho input
                 type="text"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
                 placeholder="Tìm bài viết..."
                 className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none 
                 ${isFocused ? "w-80 border-gray-400" : "w-48 border-gray-300"}`}
@@ -122,7 +156,9 @@ const News = () => {
 
         {!selectedArticle ? (
           articles.length === 0 ? (
-            <p className="text-center">Không có bài viết nào.</p>
+            <div className="text-center text-2xl font-semibold mt-5">
+              Không tìm thấy tin tức nào!
+            </div>
           ) : (
             <div className=" w-11/12 mx-auto">
               <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-col-1 ">

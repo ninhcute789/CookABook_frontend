@@ -16,6 +16,8 @@ const Books = () => {
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const size = 8; // Số bài viết mỗi trang
   const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
+  const [content, setContent] = useState("");
+  const [change, setChange] = useState("desc");
 
   const [isFocused, setIsFocused] = useState(false);
 
@@ -33,7 +35,9 @@ const Books = () => {
         size,
         setBooks,
         setTotalPages,
-        setTotalElements
+        setTotalElements,
+        change,
+        content
       );
       console.log("danh sách sách", res);
     } catch (error) {
@@ -42,19 +46,30 @@ const Books = () => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+    setPage(1);
+  }, [content]);
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
+
   return (
-    <div className=" mx-auto py-5 px-[5%] flex gap-4 bg-gray-100">
+    <div className=" py-5 px-[5%] flex gap-4 bg-gray-100 ">
       {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
-      <SidebarBooks
-        onClick={() => {
-          fetchData();
-          setPage(1);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }}
-      />
-      <div>
-        <header className="news-header shadow-xl sticky top-4 z-10 backdrop-blur-lg rounded-2xl opacity-100 bg-white">
+      <div className="w-fit ">
+        <SidebarBooks
+          onClick={() => {
+            fetchData();
+            setPage(1);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
+      </div>
+      <div className="w-full">
+        <header
+          className="news-header shadow-xl
+        sticky top-4 z-10 backdrop-blur-lg rounded-2xl opacity-100 bg-white"
+        >
           <div className=" mx-auto flex items-center justify-between p-4">
             {/* Logo / Tên trang */}
             <NavLink
@@ -70,9 +85,26 @@ const Books = () => {
               Nhà sách CaB
             </NavLink>
             {/* Ô tìm kiếm */}
+            <select
+              onChange={(e) => {
+                setChange(e.target.value);
+              }}
+              className="transition-all border-gray-300 appearance-none focus:outline-none
+              duration-300 ease-in-out border text-gray-500
+              rounded-full px-5 py-2 shadow-sm outline-none  ml-auto mr-2"
+              onClick={() => fetchData()}
+            >
+              <option value="" className="hidden bg-gray-400">
+                Sắp xếp theo giá
+              </option>
+              <option value="desc" className=" w-full">Cao đến thấp</option>
+              <option value="asc" className=" w-full">Thấp đến cao</option>
+            </select>
             <div className="relative">
               <input
-                ref={inputRef} // Ref cho input
+                // ref={inputRef} // Ref cho input
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
                 type="text"
                 placeholder="Tìm sách..."
                 className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none 
@@ -85,12 +117,20 @@ const Books = () => {
           </div>
         </header>
 
-        <BookItem
-          books={books}
-          setBooks={setBooks}
-          page={page}
-          setPage={setPage}
-        />
+        {books.length === 0 ? (
+          <div className="text-center text-2xl font-semibold mt-5">
+            Không tìm thấy quyển sách nào!
+          </div>
+        ) : (
+          <BookItem
+            books={books}
+            setBooks={setBooks}
+            page={page}
+            setPage={setPage}
+            fetchData={() => fetchData()}
+            totalPages={totalPages}
+          />
+        )}
       </div>
     </div>
   );

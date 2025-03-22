@@ -50,7 +50,9 @@ const BookDetail = () => {
           size,
           setBooks,
           setTotalPages,
-          setTotalElements
+          setTotalElements,
+          "desc",
+          ""
         );
         console.log("danh sách sách", res);
       } catch (error) {
@@ -266,6 +268,7 @@ const BookDetail = () => {
                 )}
 
                 <div className=" gap-4 grid grid-cols-4">
+                  {console.log("danh sách sách", books)}
                   {books.map((product) => (
                     <div
                       key={product.id}
@@ -284,7 +287,7 @@ const BookDetail = () => {
                         alt={product.title}
                         className="w-full h-40 object-cover rounded"
                       />
-                      <h3 className="mt-2 text-xs font-semibold">
+                      <h3 className="mt-2 text-xs font-semibold line-clamp-2 h-8">
                         {product.title}
                       </h3>
                       <div className="flex text-black mt-1">

@@ -1,33 +1,36 @@
 import { useNavigate } from "react-router";
 // import { books } from "../../data/dataBooks";
 import { use, useEffect, useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { getAllBooksWithSizeAndPage } from "../../services/BookServices";
 import { getAllCategoriesWithSizeAndPage } from "../../services/CategoryServices";
 
 const BookItem = (props) => {
-  const { books, setBooks, page, setPage } = props;
-  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
-  const size = 8; // Số bài viết mỗi trang
-  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
+  const { books, setBooks, page, setPage, fetchData, totalPages } = props;
+  // const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  // const size = 8; // Số bài viết mỗi trang
+  // const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await getAllBooksWithSizeAndPage(
+  //         page,
+  //         size,
+  //         setBooks,
+  //         setTotalPages,
+  //         setTotalElements
+  //       );
+  //       console.log("danh sách sách", res);
+  //     } catch (error) {
+  //       console.error("Lỗi khi lấy dữ liệu sách:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [page, setBooks]);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getAllBooksWithSizeAndPage(
-          page,
-          size,
-          setBooks,
-          setTotalPages,
-          setTotalElements
-        );
-        console.log("danh sách sách", res);
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu sách:", error);
-      }
-    };
     fetchData();
-  }, [page, setBooks]);
+  }, [page]);
 
   const navigate = useNavigate();
 
@@ -38,7 +41,7 @@ const BookItem = (props) => {
           <div
             onClick={() => navigate(`/sách/${book.id}`)}
             key={book.id}
-            className=" p-4 rounded-md shadow-lg hover:cursor-pointer w-full max-w-[300px] h-fit
+            className=" p-4 rounded-md shadow-lg hover:cursor-pointer max-w-[320px] h-fit
             bg-white hover:shadow-2xl transition duration-200"
           >
             {/* {console.log("official", book.official)} */}
@@ -71,8 +74,9 @@ const BookItem = (props) => {
               <h3 className="text-md mt-2 text-gray-500 line-clamp-1">
                 {book.author?.name && book.author.name}
               </h3>
-              <div className="mb-2 line-clamp-2 h-14 text-xl">{book.title}</div>
 
+              <div className=" line-clamp-2 h-14 text-xl">{book.title}</div>
+              <div className="line-clamp-2 h-13 text-gray-500">{book.description}</div>
               {!book.official ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                   CHÍNH HÃNG
@@ -147,7 +151,9 @@ BookItem.propTypes = {
   books: PropTypes.array.isRequired,
   setBooks: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
-  setPage: PropTypes.func.isRequired
+  setPage: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  totalPages: PropTypes.number.isRequired,
 };
 
 export default BookItem;

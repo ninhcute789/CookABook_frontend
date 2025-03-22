@@ -22,7 +22,9 @@ const getAllBooksWithSizeAndPage = async (
   size,
   setBooks,
   setTotalPages,
-  setTotalElements
+  setTotalElements,
+  change,
+  content
 ) => {
   try {
     const token = localStorage.getItem("token");
@@ -32,7 +34,7 @@ const getAllBooksWithSizeAndPage = async (
     }
 
     const res = await axiosInstance.get(
-      `/books/all?page=${page}&size=${size}`,
+      `/books/all?page=${page}&size=${size}&sort=discountPrice,${change}&filter=title ~ '${content}' OR author.name ~ '${content}'`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
