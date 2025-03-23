@@ -56,7 +56,7 @@ const BookItem = (props) => {
 
               <div className=" line-clamp-2 h-14 text-xl">{book.title}</div>
 
-              {!book.official ? (
+              {book.official ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                   CHÍNH HÃNG
                 </span>

@@ -79,30 +79,34 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg  w-8/22">
+      <div className="bg-white p-6 rounded-lg shadow-lg  w-11/22">
         <h2 className="text-xl font-semibold mb-4">Cập nhật bài báo</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="title"
-            placeholder="Tiêu đề mới"
-            value={title}
-            onChange={handleChangeTitle}
-            className="w-full p-2 border rounded mb-3"
-          />
-          <textarea
-            name="content"
-            placeholder="Nội dung mới"
-            value={content}
-            onChange={handleChangeContent}
-            className="w-full p-2 border rounded mb-3"
-            rows="4"
-          />
-          <div className="h-70 items-center overflow-hidden object-center w-full mb-3">
-            <ImageUploader
-              onUploadSuccess={(url) => setImageUrl(url)}
-              initialImageUrl={article.imageURL}
-            />
+          <div className="CONTENT grid grid-cols-2 space-x-4">
+            <div className="">
+              <input
+                type="text"
+                name="title"
+                placeholder="Tiêu đề mới"
+                value={title}
+                onChange={handleChangeTitle}
+                className="w-full p-2 border rounded mb-3"
+              />
+              <textarea
+                name="content"
+                placeholder="Nội dung mới"
+                value={content}
+                onChange={handleChangeContent}
+                className="w-full p-2 border rounded mb-3 h-fit"
+                rows="4"
+              />
+            </div>
+            <div className="items-center overflow-hidden object-center mb-3">
+              <ImageUploader
+                onUploadSuccess={(url) => setImageUrl(url)}
+                initialImageUrl={article.imageURL}
+              />
+            </div>
           </div>
           <div className="flex justify-end space-x-2 mt-2">
             <button

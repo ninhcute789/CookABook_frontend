@@ -1,6 +1,22 @@
 import toast from "react-hot-toast";
 import axiosInstance from "./axiosInstance";
 
+const getAuthorsById = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axiosInstance.get(`/books/all-by-author/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // toast.success("🎉 Lấy thông tin bài báo thành công!");
+    return response.data.data;
+  } catch (error) {
+    console.error("❌ Error in getAuthor:", error);
+    return null;
+  }
+};
+
 const handleDeleteAuthor = async (id, setAuthors, setTotalElements) => {
   const confirmToast = toast(
     (t) => (
@@ -52,4 +68,4 @@ const handleDeleteAuthor = async (id, setAuthors, setTotalElements) => {
   confirmToast();
 };
 
-export { handleDeleteAuthor };
+export { handleDeleteAuthor, getAuthorsById };

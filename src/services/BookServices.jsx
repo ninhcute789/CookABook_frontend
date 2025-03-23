@@ -12,7 +12,7 @@ const getBooksById = async (id) => {
     // toast.success("🎉 Lấy thông tin bài báo thành công!");
     return response.data.data;
   } catch (error) {
-    console.error("❌ Error in getUser:", error);
+    console.error("❌ Error in getBook:", error);
     return null;
   }
 };

@@ -1,5 +1,5 @@
 import { FaSearch } from "react-icons/fa";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import BookItem from "../components/common/BookItem";
 import SidebarBooks from "../components/sideBar/sideBarBooks";
@@ -10,8 +10,11 @@ import {
 } from "../services/BookServices";
 import { getAllCategoriesWithSizeAndPage } from "../services/CategoryServices";
 import toast from "react-hot-toast";
+import { getAuthorsById } from "../services/AuthorServices";
 
 const Books = () => {
+  const { idAuthor } = useParams(); // Lấy id từ URL
+  // const navigate = useNavigate(); // Dùng để điều hướng
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(1);
@@ -22,9 +25,16 @@ const Books = () => {
   const [content, setContent] = useState("");
   const [change, setChange] = useState("");
   const [id, setId] = useState(null);
+
   const [isFocused, setIsFocused] = useState(false);
 
-  // Fetch danh mục sách
+  // const handleAllBooksClick = () => {
+  //   navigate("/sách"); // Chuyển về /books
+  //   // setId(null); // Reset danh mục
+  // };
+
+  const location = useLocation();
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -63,6 +73,14 @@ const Books = () => {
             content,
             id
           );
+        } else if (idAuthor) {
+          await getAuthorsById(idAuthor).then((data) => {
+            if (data) {
+              console.log(data);
+            }
+            setBooks(data.data);
+            console.log("danh sách sách", data.data);
+          });
         } else {
           // Nếu không có danh mục -> Lấy tất cả sách preview
           await getAllBooksPreview(
@@ -80,7 +98,7 @@ const Books = () => {
       }
     };
     fetchData();
-  }, [page, id, content, change]); // Gọi lại API khi page, id, content, hoặc sắp xếp thay đổi
+  }, [page, id, content, change, idAuthor]); // Gọi lại API khi page, id, content, hoặc sắp xếp thay đổi
 
   // Khi click vào danh mục
   const handleCategoryClick = (categoryId) => {
@@ -98,6 +116,8 @@ const Books = () => {
           <div className="mx-auto flex items-center justify-between p-4">
             <NavLink
               onClick={() => {
+                // fetchData();
+                // handleAllBooksClick();
                 setId(null);
                 scrollTo({ top: 0, behavior: "smooth" });
               }}

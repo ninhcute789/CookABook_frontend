@@ -1,14 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
 // import { books } from "../data/dataBooks";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheckCircle, FaRegStar, FaStar } from "react-icons/fa";
 import {
   getAllBooksWithSizeAndPage,
   getBooksById,
 } from "../services/BookServices";
+import logo from "../assets/fav-icon/android-chrome-512x512.png";
 import { BsInfoCircle } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
-
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { truncateDate } from "../services/CommonServices";
 const BookDetail = () => {
@@ -105,10 +105,23 @@ const BookDetail = () => {
           <div className="w-15/24">
             {/* Giá tiền */}
             <div className="bg-white shadow-md space-y-4 p-4 rounded-lg h-fit mb-5">
-              <p className="text-gray-600">
-                <span className="font-semibold">Tác giả:</span>{" "}
-                {book.author?.name}
-              </p>
+              <div className="text-gray-600 flex">
+                {book.official ? (
+                  <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                    CHÍNH HÃNG
+                  </span>
+                ) : (
+                  <span className=""></span>
+                )}
+                <div className="font-semibold">Tác giả:</div>
+                <div
+                  onClick={() => navigate(`/sách/tác-giả/${book.author?.id}`)}
+                  className="hover:cursor-pointer hover:scale-110 hover:translate-x-2 duration-300 ml-1 text-blue-700"
+                >
+                  {" "}
+                  {book.author?.name}
+                </div>
+              </div>
               <h1 className="text-xl font-bold">{book.title}</h1>
 
               {/* Đánh giá */}
@@ -395,18 +408,18 @@ const BookDetail = () => {
         </div>
       </div>
       {/* {Mua sách này} */}
-      <div className="2 w-6/24 sticky top-4 rounded-lg p-4 bg-white shadow-md h-fit">
+      <div className="2 w-8/24 sticky top-4 rounded-lg p-4 bg-white shadow-md h-fit">
         {/* Nhà bán */}
         <div className="flex items-center gap-2 mb-3">
           <img
-            src="https://salt.tikicdn.com/cache/w220/ts/seller/f8/86/c0/12f7213bcdfd4d9a7a52e9b3a6704493.jpg"
+            src={logo}
             alt="logo"
             className="w-10 h-10 rounded-full"
           />
           <div>
-            <p className="font-semibold">Nhà sách Fahasa</p>
+            <p className="font-semibold">Nhà sách CookABook</p>
             <p className="text-sm text-gray-500 flex items-center">
-              <span className="text-blue-500 font-semibold">OFFICIAL</span> •
+              <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold mr-1">OFFICIAL</span> •
               <span className="text-yellow-500 ml-1">
                 ⭐ 4.8 (416k+ đánh giá)
               </span>

@@ -19,6 +19,7 @@ import UserProfile from "./pages/UserProfile.jsx";
 import BookDetail from "./pages/BookDetail.jsx";
 import AdminAuthors from "./pages/AdminAuthors.jsx";
 import AdminCategories from "./pages/AdminCategories.jsx";
+import AuthorsBooks from "./pages/AuthorsBooks.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -30,6 +31,7 @@ ReactDOM.createRoot(root).render(
         <Route index element={<Home />} />
         <Route path="sách" element={<Books />} />
         <Route path="sách/:id" element={<BookDetail />} />
+        <Route path="sách/tác-giả/:idAuthor" element={<Books />} />
 
         <Route path="về-chúng-tôi" element={<About />} />
         <Route path="lien-he" element={<Contact />} />
