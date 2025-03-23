@@ -125,7 +125,7 @@ const News = () => {
               onChange={(e) => {
                 setChange(e.target.value);
               }}
-              className="transition-all border-gray-300
+              className="transition-all border-gray-300 appearance-none focus:outline-none
               duration-300 ease-in-out border text-gray-400
               rounded-full px-4 py-2 shadow-sm outline-none  ml-auto mr-2"
               onClick={() => fetchArticles()}

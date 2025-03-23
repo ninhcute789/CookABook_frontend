@@ -7,30 +7,9 @@ import { getAllCategoriesWithSizeAndPage } from "../../services/CategoryServices
 
 const BookItem = (props) => {
   const { books, setBooks, page, setPage, fetchData, totalPages } = props;
-  // const [totalPages, setTotalPages] = useState(1); // Tổng số trang
-  // const size = 8; // Số bài viết mỗi trang
-  // const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
-
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await getAllBooksWithSizeAndPage(
-  //         page,
-  //         size,
-  //         setBooks,
-  //         setTotalPages,
-  //         setTotalElements
-  //       );
-  //       console.log("danh sách sách", res);
-  //     } catch (error) {
-  //       console.error("Lỗi khi lấy dữ liệu sách:", error);
-  //     }
-  //   };
   //   fetchData();
-  // }, [page, setBooks]);
-  useEffect(() => {
-    fetchData();
-  }, [page]);
+  // }, [page]);
 
   const navigate = useNavigate();
 
@@ -72,17 +51,17 @@ const BookItem = (props) => {
               </div>
 
               <h3 className="text-md mt-2 text-gray-500 line-clamp-1">
-                {book.author?.name && book.author.name}
+                {book.author?.name ? book.author.name : book.author}
               </h3>
 
               <div className=" line-clamp-2 h-14 text-xl">{book.title}</div>
-              <div className="line-clamp-2 h-13 text-gray-500">{book.description}</div>
+
               {!book.official ? (
                 <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                   CHÍNH HÃNG
                 </span>
               ) : (
-                <span className=" text-white text-xs px-2 py-1 rounded-full font-semibold"></span>
+                <span className="px-1"></span>
               )}
               <div className="flex items-center gap-1 text-yellow-500 mt-2">
                 {[...Array(4)].map((_, i) => (
@@ -105,7 +84,7 @@ const BookItem = (props) => {
         ))}
       </div>
       {/* Phân trang */}
-      <div className="flex justify-center mt-4 space-x-2">
+      { <div className="flex justify-center mt-4 space-x-2">
         <button
           onClick={() => {
             setPage((prev) => Math.max(prev - 1, 1));
@@ -143,7 +122,7 @@ const BookItem = (props) => {
         >
           Tiếp
         </button>
-      </div>
+      </div>}
     </div>
   );
 };

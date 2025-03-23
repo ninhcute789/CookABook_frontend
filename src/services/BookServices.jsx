@@ -56,6 +56,47 @@ const getAllBooksWithSizeAndPage = async (
     );
   }
 };
+
+const getAllBooksPreview = async (
+  page,
+  size,
+  setBooks,
+  setTotalPages,
+  setTotalElements,
+  change,
+  content
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(
+      `/books/preview?page=${page}&size=${size}&sort=discountPrice,${change}&filter=title ~ '${content}' OR author.name ~ '${content}'`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    // console.log("✅ API trả về:", res.data);
+    setBooks(res.data?.data?.data || []);
+    console.log("Danh sách sách:", res.data?.data?.data);
+    setTotalPages(res.data?.data?.meta?.totalPages);
+    // setPage(res.data?.data?.meta?.page);
+    // console.log("trang hien tai:", res.data?.data?.meta?.page);
+    setTotalElements(res.data?.data?.meta?.totalElements);
+    console.log("Tổng số trang:", res.data?.data?.meta?.totalPages);
+    console.log("Tổng số sách:", res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
 const handleDeleteBook = async (id, setBooks, setTotalElements) => {
   const confirmToast = toast(
     (t) => (
@@ -107,4 +148,46 @@ const handleDeleteBook = async (id, setBooks, setTotalElements) => {
   confirmToast();
 };
 
-export { getBooksById, getAllBooksWithSizeAndPage, handleDeleteBook };
+const getAllBooksWithCategoryId = async (
+  page,
+  size,
+  setBooks,
+  setTotalPages,
+  setTotalElements,
+  change,
+  content,
+  id
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(
+      `/books/all-by-category/${id}?page=${page}&size=${size}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    setBooks(res.data?.data?.data || []);
+    console.log("Danh sách sách theo thể loại sách:", res.data?.data?.data);
+    setTotalPages(res.data?.data?.meta?.totalPages);
+    setTotalElements(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách sách theo thể loại sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+export {
+  getBooksById,
+  getAllBooksWithSizeAndPage,
+  handleDeleteBook,
+  getAllBooksWithCategoryId,
+  getAllBooksPreview,
+};

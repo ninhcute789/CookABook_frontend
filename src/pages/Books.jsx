@@ -1,104 +1,121 @@
 import { FaSearch } from "react-icons/fa";
-// import Header from "../components/common/Header";
-// import SideBar from "../components/common/SideBar";
 import { NavLink } from "react-router";
-// import { IoIosArrowBack } from "react-icons/io";
-import { useEffect, useRef, useState } from "react";
-// import { newsArticles } from "../data/dataBooks";
+import { useEffect, useState } from "react";
 import BookItem from "../components/common/BookItem";
 import SidebarBooks from "../components/sideBar/sideBarBooks";
-import { getAllBooksWithSizeAndPage } from "../services/BookServices";
+import {
+  getAllBooksPreview,
+  getAllBooksWithCategoryId,
+  getAllBooksWithSizeAndPage,
+} from "../services/BookServices";
+import { getAllCategoriesWithSizeAndPage } from "../services/CategoryServices";
+import toast from "react-hot-toast";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
-  const [selectedArticle, setSelectedArticle] = useState(null);
-  const [page, setPage] = useState(1); // Trang hiện tại
-  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
-  const size = 8; // Số bài viết mỗi trang
-  const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
+  const [categories, setCategories] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
+  const size = 8; // Số sách mỗi trang
+  const sizeCategories = 20; // Số danh mục mỗi trang
   const [content, setContent] = useState("");
-  const [change, setChange] = useState("desc");
-
+  const [change, setChange] = useState("");
+  const [id, setId] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
 
-  const inputRef = useRef(null);
-  const truncateText = (text, wordLimit) => {
-    const words = text.split(" ");
-    return words.length > wordLimit
-      ? words.slice(0, wordLimit).join(" ") + "..."
-      : text;
-  };
-  const fetchData = async () => {
-    try {
-      const res = await getAllBooksWithSizeAndPage(
-        page,
-        size,
-        setBooks,
-        setTotalPages,
-        setTotalElements,
-        change,
-        content
-      );
-      console.log("danh sách sách", res);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu sách:", error);
-    }
-  };
+  // Fetch danh mục sách
   useEffect(() => {
-    fetchData();
-    setPage(1);
-  }, [content]);
+    const fetchCategories = async () => {
+      try {
+        await getAllCategoriesWithSizeAndPage(
+          1, // Luôn lấy danh mục trang 1
+          sizeCategories,
+          setCategories,
+          setTotalPages,
+          setTotalElements
+        );
+      } catch (error) {
+        toast.error("Lỗi khi tải danh sách thể loại sách!");
+        console.error("Lỗi khi tải danh sách thể loại sách:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch sách (phân biệt khi có danh mục và khi không có danh mục)
+  useEffect(() => {
+    setPage(1); // Reset về trang 1 khi đổi danh mục hoặc tìm kiếm
+  }, [id, content]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (id) {
+          // Nếu có danh mục -> Lấy sách theo danh mục
+          await getAllBooksWithCategoryId(
+            page,
+            size,
+            setBooks,
+            setTotalPages,
+            setTotalElements,
+            change,
+            content,
+            id
+          );
+        } else {
+          // Nếu không có danh mục -> Lấy tất cả sách preview
+          await getAllBooksPreview(
+            page,
+            size,
+            setBooks,
+            setTotalPages,
+            setTotalElements,
+            change,
+            content
+          );
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu sách:", error);
+      }
+    };
     fetchData();
-  }, [page]);
+  }, [page, id, content, change]); // Gọi lại API khi page, id, content, hoặc sắp xếp thay đổi
+
+  // Khi click vào danh mục
+  const handleCategoryClick = (categoryId) => {
+    console.log("Danh mục được chọn có ID:", categoryId);
+    setId(categoryId);
+  };
 
   return (
-    <div className=" py-5 px-[5%] flex gap-4 bg-gray-100 ">
-      {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
-      <div className="w-fit ">
-        <SidebarBooks
-          onClick={() => {
-            fetchData();
-            setPage(1);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-        />
+    <div className="py-5 px-[5%] flex gap-4 bg-gray-100">
+      <div className="w-fit">
+        <SidebarBooks categories={categories} onClick={handleCategoryClick} />
       </div>
       <div className="w-full">
-        <header
-          className="news-header shadow-xl
-        sticky top-4 z-10 backdrop-blur-lg rounded-2xl opacity-100 bg-white"
-        >
-          <div className=" mx-auto flex items-center justify-between p-4">
-            {/* Logo / Tên trang */}
+        <header className="news-header shadow-xl sticky top-4 z-10 backdrop-blur-lg rounded-2xl bg-white">
+          <div className="mx-auto flex items-center justify-between p-4">
             <NavLink
               onClick={() => {
-                setSelectedArticle(null),
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth",
-                  });
+                setId(null);
+                scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="text-2xl font-medium text-gray-800 hover:cursor-pointer"
+              className="text-2xl font-medium text-gray-800 cursor-pointer"
             >
               Nhà sách CaB
             </NavLink>
-            {/* Ô tìm kiếm */}
             <select
-              onChange={(e) => {
-                setChange(e.target.value);
-              }}
+              onChange={(e) => setChange(e.target.value)}
               className="transition-all border-gray-300 appearance-none focus:outline-none
               duration-300 ease-in-out border text-gray-500
               rounded-full px-5 py-2 shadow-sm outline-none  ml-auto mr-2"
-              onClick={() => fetchData()}
             >
               <option value="" className="hidden bg-gray-400">
                 Sắp xếp theo giá
               </option>
-              <option value="desc" className=" w-full">Cao đến thấp</option>
-              <option value="asc" className=" w-full">Thấp đến cao</option>
+              <option value="desc">Cao đến thấp</option>
+              <option value="asc">Thấp đến cao</option>
             </select>
             <div className="relative">
               <input
@@ -106,8 +123,8 @@ const Books = () => {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 type="text"
-                placeholder="Tìm sách..."
-                className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none 
+                placeholder="Tìm sách, tác giả..."
+                className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none
                 ${isFocused ? "w-80 border-gray-400" : "w-48 border-gray-300"}`}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
@@ -127,7 +144,6 @@ const Books = () => {
             setBooks={setBooks}
             page={page}
             setPage={setPage}
-            fetchData={() => fetchData()}
             totalPages={totalPages}
           />
         )}

@@ -10,6 +10,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { truncateDate } from "../services/CommonServices";
 const BookDetail = () => {
   const { id } = useParams(); // Lấy id từ URL
   const [book, setBook] = useState([]);
@@ -66,7 +67,7 @@ const BookDetail = () => {
       <div className="2 w-full flex-col gap-6">
         <div className="3 w-full flex gap-6">
           {/* Ảnh sách */}
-          <div className="w-9/24 bg-white sticky top-4 flex flex-col items-center p-4 rounded-lg h-fit shadow-md">
+          <div className="w-9/24 bg-white sticky top-4 flex flex-col items-center p-4 rounded-lg h-fit shadow-lg">
             <img
               src={book.imageURL}
               alt={book.title}
@@ -105,7 +106,8 @@ const BookDetail = () => {
             {/* Giá tiền */}
             <div className="bg-white shadow-md space-y-4 p-4 rounded-lg h-fit mb-5">
               <p className="text-gray-600">
-                <span className="font-semibold">Tác giả:</span> {book.author?.name}
+                <span className="font-semibold">Tác giả:</span>{" "}
+                {book.author?.name}
               </p>
               <h1 className="text-xl font-bold">{book.title}</h1>
 
@@ -252,8 +254,8 @@ const BookDetail = () => {
             </div>
 
             {/* Sản phẩm tương tự */}
-            <div className="bg-white p-4 rounded-lg shadow-lg relative">
-              <h2 className="text-lg font-semibold mb-4">Sản phẩm tương tự</h2>
+            <div className="bg-white p-4 rounded-lg shadow-lg relative mb-5">
+              <h2 className="text-xl font-semibold mb-4">Sản phẩm tương tự</h2>
 
               {/* Danh sách sản phẩm */}
               <div className="relative">
@@ -310,9 +312,83 @@ const BookDetail = () => {
                 )}
               </div>
             </div>
+            {/* Sản phẩm tương tự */}
+            <div className="bg-white p-4 rounded-lg shadow-lg relative ">
+              <h2 className="text-xl font-semibold mb-2">Thông tin chi tiết</h2>
+              {/* <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Phiên bản sách </div>
+                  <div>def </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div> */}
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Công ty phát hành </div>
+                  <div>Cook A Book </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Ngày xuất bản </div>
+                  <div>{truncateDate(book?.createdAt, 2)} </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Kích thước </div>
+                  <div>{book.size} </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Loại bìa </div>
+                  <div>
+                    {book.coverType === "HARDCOVER" && "Bìa cứng"}
+                    {book.coverType === "PAPERBACK" && "Bìa mềm"}
+                    {book.coverType === "SPIRAL_BOUND" && "Bìa xoắn ốc"}
+                    {book.coverType === "LEATHER_BOUND" && "Bìa da"}
+                    {book.coverType === "BOARD_BOOK" && "Bìa cứng toàn bộ"}
+                    {book.coverType === "DUST_JACKET" && "Bìa dust jacket"}
+                  </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Số trang </div>
+                  <div>{book.numberOfPages} </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Nhà xuất bản </div>
+                  <div>{book.publisher} </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Trọng lượng </div>
+                  <div>{book.weight} </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+              <div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="text-gray-500 py-1.5">Hàng tồn </div>
+                  <div>{book.stockQuantity} </div>
+                </div>
+                <hr className="text-gray-300" />
+              </div>
+            </div>
           </div>
         </div>
-        <div className="3 w-full bg-white h-80 rounded-lg mt-5 shadow-lg">
+        <div className="3 w-full bg-white h-80 rounded-lg mt-6 shadow-lg">
           <h2 className="flex text-2xl font-semibold text-black p-4 justify-center items-center h-full">
             Đây là phần bình luận
           </h2>

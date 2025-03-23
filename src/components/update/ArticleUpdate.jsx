@@ -98,10 +98,12 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
             className="w-full p-2 border rounded mb-3"
             rows="4"
           />
-          <ImageUploader
-            onUploadSuccess={(url) => setImageUrl(url)}
-            initialImageUrl={article.imageURL}
-          />
+          <div className="h-70 items-center overflow-hidden object-center w-full mb-3">
+            <ImageUploader
+              onUploadSuccess={(url) => setImageUrl(url)}
+              initialImageUrl={article.imageURL}
+            />
+          </div>
           <div className="flex justify-end space-x-2 mt-2">
             <button
               type="button"
