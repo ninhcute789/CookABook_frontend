@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router";
 
 const SidebarBooks = (props) => {
-  const { onClick, categories, fetchData } = props;
+  const { onClick, categories } = props;
+
+  const navigate = useNavigate();
 
   const handleAllBooksClick = () => {
-    window.history.pushState({}, "", "/sách");
-    // setId(null); // Reset state
+    navigate("/sách"); // Chuyển hướng về trang tất cả sách
   };
 
   return (
@@ -18,8 +20,8 @@ const SidebarBooks = (props) => {
                hover:underline flex items-center justify-between h-fit"
         onClick={() => {
           handleAllBooksClick();
-          // fetchData();
           onClick(null);
+          scrollTo({ top: 0, behavior: "smooth" });
         }}
       >
         Tất cả sách

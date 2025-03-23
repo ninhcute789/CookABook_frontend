@@ -1,12 +1,11 @@
 import { FaSearch } from "react-icons/fa";
-import { NavLink, useLocation, useNavigate, useParams } from "react-router";
+import { NavLink, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import BookItem from "../components/common/BookItem";
 import SidebarBooks from "../components/sideBar/sideBarBooks";
 import {
   getAllBooksPreview,
   getAllBooksWithCategoryId,
-  getAllBooksWithSizeAndPage,
 } from "../services/BookServices";
 import { getAllCategoriesWithSizeAndPage } from "../services/CategoryServices";
 import toast from "react-hot-toast";
@@ -27,13 +26,6 @@ const Books = () => {
   const [id, setId] = useState(null);
 
   const [isFocused, setIsFocused] = useState(false);
-
-  // const handleAllBooksClick = () => {
-  //   navigate("/sách"); // Chuyển về /books
-  //   // setId(null); // Reset danh mục
-  // };
-
-  const location = useLocation();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -82,7 +74,7 @@ const Books = () => {
             console.log("danh sách sách", data.data);
           });
         } else {
-          // Nếu không có danh mục -> Lấy tất cả sách preview
+          // Nếu không có danh mục hoặc id === null -> Lấy tất cả sách preview
           await getAllBooksPreview(
             page,
             size,
@@ -95,6 +87,7 @@ const Books = () => {
         }
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu sách:", error);
+        toast.error("Lỗi khi tải danh sách sách!");
       }
     };
     fetchData();
@@ -116,8 +109,6 @@ const Books = () => {
           <div className="mx-auto flex items-center justify-between p-4">
             <NavLink
               onClick={() => {
-                // fetchData();
-                // handleAllBooksClick();
                 setId(null);
                 scrollTo({ top: 0, behavior: "smooth" });
               }}
