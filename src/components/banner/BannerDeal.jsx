@@ -196,16 +196,20 @@ const TopDealBanner = () => {
         <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          className="p-3 bg-gray-300 hover:cursor-pointer
-          rounded-full disabled:opacity-50 items-center top-[45%] absolute left-2"
+          className={`p-3 bg-gray-300 hover:cursor-pointer ${
+            currentPage === 1 ? "hidden" : ""
+          }
+          rounded-full disabled:opacity-50 items-center top-[45%] absolute left-2`}
         >
           <SlArrowLeft className="mx-auto text-blue-700" />
         </button>
         <button
           onClick={handleNextPage}
           disabled={startIndex + itemsPerPage >= products.length}
-          className="p-3 bg-gray-300 hover:cursor-pointer
-          rounded-full disabled:opacity-50 items-center top-[45%] absolute right-0"
+          className={`p-3 bg-gray-300 hover:cursor-pointer ${
+            startIndex + itemsPerPage >= products.length ? "hidden" : ""
+          }
+          rounded-full disabled:opacity-50 items-center top-[45%] absolute right-0`}
         >
           <SlArrowRight className="mx-auto text-blue-700 " />
         </button>

@@ -20,6 +20,7 @@ import BookDetail from "./pages/BookDetail.jsx";
 import AdminAuthors from "./pages/AdminAuthors.jsx";
 import AdminCategories from "./pages/AdminCategories.jsx";
 import AuthorsBooks from "./pages/AuthorsBooks.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -45,6 +46,7 @@ ReactDOM.createRoot(root).render(
         <Route path='admin-news' element={<AdminNews />} /> */}
 
         <Route path="admin" element={<Admin />}>
+          <Route index element={<AdminDashboard />} />
           <Route path="admin-books" element={<AdminBooks />} />
           <Route path="admin-orders" element={<AdminOrders />} />
           <Route path="admin-users" element={<AdminUsers />} />

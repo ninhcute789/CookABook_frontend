@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 const SidebarBooks = (props) => {
   const { onClick, categories } = props;
   const location = useLocation();
-  
+
   const decodedPath = decodeURIComponent(location.pathname); // Giải mã đường dẫn
   console.log("Current path (decoded):", decodedPath);
 
@@ -44,7 +44,10 @@ const SidebarBooks = (props) => {
           }
             border-gray-400 cursor-pointer hover:text-blue-500 
                hover:underline flex items-center justify-between h-fit`}
-          onClick={() => onClick(category.id)}
+          onClick={() => {
+            onClick(category.id);
+            scrollTo({ top: 0, behavior: "smooth" });
+          }}
         >
           {category.name}
         </div>

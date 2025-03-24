@@ -7,9 +7,11 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { FaNewspaper } from "react-icons/fa";
 import { FiPenTool } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
+import { LuLayoutDashboard } from "react-icons/lu";
 
 const SideBar = () => {
   const [outlineState, setOutlineState] = useState(false);
+  const [className0, setClassName0] = useState("opacity-0");
   const [className1, setClassName1] = useState("opacity-0");
   const [className2, setClassName2] = useState("opacity-0");
   const [className3, setClassName3] = useState("opacity-0");
@@ -21,6 +23,9 @@ const SideBar = () => {
     setOutlineState(!outlineState);
   };
   useEffect(() => {
+    setTimeout(() => {
+      setClassName0("goes-in");
+    }, 0); // Delay 0.8 giây
     setTimeout(() => {
       setClassName1("goes-in");
     }, 100); // Delay 1 giây
@@ -44,7 +49,7 @@ const SideBar = () => {
   return (
     <>
       {outlineState === false ? (
-        <div className="relative top-0 left-0 w-52 min-h-96 bg-gray-700 text-white transition-all duration-300 ease-in-out">
+        <div className="relative top-0 left-0 w-55 min-h-96 bg-gray-700 text-white transition-all duration-300 ease-in-out">
           <div className="h-10">
             <HiOutlineBars3
               className="absolute top-2 right-2 cursor-pointer size-8
@@ -54,6 +59,14 @@ const SideBar = () => {
           </div>
           <hr className="my-5 w-5/6 mx-auto fade-in" />
           <div className=" pl-3 pr-3 space-y-4">
+            <NavLink
+              to="/admin"
+              className={`text-xl flex ${className0}
+              hover:bg-gray-400 rounded w-full hover:translate-x-2 transition-all p-1`}
+            >
+              <LuLayoutDashboard className="translate-y size-7 mr-3" />
+              Dash Board
+            </NavLink>
             <NavLink
               to="/admin/admin-books"
               className={`text-xl flex ${className1}
@@ -116,6 +129,12 @@ const SideBar = () => {
           </div>
           <hr className="my-5 w-5/6 mx-auto " />
           <div className="space-y-4 goes-out mx-auto">
+            <NavLink
+              to="/admin"
+              className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1"
+            >
+              <LuLayoutDashboard className="translate-y size-7 mx-auto" />
+            </NavLink>
             <NavLink
               to="/admin/admin-books"
               className="text-xl flex hover:bg-gray-400 rounded w-5/6 mx-auto transition-all p-1"
