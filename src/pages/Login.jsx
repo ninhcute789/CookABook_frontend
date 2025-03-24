@@ -16,7 +16,6 @@ const Login = () => {
   );
   const navigate = useNavigate();
 
-
   // Xử lý scroll lên đầu trang khi thay đổi route
   const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -63,10 +62,14 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await axiosInstance.post("/auth/login", {
-        username,
-        password,
-      });
+      const response = await axiosInstance.post(
+        "/auth/login",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      );
 
       console.log("Dữ liệu API trả về:", response.data);
 
@@ -77,6 +80,7 @@ const Login = () => {
         setLoggedInUser(username);
         // console.log(response.data.data.user);
         toast.success(response.data.message);
+        refreshToken();
         navigate("/");
         // window.location.reload();
       } else {
@@ -89,6 +93,20 @@ const Login = () => {
       );
       toast.error(error.response?.data?.message || "Đăng nhập thất bại!");
     }
+  };
+
+  const refreshToken = () => {
+    axiosInstance
+      .get("/auth/refresh", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.data.status === 200 && response.data.data?.accessToken) {
+          document.cookie = `refreshToken=${response.data.data.accessToken}; path=/; Secure; HttpOnly`;
+          console.log("Refresh token đã lưu vào cookie!");
+        }
+      })
+      .catch((error) => console.error("Lỗi khi lấy refresh token:", error));
   };
 
   return (

@@ -6,11 +6,31 @@ import { Outlet } from "react-router-dom";
 // import { useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import axiosInstance from "./services/axiosInstance.jsx";
 // import SideBar from "./components/common/SideBar.jsx";
 // import cr7Image from './assets/cr7.jpg';
 
 const App = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    refreshToken(); // Gọi khi app khởi động
+  }, []);
+
+  const refreshToken = () => {
+    axiosInstance
+      .get("/auth/refresh", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.data.status === 200 && response.data.data?.accessToken) {
+          document.cookie = `refreshToken=${response.data.data.accessToken}; path=/; Secure; HttpOnly`;
+          console.log("Refresh token đã lưu vào cookie!");
+        }
+      })
+      .catch((error) => console.error("Lỗi khi lấy refresh token:", error));
+  };
 
   return (
     <div className="app-container">
@@ -44,7 +64,7 @@ const App = () => {
       <div className="footer-container">
         <Footer />
       </div>
-      <Toaster position="top-right"/>
+      <Toaster position="top-right" />
     </div>
   );
 };

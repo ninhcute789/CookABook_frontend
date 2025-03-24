@@ -277,8 +277,15 @@ const Header = () => {
               Đăng nhập
             </Link>
           )}
-          <Link to="/gio-hang" className="ml-6 text-gray-700 hover:text-white">
-            <div className="hover:bg-gray-400 p-2 rounded duration-300">
+          <Link to="/gio-hang" className="ml-6 text-gray-700 ">
+            <div className="hover:bg-gray-200 p-2 rounded duration-300 relative">
+              <div
+                className="text-white absolute -top-1 -right-1
+               bg-[#f93333] rounded-full w-5 h-5 font-medium
+                justify-center flex items-center text-xs"
+              >
+                23
+              </div>
               <BsCart3 className="size-6" />
             </div>
           </Link>

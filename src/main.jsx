@@ -12,15 +12,15 @@ import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import AdminNews from "./pages/AminNews.jsx";
 import News from "./pages/News.jsx";
-import Cart from "./pages/Cart.jsx";
 import Books from "./pages/Books.jsx";
 import Contact from "./pages/Contact.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import BookDetail from "./pages/BookDetail.jsx";
 import AdminAuthors from "./pages/AdminAuthors.jsx";
 import AdminCategories from "./pages/AdminCategories.jsx";
-import AuthorsBooks from "./pages/AuthorsBooks.jsx";
+// import AuthorsBooks from "./pages/AuthorsBooks.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import Cart from "./pages/Cart.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(

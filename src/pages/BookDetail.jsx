@@ -11,6 +11,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { truncateDate } from "../services/CommonServices";
+import { TiTickOutline } from "react-icons/ti";
 const BookDetail = () => {
   const { id } = useParams(); // Lấy id từ URL
   const [book, setBook] = useState([]);
@@ -106,13 +107,13 @@ const BookDetail = () => {
             {/* Giá tiền */}
             <div className="bg-white shadow-md space-y-4 p-4 rounded-lg h-fit mb-5">
               <div className="text-gray-600 flex">
-                {book.official ? (
-                  <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
-                    CHÍNH HÃNG
-                  </span>
-                ) : (
-                  <span className=""></span>
-                )}
+                {!book.official ? (
+                  <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold flex items-center mr-2">
+                    <TiTickOutline className="mr-1 bg-white rounded-full text-blue-600" />
+                    <div>CHÍNH HÃNG </div>
+                  </div>
+                ) : null}
+                {console.log("official??",book.official)}
                 <div className="font-semibold">Tác giả:</div>
                 <div
                   onClick={() => navigate(`/sách/tác-giả/${book.author?.id}`)}
@@ -411,15 +412,14 @@ const BookDetail = () => {
       <div className="2 w-8/24 sticky top-4 rounded-lg p-4 bg-white shadow-md h-fit">
         {/* Nhà bán */}
         <div className="flex items-center gap-2 mb-3">
-          <img
-            src={logo}
-            alt="logo"
-            className="w-10 h-10 rounded-full"
-          />
+          <img src={logo} alt="logo" className="w-10 h-10 rounded-full" />
           <div>
             <p className="font-semibold">Nhà sách CookABook</p>
             <p className="text-sm text-gray-500 flex items-center">
-              <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold mr-1">OFFICIAL</span> •
+              <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold mr-1">
+                OFFICIAL
+              </span>{" "}
+              •
               <span className="text-yellow-500 ml-1">
                 ⭐ 4.8 (416k+ đánh giá)
               </span>
