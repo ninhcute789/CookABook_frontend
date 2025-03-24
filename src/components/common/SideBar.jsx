@@ -23,22 +23,22 @@ const SideBar = () => {
   useEffect(() => {
     setTimeout(() => {
       setClassName1("goes-in");
-    }, 300); // Delay 1 giây
+    }, 100); // Delay 1 giây
     setTimeout(() => {
       setClassName2("goes-in");
-    }, 500); // Delay 1.2 giây
+    }, 200); // Delay 1.2 giây
     setTimeout(() => {
       setClassName3("goes-in");
-    }, 700); // Delay 1.4 giây
+    }, 300); // Delay 1.4 giây
     setTimeout(() => {
       setClassName4("goes-in");
-    }, 900); // Delay 1.6 giây
+    }, 400); // Delay 1.6 giây
     setTimeout(() => {
       setClassName5("goes-in");
-    }, 1100); // Delay 1.8 giây
+    }, 500); // Delay 1.8 giây
     setTimeout(() => {
       setClassName6("goes-in");
-    }, 1300); // Delay 2 gi
+    }, 600); // Delay 2 gi
   }, []);
 
   return (

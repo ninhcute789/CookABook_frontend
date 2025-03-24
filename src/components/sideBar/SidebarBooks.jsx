@@ -1,8 +1,14 @@
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const SidebarBooks = (props) => {
   const { onClick, categories } = props;
+  const location = useLocation();
+  
+  const decodedPath = decodeURIComponent(location.pathname); // Giải mã đường dẫn
+  console.log("Current path (decoded):", decodedPath);
+
+  const path = decodedPath === "/sách";
 
   const navigate = useNavigate();
 
@@ -26,11 +32,18 @@ const SidebarBooks = (props) => {
       >
         Tất cả sách
       </div>
+      {console.log("Current path:", location.pathname)}
+
       {categories.map((category, index) => (
         <div
           key={index}
-          className="py-3 border-b border-gray-400 cursor-pointer hover:text-blue-500 
-               hover:underline flex items-center justify-between h-fit"
+          className={`py-3 border-b ${
+            !path
+              ? "hidden opacity-50 text-gray-400 cursor-default hover:text-gray-400 hover:no-underline"
+              : " "
+          }
+            border-gray-400 cursor-pointer hover:text-blue-500 
+               hover:underline flex items-center justify-between h-fit`}
           onClick={() => onClick(category.id)}
         >
           {category.name}
