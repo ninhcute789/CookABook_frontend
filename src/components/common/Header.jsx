@@ -35,7 +35,7 @@ const Header = () => {
     fetchUser();
   }, []); // Chỉ chạy 1 lần khi component mount
 
-  console.log("🚀 ~ file: Header.jsx ~ line 45 ~ user", user);
+  // console.log("🚀 ~ file: Header.jsx ~ line 45 ~ user", user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,9 +45,16 @@ const Header = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        if (!user) return;
-        getUserAvatarById(user.id).then((res) => {
-          setUser((prev) => ({ ...prev, avatar: res.data }));
+        if (!user?.id) return;
+
+        const res = await getUserAvatarById(user.id);
+        console.log("🚀 ~ file: Header.jsx ~ line 51 ~ fetchUser ~ res", res);
+        setUser((prev) => {
+          // Chỉ cập nhật nếu avatar thay đổi để tránh render không cần thiết
+          if (prev && prev.avatar !== res) {
+            return { ...prev, avatar: res };
+          }
+          return prev;
         });
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu user:", error);

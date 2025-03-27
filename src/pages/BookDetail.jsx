@@ -113,7 +113,7 @@ const BookDetail = () => {
                     <div>CHÍNH HÃNG </div>
                   </div>
                 ) : null}
-                {console.log("official??",book.official)}
+                {console.log("official??", book.official)}
                 <div className="font-semibold">Tác giả:</div>
                 <div
                   onClick={() => navigate(`/sách/tác-giả/${book.author?.id}`)}
@@ -147,7 +147,7 @@ const BookDetail = () => {
               <div className="flex gap-4 flex-col md:flex-row">
                 <div className="text-red-500 text-3xl font-bold flex ">
                   {/* {book.originalPrice.toLocaleString()} */}
-                  {book.discountPrice?.toLocaleString("vi-VN")}
+                  {book.finalPrice?.toLocaleString("vi-VN")}
                   <p className="text-[20px]">₫</p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -308,7 +308,7 @@ const BookDetail = () => {
                       </h3>
                       <div className="flex text-black mt-1">
                         <p className=" font-medium">
-                          {product.discountPrice.toLocaleString("vi-VN")}
+                          {product.finalPrice.toLocaleString("vi-VN")}
                         </p>
                         <p className="text-[13px]">₫</p>
                       </div>
@@ -461,7 +461,7 @@ const BookDetail = () => {
           <div className="flex">
             <p className="text-2xl font-bold text-red-500 flex">
               {/* {(book.price * quantity).toLocaleString()} */}
-              {(book.discountPrice * quantity)?.toLocaleString("vi-VN")}
+              {(book.finalPrice * quantity)?.toLocaleString("vi-VN")}
             </p>
             <p className="text-[15px] font-bold text-red-500 ">₫</p>
           </div>
@@ -471,6 +471,7 @@ const BookDetail = () => {
         <button
           className="w-full bg-red-500 duration-300 hover:cursor-pointer
         hover:bg-red-600 text-white py-2 rounded-lg font-semibold mb-2"
+        onClick={() => navigate("/dia-chi")}
         >
           Mua ngay
         </button>

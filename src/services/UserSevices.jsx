@@ -26,8 +26,8 @@ const getUserAvatarById = async (id) => {
       },
     });
     // toast.success("🎉 Lấy thông tin người dùng thành công!");
-    
-    return response;
+
+    return response.data;
   } catch (error) {
     console.error("❌ Error in getUser:", error);
     return null;
