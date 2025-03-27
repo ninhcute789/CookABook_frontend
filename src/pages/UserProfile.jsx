@@ -33,6 +33,7 @@ const UserProfile = () => {
       const parsedUser = JSON.parse(storedUser);
       const res = await getUsersById(parsedUser.id);
       setUser(res);
+      // console.log("👤 Dữ liệu user:", res);
       // setArticles(res.articles);
       // console.log("👤 Ids bài báo:", res.articles);
       // const id = await res.articles.map((article) => getArticlesById(article.id));
@@ -41,6 +42,7 @@ const UserProfile = () => {
         res.articles.map((article) => getArticlesById(article.id))
       );
       setArticles(id);
+      // console.log("👤 Dữ liệu bài báo:", id);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu user:", error);
     }

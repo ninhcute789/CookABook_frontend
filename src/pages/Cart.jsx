@@ -5,8 +5,6 @@ import b1 from "../assets/books/b1.webp";
 import { FcHome } from "react-icons/fc";
 
 const Cart = () => {
-  const [checkedItems, setCheckedItems] = useState({});
-  // const [isChecked, setIsChecked] = useState(false);
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -27,6 +25,15 @@ const Cart = () => {
       image: "https://via.placeholder.com/50",
     },
   ]);
+
+  const [checkedItems, setCheckedItems] = useState({});
+
+  // const checkedCount = Object.values(checkedItems).filter(value => value === true).length;
+  // // Đếm số lượng item đã tích
+  let checkedCount = 0;
+  for (let key in checkedItems) {
+    if (checkedItems[key]) checkedCount++;
+  }
 
   const toggleCheckbox = (id) => {
     setCheckedItems((prev) => ({
@@ -218,7 +225,7 @@ const Cart = () => {
                     text-white py-2 mt-4 rounded-lg text-lg 
                     font-semibold duration-300 hoh hover:bg-red-600"
                     >
-                      Mua Hàng ({cartItems.length})
+                      Mua Hàng ({checkedCount})
                     </button>
                   </div>
                 </div>

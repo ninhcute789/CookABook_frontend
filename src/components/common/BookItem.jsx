@@ -32,7 +32,7 @@ const BookItem = (props) => {
             <div className="p-2">
               <div className="flex-col space-x-2 items-center">
                 <div className="text-xl font-semibold text-red-600 flex">
-                  {book.discountPrice?.toLocaleString("vi-VN")}
+                  {book.finalPrice?.toLocaleString("vi-VN")}
                   <p className="text-[15px]">₫</p>
                 </div>
 

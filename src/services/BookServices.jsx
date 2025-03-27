@@ -74,7 +74,7 @@ const getAllBooksPreview = async (
     }
 
     const res = await axiosInstance.get(
-      `/books/preview?page=${page}&size=${size}&sort=discountPrice,${change}&filter=title ~ '${content}' OR author.name ~ '${content}'`,
+      `/books/preview?page=${page}&size=${size}&sort=finalPrice,${change}&filter=title ~ '${content}' OR author.name ~ '${content}'`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

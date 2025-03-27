@@ -55,7 +55,7 @@ const Register = () => {
 
     try {
       const response = await axiosInstance.post(
-        "/users/register",
+        "/users",
         userData,
         config
       );

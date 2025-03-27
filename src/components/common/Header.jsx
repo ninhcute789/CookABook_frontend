@@ -2,36 +2,41 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
-import { getUsersById } from "../../services/UserSevices";
+import { getUserAvatarById, getUsersById } from "../../services/UserSevices";
 import axiosInstance from "../../services/axiosInstance";
 import toast from "react-hot-toast";
+import ava from "../../assets/ava.png";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
-  // const [user, setUser] = useState(localStorage.getItem("user"));
   const [isHovered, setIsHovered] = useState(false);
 
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      const updatedUser = localStorage.getItem("user");
-      setUser(updatedUser ? JSON.parse(updatedUser) : null);
+    const fetchUser = async () => {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return; // Nếu không có user trong localStorage, không làm gì cả
+
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        console.log("🚀 storedUser ID:", parsedUser.id);
+
+        const userData = await getUsersById(parsedUser.id);
+        console.log("🚀 User từ API:", userData);
+
+        setUser(userData); // Cập nhật state với dữ liệu từ API
+      } catch (error) {
+        console.error("Lỗi khi lấy user từ API:", error);
+      }
     };
 
-    // Lắng nghe sự kiện thay đổi localStorage
-    window.addEventListener("storage", handleStorageChange);
+    fetchUser();
+  }, []); // Chỉ chạy 1 lần khi component mount
 
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  console.log("🚀 ~ file: Header.jsx ~ line 45 ~ user", user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoggedInUser(localStorage.getItem("username"));
@@ -41,18 +46,13 @@ const Header = () => {
     const fetchUser = async () => {
       try {
         if (!user) return;
-
-        const res = await getUsersById(user.id);
-        if (JSON.stringify(res) !== JSON.stringify(user)) {
-          // Kiểm tra trước khi cập nhật
-          setUser(res);
-          console.log("🔄 Trước khi cập nhật:", res);
-        }
+        getUserAvatarById(user.id).then((res) => {
+          setUser((prev) => ({ ...prev, avatar: res.data }));
+        });
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu user:", error);
       }
     };
-
     fetchUser();
   }, [user]);
 
@@ -165,7 +165,7 @@ const Header = () => {
           } md:flex md:items-center`}
         >
           <ul className="md:flex lg:space-x-8 text-center md:text-left">
-            {loggedInUser === "admin" // Nếu tài khoản là Admin thì có phần header Admin
+            {loggedInUser === "admin123" // Nếu tài khoản là Admin thì có phần header Admin
               ? ["Trang chủ", "Sách", "Tin tức", "Về chúng tôi", "Admin"].map(
                   (item, index) => {
                     const path =
@@ -220,10 +220,11 @@ const Header = () => {
           {loggedInUser ? (
             <div className="flex items-center">
               <img
-                src={user?.avatar}
+                src={user?.avatar || ava}
                 alt="Avatar"
                 className="w-10 h-10 mr-6 rounded-full object-cover border-2 border-gray-200"
               />
+              {console.log("✅ Avatar đã cập nhật - 271:", user?.avatar)}
               <div
                 className="flex items-center relative"
                 onMouseEnter={() => setIsHovered(true)}

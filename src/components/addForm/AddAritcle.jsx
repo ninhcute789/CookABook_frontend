@@ -7,7 +7,7 @@ import axiosInstance from "../../services/axiosInstance";
 
 const AddArticle = (props) => {
   const { onSubmit, initialData = {} } = props;
-  
+
   const user = JSON.parse(localStorage.getItem("user")); // Lấy thông tin user từ localStorage
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -73,29 +73,31 @@ const AddArticle = (props) => {
         <div className="z-50  fixed inset-0 flex items-center justify-center bg-black ">
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-lg shadow-lg w-8/22"
+            className="bg-white p-6 rounded-lg shadow-lg w-11/22"
           >
             <h2 className="text-lg font-semibold mb-4">Thêm bài báo</h2>
-            <div className="space-y-4">
-              <label className="block">
-                Tiêu đề
+            <div className="CONTENT grid grid-cols-2 space-x-4">
+              <div className="">
                 <input
-                  className="w-full border p-2 rounded"
+                  type="text"
                   name="title"
+                  placeholder="Tiêu đề mới"
                   value={title}
                   onChange={handleTitleChange}
+                  className="w-full p-2 border rounded mb-3"
                 />
-              </label>
-              <label className="block">
-                Nội dung
                 <textarea
-                  className="w-full border p-2 rounded"
                   name="content"
+                  placeholder="Nội dung mới"
                   value={content}
                   onChange={handleContentChange}
+                  className="w-full p-2 border rounded mb-3 h-fit"
+                  rows="4"
                 />
-              </label>
-              <ImageUploader onUploadSuccess={(url) => setImageUrl(url)} />
+              </div>
+              <div className="items-center overflow-hidden object-center mb-3">
+                <ImageUploader onUploadSuccess={(url) => setImageUrl(url)} />
+              </div>
             </div>
             <div className="flex justify-end mt-4 space-x-2">
               <button

@@ -1,6 +1,6 @@
 import { FaSearch } from "react-icons/fa";
 import { NavLink, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import BookItem from "../components/common/BookItem";
 import SidebarBooks from "../components/sideBar/sideBarBooks";
 import {
@@ -43,6 +43,10 @@ const Books = () => {
       }
     };
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // Fetch sách (phân biệt khi có danh mục và khi không có danh mục)
