@@ -1,10 +1,10 @@
-import { set } from "@cloudinary/url-gen/actions/variable";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   createNewAddress,
   deleteAddressById,
   getAllAddressesByUserId,
+  getDefautAddressByUserId,
   updateAddress,
 } from "../services/AddressServices";
 
@@ -18,6 +18,7 @@ const Address = () => {
 
   const [addresses, setAddresses] = useState([]);
 
+  const [idDefault, setIdDefault] = useState(null);
   const [id, setId] = useState(null);
   const [name, setName] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
@@ -26,72 +27,22 @@ const Address = () => {
   const [ward, setWard] = useState(null);
   const [address, setAddress] = useState(null);
   const [defaultAddress, setDefaultAddress] = useState(false);
-  const [userId, setUserId] = useState(user.id);
+  const userId = user.id;
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
-    scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  useEffect(() => {
+    const defaultAddress = async () => {
+      const address = await getDefautAddressByUserId(userId);
+      // console.log("🏠 Địa chỉ:", address.id);
+      setIdDefault(address.id);
+    };
+    defaultAddress();
     getAllAddressesByUserId(userId, setAddresses);
-  }, []);
-
-  // const addresses = [
-  //   {
-  //     id: 1,
-  //     name: "Lê Minh Khánh",
-  //     phone: "0394517504",
-  //     city: "Hà Nội",
-  //     district: "Hoàng Mai",
-  //     ward: "Phường Hoàng Văn Thụ",
-  //     address: "22 Kim Ngưu, đường Hoàng Mai",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Nguyễn Văn A",
-  //     phone: "0987654321",
-  //     city: "Hồ Chí Minh",
-  //     district: "Quận 1",
-  //     ward: "Phường Bến Nghé",
-  //     address: "52 Nguyễn Huệ, Quận 1",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Trần Thị B",
-  //     phone: "0912345678",
-  //     city: "Đà Nẵng",
-  //     district: "Hải Châu",
-  //     ward: "Phường Hòa Cường",
-  //     address: "10 Bạch Đằng, đường Hải Châu",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Phạm Văn C",
-  //     phone: "0321654987",
-  //     city: "Hải Phòng",
-  //     district: "Ngô Quyền",
-  //     ward: "Phường Máy Tơ",
-  //     address: "30 Lê Lợi, đường Ngô Quyền",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Nguyễn Thị D",
-  //     phone: "0365987412",
-  //     city: "Cần Thơ",
-  //     district: "Ninh Kiều",
-  //     ward: "Phường An Bình",
-  //     address: "15 Lê Lợi, đường Ninh Kiều",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Trần Văn E",
-  //     phone: "0987456321",
-  //     city: "Đà Lạt",
-  //     district: "Lâm Đồng",
-  //     ward: "Phường 1",
-  //     address: "20 Nguyễn Văn Cừ, đường Lâm Đồng",
-  //   },
-  // ];
+    setTimeout(() => {
+      scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
+  }, [userId]);
 
   const handleCancel = () => {
     setAnimateForm(false);
@@ -173,10 +124,17 @@ const Address = () => {
                 onClick={() => {
                   setShowForm(true);
                   setAnimateForm(true);
-                  // scrollTo({ top: 378, behavior: "smooth" });
+
                   handleEdit(ad);
                   setNewForm(false);
                   setId(ad.id);
+                  if (addresses.length >= 5) {
+                    scrollTo({ top: 378, behavior: "smooth" });
+                  } else if (addresses.length >= 3) {
+                    scrollTo({ top: 180, behavior: "smooth" });
+                  } else {
+                    scrollTo({ top: 0, behavior: "smooth" });
+                  }
                 }}
               >
                 Sửa
@@ -204,9 +162,16 @@ const Address = () => {
           <span
             className="text-blue-500 hover:cursor-pointer ml-2"
             onClick={() => {
-              setNewForm(true);
               setShowForm(true);
               setAnimateForm(true);
+              setNewForm(true);
+              if (addresses.length >= 5) {
+                scrollTo({ top: 378, behavior: "smooth" });
+              } else if (addresses.length >= 3) {
+                scrollTo({ top: 180, behavior: "smooth" });
+              } else {
+                scrollTo({ top: 0, behavior: "smooth" });
+              }
               // scrollTo({ top: 378, behavior: "smooth" });
             }}
           >
@@ -286,19 +251,18 @@ const Address = () => {
                 placeholder="Ví dụ: 23, đường Hoàng Mai"
               />
             </div>
-            {!defaultAddress ? (
-              <div className="flex w-15/24 mx-auto lg:items-center lg:flex-row flex-col">
-                <label className="lg:w-1/2"></label>
-                <input
-                  type="checkbox"
-                  className="w-6 h-6 cursor-pointer overflow-hidden"
-                  checked={defaultAddress ? true : false}
-                  onChange={() => setDefaultAddress(!defaultAddress)}
-                />
-                {/* {console.log("294 defaultAddress", defaultAddress)} */}
-                <label className="w-full ml-3">Đặt làm địa chỉ mặc định</label>
-              </div>
-            ) : null}
+            <div className="flex w-15/24 mx-auto lg:items-center lg:flex-row flex-col">
+              <label className="lg:w-1/2"></label>
+              <input
+                type="checkbox"
+                className="w-6 h-6 cursor-pointer overflow-hidden"
+                checked={defaultAddress}
+                onChange={() => setDefaultAddress(!defaultAddress)}
+                disabled={id === idDefault ? true : false}
+              />
+              <label className="w-full ml-3">Đặt làm địa chỉ mặc định</label>
+            </div>
+            {console.log("302", id)}
 
             <div className="flex mt-4 w-15/24 mx-auto">
               <button
