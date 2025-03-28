@@ -40,7 +40,7 @@ const AddArticle = (props) => {
       const token = localStorage.getItem("token");
       const res = await axiosInstance.post(
         "/articles",
-        { title, content, imageURL: imageUrl, user: { id: user.id } },
+        { title, content, imageURL: imageUrl, userId: user.id },
         {
           headers: {
             Authorization: `Bearer ${token}`,

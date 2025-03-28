@@ -34,6 +34,23 @@ const getUserAvatarById = async (id) => {
   }
 };
 
+const getAllArticlesByUserId = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axiosInstance.get(`/users/${id}/articles`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // toast.success("🎉 Lấy thông tin người dùng thành công!");
+
+    return response.data;
+  } catch (error) {
+    console.error("❌ Error in getUser:", error);
+    return null;
+  }
+};
+
 const fetchUsers = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -58,4 +75,4 @@ const fetchUsers = async () => {
   }
 };
 
-export { getUsersById, fetchUsers, getUserAvatarById };
+export { getUsersById, fetchUsers, getUserAvatarById, getAllArticlesByUserId };

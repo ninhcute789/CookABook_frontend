@@ -6,13 +6,35 @@ import { getUserAvatarById, getUsersById } from "../../services/UserSevices";
 import axiosInstance from "../../services/axiosInstance";
 import toast from "react-hot-toast";
 import ava from "../../assets/ava.png";
+import { getQuantityOfCartItems } from "../../services/CartServices";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
   const [isHovered, setIsHovered] = useState(false);
+  const [quantity, setQuantity] = useState(0);
 
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchQuantity = async () => {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return; // Nếu không có user trong localStorage, không làm gì cả
+
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        // console.log("🚀 storedUser ID:", parsedUser.id);
+
+        const userData = await getQuantityOfCartItems(parsedUser.cartId);
+        // console.log("🚀 User từ API:", userData);
+        setQuantity(userData); // Cập nhật state với dữ liệu từ API
+      } catch (error) {
+        console.error("Lỗi khi lấy user từ API:", error);
+      }
+    };
+
+    fetchQuantity();
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -21,10 +43,10 @@ const Header = () => {
 
       try {
         const parsedUser = JSON.parse(storedUser);
-        console.log("🚀 storedUser ID:", parsedUser.id);
+        // console.log("🚀 storedUser ID:", parsedUser.id);
 
         const userData = await getUsersById(parsedUser.id);
-        console.log("🚀 User từ API:", userData);
+        // console.log("🚀 User từ API:", userData);
 
         setUser(userData); // Cập nhật state với dữ liệu từ API
       } catch (error) {
@@ -48,7 +70,7 @@ const Header = () => {
         if (!user?.id) return;
 
         const res = await getUserAvatarById(user.id);
-        console.log("🚀 ~ file: Header.jsx ~ line 51 ~ fetchUser ~ res", res);
+        // console.log("🚀 ~ file: Header.jsx ~ line 51 ~ fetchUser ~ res", res);
         setUser((prev) => {
           // Chỉ cập nhật nếu avatar thay đổi để tránh render không cần thiết
           if (prev && prev.avatar !== res) {
@@ -172,7 +194,7 @@ const Header = () => {
           } md:flex md:items-center`}
         >
           <ul className="md:flex lg:space-x-8 text-center md:text-left">
-            {loggedInUser === "admin123" // Nếu tài khoản là Admin thì có phần header Admin
+            {loggedInUser === "admin" // Nếu tài khoản là Admin thì có phần header Admin
               ? ["Trang chủ", "Sách", "Tin tức", "Về chúng tôi", "Admin"].map(
                   (item, index) => {
                     const path =
@@ -231,7 +253,7 @@ const Header = () => {
                 alt="Avatar"
                 className="w-10 h-10 mr-6 rounded-full object-cover border-2 border-gray-200"
               />
-              {console.log("✅ Avatar đã cập nhật - 271:", user?.avatar)}
+              {/* {console.log("✅ Avatar đã cập nhật - 271:", user?.avatar)} */}
               <div
                 className="flex items-center relative"
                 onMouseEnter={() => setIsHovered(true)}
@@ -287,13 +309,16 @@ const Header = () => {
           )}
           <Link to="/gio-hang" className="ml-6 text-gray-700 ">
             <div className="hover:bg-gray-200 p-2 rounded duration-300 relative">
-              <div
-                className="text-white absolute -top-1 -right-1
+              {quantity > 0 && (
+                <div
+                  className="text-white absolute -top-1 -right-1
                bg-[#f93333] rounded-full w-5 h-5 font-medium
                 justify-center flex items-center text-xs"
-              >
-                23
-              </div>
+                >
+                  {quantity}
+                  {/* {console.log("✅ Số lượng sách trong giỏ hàng:", quantity)} */}
+                </div>
+              )}
               <BsCart3 className="size-6" />
             </div>
           </Link>

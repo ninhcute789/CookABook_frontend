@@ -12,10 +12,13 @@ import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { truncateDate } from "../services/CommonServices";
 import { TiTickOutline } from "react-icons/ti";
+import toast from "react-hot-toast";
+import { addBookToCart, getCartById } from "../services/CartServices";
 const BookDetail = () => {
   const { id } = useParams(); // Lấy id từ URL
   const [book, setBook] = useState([]);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const [quantity, setQuantity] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +27,7 @@ const BookDetail = () => {
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const size = 8; // Số bài viết mỗi trang
   const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
+  const [cartItems, setCartItems] = useState(0);
 
   const handleIncrease = () => setQuantity((prev) => prev + 1);
   const handleDecrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
@@ -31,7 +35,7 @@ const BookDetail = () => {
   useEffect(() => {
     getBooksById(id).then((data) => {
       if (data) {
-        console.log(data);
+        // console.log(data);
       }
       setBook(data);
     });
@@ -43,6 +47,21 @@ const BookDetail = () => {
       behavior: "smooth",
     });
   }, []);
+  const fetchData = async () => {
+    try {
+      const res = await getCartById(user.cartId);
+      console.log("danh sách sách", res);
+      ``;
+      setCartItems(res.cartItems);
+
+      console.log("số lượng sách trong giỏ hàng", res.cartItems);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu sách:", error);
+    }
+  };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +75,7 @@ const BookDetail = () => {
           "desc",
           ""
         );
-        console.log("danh sách sách", res);
+        // console.log("danh sách sách", res);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu sách:", error);
       }
@@ -113,7 +132,7 @@ const BookDetail = () => {
                     <div>CHÍNH HÃNG </div>
                   </div>
                 ) : null}
-                {console.log("official??", book.official)}
+                {/* {console.log("official??", book.official)} */}
                 <div className="font-semibold">Tác giả:</div>
                 <div
                   onClick={() => navigate(`/sách/tác-giả/${book.author?.id}`)}
@@ -284,7 +303,7 @@ const BookDetail = () => {
                 )}
 
                 <div className=" gap-4 grid grid-cols-4">
-                  {console.log("danh sách sách", books)}
+                  {/* {console.log("danh sách sách", books)} */}
                   {books.map((product) => (
                     <div
                       key={product.id}
@@ -471,12 +490,35 @@ const BookDetail = () => {
         <button
           className="w-full bg-red-500 duration-300 hover:cursor-pointer
         hover:bg-red-600 text-white py-2 rounded-lg font-semibold mb-2"
-        onClick={() => navigate("/dia-chi")}
+          onClick={() => {
+            if (!user) {
+              toast.error("Bạn chưa đăng nhập!");
+              navigate("/dang-nhap");
+            } else {
+              navigate("/dia-chi");
+            }
+          }}
         >
           Mua ngay
         </button>
-        <button className="w-full border border-gray-300 py-2 rounded-lg mb-2">
+        <button
+          className="w-full border border-gray-300 duration-300
+          py-2 rounded-lg mb-2 hover:cursor-pointer hover:bg-gray-200"
+          onClick={() => {
+            if (!user) {
+              toast.error("Bạn chưa đăng nhập!");
+              navigate("/dang-nhap");
+            } else {
+              addBookToCart(book.id, user.cartId, quantity);
+              // fetchData();
+              setTimeout(() => {
+                navigate("/gio-hang");
+              }, 100);
+            }
+          }}
+        >
           Thêm vào giỏ
+          {/* {console.log("cartItems", cartItems)} */}
         </button>
         <button className="w-full border border-gray-300 py-2 rounded-lg">
           Mua trước trả sau

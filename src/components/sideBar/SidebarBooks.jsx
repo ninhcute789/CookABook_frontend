@@ -32,7 +32,7 @@ const SidebarBooks = (props) => {
       >
         Tất cả sách
       </div>
-      {console.log("Current path:", location.pathname)}
+      {/* {console.log("Current path:", location.pathname)} */}
 
       {categories.map((category, index) => (
         <div

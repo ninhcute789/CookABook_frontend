@@ -42,9 +42,7 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
           title: title,
           content: content,
           imageURL: imageUrl, // Nếu là URL hoặc base64
-          user: {
-            id: user.id,
-          },
+          userId: user.id,
         },
         {
           headers: {

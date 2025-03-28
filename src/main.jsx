@@ -22,6 +22,7 @@ import AdminCategories from "./pages/AdminCategories.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Cart from "./pages/Cart.jsx";
 import Address from "./pages/Address.jsx";
+import Payment from "./pages/Payment.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -41,6 +42,7 @@ ReactDOM.createRoot(root).render(
         <Route path="user-profile" element={<UserProfile />} />
         <Route path="gio-hang" element={<Cart />} />
         <Route path="dia-chi" element={<Address />} />
+        <Route path="thanh-toan/:id" element={<Payment />} />
 
         {/* <Route path='admin' element={<Admin />} />
         <Route path='admin-books' element={<AdminBooks />} />

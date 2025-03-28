@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import toast from "react-hot-toast";
 // import { useNavigate } from "react-router";
 // import axiosInstance from "../services/axiosInstance";
-import { getUsersById } from "../services/UserSevices";
+import { getAllArticlesByUserId, getUsersById } from "../services/UserSevices";
 import UserUpdate from "../components/update/UserUpdate";
 import {
   getAllArticlesWithSizeAndPage,
@@ -38,10 +38,8 @@ const UserProfile = () => {
       // console.log("👤 Ids bài báo:", res.articles);
       // const id = await res.articles.map((article) => getArticlesById(article.id));
       // console.log("👤 Dữ liệu bài báo:", id);
-      const id = await Promise.all(
-        res.articles.map((article) => getArticlesById(article.id))
-      );
-      setArticles(id);
+      const fetchUserArticles = await getAllArticlesByUserId(parsedUser.id);
+      setArticles(fetchUserArticles.data.data);
       // console.log("👤 Dữ liệu bài báo:", id);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu user:", error);

@@ -148,7 +148,7 @@ const BookList = () => {
                     <div>
                       Giá giảm -{" "}
                       <span className="text-green-500 font-medium">
-                        {book.discountPrice?.toLocaleString("vi-VN")}đ
+                        {book.finalPrice?.toLocaleString("vi-VN")}đ
                       </span>
                     </div>
                   </div>
