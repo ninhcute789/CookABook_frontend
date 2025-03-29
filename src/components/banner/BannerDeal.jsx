@@ -10,11 +10,12 @@ const TopDealBanner = () => {
 
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);// Số trang
+  const [totalPages, setTotalPages] = useState(1); // Số trang
   const [totalElements, setTotalElements] = useState(0);
   const [size, setSize] = useState(6); // Số sách mỗi trang
   const [content, setContent] = useState("");
   const [change, setChange] = useState("");
+  const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +38,18 @@ const TopDealBanner = () => {
 
     fetchData();
   }, [page, content, change, size]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsFading(true);
+      setTimeout(() => {
+        setPage((prev) => (prev < totalPages ? prev + 1 : 1));
+        setIsFading(false);
+      }, 300); // Thời gian hiệu ứng trùng với transition
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [totalPages]);
 
   // Theo dõi kích thước màn hình và cập nhật số lượng item hiển thị
   useEffect(() => {
@@ -63,7 +76,7 @@ const TopDealBanner = () => {
   }, []);
 
   return (
-    <div className="bg-white p-5 shadow-md border-t-3 border-red-600 rounded-lg">
+    <div className="bg-white p-5 shadow-md rounded-lg h-fit">
       <h2 className="text-xl font-bold text-red-600 flex items-center gap-2">
         <span role="img" aria-label="deal">
           👍
@@ -72,8 +85,8 @@ const TopDealBanner = () => {
       </h2>
       {/* {console.log("tong so sach", totalElements)} */}
 
-      <div className="flex space-x-2 mt-4 relative">
-        <button
+      <div className={`book-container duration-300 ${isFading ? "fade-out" : "fade-in"} flex space-x-2 mt-4 relative`}>
+        {/* <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
           className={`p-3 bg-gray-200 shadow-[0px_2px_8px_rgba(0,0,0,0.2)] shadow-neutral-900 z-10 hover:cursor-pointer hover:bg-white duration-300 ${
@@ -92,12 +105,13 @@ const TopDealBanner = () => {
           rounded-full disabled:opacity-50 items-center top-[45%] absolute right-0`}
         >
           <IoIosArrowForward className="text-black" />
-        </button>
-        {books.map((product) => (
+        </button> */}
+        {books.slice(0,26).map((product) => (
           <div
             key={product.id}
             onClick={() => navigate(`/sách/${product.id}`)}
-            className="w-[300px] hover:shadow-2xl shadow-md transition duration-200 
+            className="w-[300px] hover:shadow-2xl mb-5
+            shadow-md transition duration-200 
              border-cyan-700 p-3 rounded-lg "
           >
             <div className="relative">
@@ -106,7 +120,7 @@ const TopDealBanner = () => {
                 alt={product.title}
                 className="w-full h-72 object-cover rounded-md"
               />
-              
+
               {product.official ? (
                 <div className="absolute right-0 bottom-0 pl-[2px] pt-[2px] bg-white rounded-tl-lg">
                   <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md font-semibold w-fit flex items-center">
@@ -122,7 +136,7 @@ const TopDealBanner = () => {
             </h3>
 
             <p className="text-red-600 font-bold mt-2">
-              {product.discountPrice?.toLocaleString("vi-VN")}₫
+              {product.finalPrice?.toLocaleString("vi-VN")}₫
             </p>
             <div className="flex items-center gap-2 ">
               <p className="text-green-600 font-semibold bg-stone-100 p-1 rounded-lg shadow-md text-sm">
@@ -146,16 +160,6 @@ const TopDealBanner = () => {
               ))}
               <span className="text-gray-600 text-sm">(Đã bán 200)</span>
             </div>
-
-            {/* {!product.official ? (
-              <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold w-fit ml-auto mt-2">
-                CHÍNH HÃNG
-              </div>
-            ) : (
-              <span className="px-1"></span>
-            )} */}
-
-            <hr className="mt-5" />
           </div>
         ))}
       </div>

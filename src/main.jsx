@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
-import App from "./App.jsx";
+import { App } from "./App.jsx";
 import "./index.css";
 import Home from "./pages/Home.jsx";
 import Admin from "./pages/Admin.jsx";
@@ -10,7 +10,7 @@ import Login from "./pages/Login.jsx";
 import AdminBooks from "./pages/AdminBooks.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
-import AdminNews from "./pages/AminNews.jsx";
+import AdminNews from "./pages/AdminNews.jsx";
 import News from "./pages/News.jsx";
 import Books from "./pages/Books.jsx";
 import Contact from "./pages/Contact.jsx";

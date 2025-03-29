@@ -46,17 +46,17 @@ const News = () => {
 
   const fetchArticles = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("❌ Không tìm thấy token!");
-        return;
-      }
+      // const token = localStorage.getItem("token");
+      // if (!token) {
+      //   console.error("❌ Không tìm thấy token!");
+      //   return;
+      // }
 
       const res = await axiosInstance.get(
         `/articles/all?size=${size}&page=${page}&sort=createdAt,${change}&filter=title ~ '${content}'`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        // {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // }
       );
 
       // console.log("✅ API trả về:", res.data);
@@ -104,7 +104,7 @@ const News = () => {
   return (
     <div>
       {/* <ScrollToTop /> */}
-      <div className=" px-10 mx-auto py-5  bg-orange-50">
+      <div className=" px-10 mx-auto py-5 ">
         <header className="news-header w-11/12 mx-auto shadow-md  top-5 z-50 backdrop-blur-md rounded-2xl bg-white opacity-90">
           <div className=" mx-auto flex items-center justify-between p-4">
             {/* Logo / Tên trang */}
@@ -168,7 +168,7 @@ const News = () => {
                   ) => (
                     <div
                       key={article.id}
-                      className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6 bg-white"
+                      className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-gray-200 p-6 bg-white"
                     >
                       <img
                         src={article.imageURL}

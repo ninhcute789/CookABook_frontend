@@ -3,11 +3,11 @@ import axiosInstance from "./axiosInstance";
 
 const getAuthorsById = async (id) => {
   try {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     const response = await axiosInstance.get(`/books/all-by-author-id/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
     });
     // toast.success("🎉 Lấy thông tin bài báo thành công!");
     return response.data.data;

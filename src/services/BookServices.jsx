@@ -3,11 +3,11 @@ import axiosInstance from "./axiosInstance";
 
 const getBooksById = async (id) => {
   try {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     const response = await axiosInstance.get(`/books/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
     });
     // toast.success("🎉 Lấy thông tin bài báo thành công!");
     return response.data.data;
@@ -67,17 +67,17 @@ const getAllBooksPreview = async (
   content
 ) => {
   try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("❌ Không tìm thấy token!");
-      return;
-    }
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   console.error("❌ Không tìm thấy token!");
+    //   return;
+    // }
 
     const res = await axiosInstance.get(
-      `/books/preview?page=${page}&size=${size}&sort=finalPrice,${change}&filter=title ~ '${content}' OR author.name ~ '${content}'`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `/books/preview?page=${page}&size=${size}&sort=finalPrice,${change}&filter=title ~ '${content}' OR author.name ~ '${content}'`
+      // {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // }
     );
 
     // console.log("✅ API trả về:", res.data);
@@ -154,26 +154,29 @@ const getAllBooksWithCategoryId = async (
   setBooks,
   setTotalPages,
   setTotalElements,
-  change,
-  content,
+  // change,
+  // content,
   id
 ) => {
   try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("❌ Không tìm thấy token!");
-      return;
-    }
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   console.error("❌ Không tìm thấy token!");
+    //   return;
+    // }
 
     const res = await axiosInstance.get(
-      `/books/all-by-category-id/${id}?page=${page}&size=${size}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `/books/all-by-category-id/${id}?page=${page}&size=${size}`
+      // {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // }
     );
 
     setBooks(res.data?.data?.data || []);
-    console.log("Danh sách sách theo thể loại sách:", res.data?.data?.data);
+    console.log(
+      "Danh sách sách theo thể loại sách-777777:",
+      res.data?.data?.data
+    );
     setTotalPages(res.data?.data?.meta?.totalPages);
     setTotalElements(res.data?.data?.meta?.totalElements);
   } catch (error) {

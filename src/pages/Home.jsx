@@ -37,6 +37,9 @@ const Home = () => {
       ? words.slice(0, wordLimit).join(" ")
       : text;
   };
+  // useEffect(() => {
+  //   scrollTo({ top: 0, behavior: "smooth" });
+  // }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,23 +55,23 @@ const Home = () => {
   const [articles, setArticles] = useState([]);
   const [article, setArticle] = useState();
   const [Selected, setSelected] = useState(false);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error(
-            "❌ Không tìm thấy token! Người dùng có thể chưa đăng nhập."
-          );
-          return;
-        }
+        // const token = localStorage.getItem("token");
+        // if (!token) {
+        //   console.error(
+        //     "❌ Không tìm thấy token! Người dùng có thể chưa đăng nhập."
+        //   );
+        //   return;
+        // }
 
         const res = await axiosInstance.get("/articles/all", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
         });
 
         // console.log("✅ Dữ liệu API trả về:", res.data);
@@ -80,16 +83,16 @@ const Home = () => {
           error.response?.data || error.message
         );
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
     fetchArticles();
   }, []);
 
-  if (loading) return <p className="text-center">Đang tải...</p>;
+  // if (loading) return <p className="text-center">Đang tải...</p>;
   return (
-    <>
+    <div className="home bg-[#efefef] h-fit">
       <div
         className="home banner container mx-auto p-4 bg-cover bg-center"
         style={{ backgroundImage: `url(${libra})` }}
@@ -143,7 +146,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="chung toi lam gi">
+      <div className="chung toi lam gi bg-white m-5 rounded-xl">
         <div className="container mx-auto space-y-2 py-16">
           <div className="flex justify-center items-center space-x-2 text-red-600">
             <IoBookOutline className="size-7" />
@@ -177,9 +180,6 @@ const Home = () => {
                 Mỗi ngày là một cơ hội để tìm ra cuốn sách mới sẽ chinh phục
                 bạn, mang đến những câu chuyện, kiến thức mới mẻ.
               </div>
-              <NavLink className=" text-amber-500 hover:underline">
-                Thêm thông tin
-              </NavLink>
             </div>
             <div className="md:absolute right-0 bottom-0">
               <img src={th5} className="md:w-full rounded" />
@@ -205,9 +205,6 @@ const Home = () => {
                 được yêu thích, giúp bạn dễ dàng tìm thấy những cuốn sách phù
                 hợp.
               </div>
-              <NavLink className=" text-amber-500 hover:underline">
-                Thêm thông tin
-              </NavLink>
             </div>
             <div className="md:absolute right-0 bottom-0">
               <img src={th2} className="md:w-full rounded" />
@@ -232,9 +229,6 @@ const Home = () => {
                 Tìm những cuốn sách phù hợp với sở thích và nhu cầu đọc của bạn,
                 từ các thể loại khác nhau đến những chủ đề chuyên sâu.
               </div>
-              <NavLink className=" text-amber-500 hover:underline">
-                Thêm thông tin
-              </NavLink>
             </div>
             <div className="md:absolute right-0 bottom-0">
               <img src={th3} className="md:w-full rounded" />
@@ -259,9 +253,6 @@ const Home = () => {
                 Khám phá những cuốn sách mới nhất vừa ra mắt, luôn được cập nhật
                 liên tục để bạn không bỏ lỡ những tác phẩm hot nhất.
               </div>
-              <NavLink className=" text-amber-500 hover:underline">
-                Thêm thông tin
-              </NavLink>
             </div>
             <div className="md:absolute right-0 bottom-0">
               <img src={th2} className="md:w-full rounded" />
@@ -286,9 +277,6 @@ const Home = () => {
                 Những cuốn sách nhận được nhiều đánh giá tích cực từ độc giả,
                 giúp bạn dễ dàng tìm ra lựa chọn hoàn hảo cho mình.
               </div>
-              <NavLink className=" text-amber-500 hover:underline">
-                Thêm thông tin
-              </NavLink>
             </div>
             <div className="md:absolute right-0 bottom-0">
               <img src={th3} className="md:w-full rounded" />
@@ -312,9 +300,6 @@ const Home = () => {
                 tác phẩm dành cho người trưởng thành, mỗi độ tuổi đều có những
                 lựa chọn phù hợp.
               </div>
-              <NavLink className=" text-amber-500 hover:underline">
-                Thêm thông tin
-              </NavLink>
             </div>
             <div className="md:absolute right-0 bottom-0">
               <img src={th4} className="md:w-full rounded" />
@@ -323,9 +308,11 @@ const Home = () => {
         </div>
       </div>
 
-      <BannerDeal />
+      <div className="m-5">
+        <BannerDeal />
+      </div>
 
-      <div className="tin tuc tu chung toi  p-4 bg-cover bg-center">
+      <div className="tin tuc tu chung toi  p-4 bg-cover bg-center bg-white m-5 rounded-xl">
         <div className="container mx-auto space-y-2 py-16">
           <div className="flex justify-center items-center space-x-2 text-red-600">
             <FaEarthAsia className="size-7" />
@@ -361,7 +348,7 @@ const Home = () => {
                       <div
                         key={article.id}
                         className="img4 flex justify-center items-center
-                     shadow-xl mb-4 mr-2 bg-white p-2 
+                     shadow-xl mb-4 mr-2 bg-white p-2 rounded
                     xl:flex-row flex-col"
                       >
                         <div className="flex flex-col space-y-2 ">
@@ -454,57 +441,10 @@ const Home = () => {
               </div>
             )}
           </div>
-          {/* <div
-            className="img4 flex justify-center items-center
-                    w-fit shadow-emerald-950 shadow-md mr-4 mb-4 rounded
-                    xl:flex-row flex-col"
-          >
-            <div className="flex flex-col space-y-2 ">
-              <img src={s4} className="max-h-96 object-cover rounded " />
-            </div>
-            <div className="flex flex-col space-y-2 px-5 my-5">
-              <div>
-                <button
-                  className="bg-gray-400  
-                                text-cyan-800 font-bold py-1 
-                                text-xs px-3 rounded hover:bg-yellow-500 
-                                hover:text-black transition-all duration-200
-                                cursor-pointer"
-                >
-                  Tin tức
-                </button>
-              </div>
-              <div className="flex w-9/10 justify-between">
-                <div className="flex">
-                  <div>
-                    <LuCalendarFold className="translate-y-1 mr-1" />
-                  </div>
-                  <div>Th11 24, 2024</div>
-                </div>
-                <div className="flex ">
-                  <div>
-                    <FaUser className="translate-y-1 mr-1" />
-                  </div>
-                  <div>by hai múa</div>
-                </div>
-              </div>
-              <div>
-                <NavLink
-                  to="#"
-                  className="font-bold hover:text-yellow-300 duration-200 transition-all"
-                >
-                  Phá vỡ khuôn mẫu: Hành trình chữa lành từ những tổn thương
-                </NavLink>
-              </div>
-              <div className="w-3/4 xl:mb-0 mb-10">
-                Tháng 11/2024, Phá vỡ khuôn mẫu ra mắt ấn tượng. Cuốn sách khám
-                phá tâm lý học và…
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
-    </>
+      <div className="h-1"></div>
+    </div>
   );
 };
 

@@ -29,16 +29,7 @@ const Register = () => {
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem("token"); // Hoặc cách bạn lưu token
-    // const token =
-    //   "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1MDQ2OTMyNiwiaWF0IjoxNzQxODI5MzI2LCJ1c2VyIjp7ImlkIjoxMCwidXNlcm5hbWUiOiJhZG1pbiIsIm5hbWUiOiJhZG1pbiJ9LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVJfQ1JFQVRFIiwiUk9MRV9VU0VSX1VQREFURSJdfQ.3vayKQfnqeeuOsUKOCKiXCB9u3GiPk0Uuwv0WCmGY12m5_l_qcwCzQ6L4z9KsOUWH9dB_7ioBYqK_cX7OoI_eA"; // Hoặc cách bạn lưu token
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Gửi token lên backend
-        "Content-Type": "application/json",
-      },
-    };
     if (password !== rewirtePassword) {
       toast.error("Mật khẩu nhập lại không đúng");
       return;
@@ -54,11 +45,7 @@ const Register = () => {
     };
 
     try {
-      const response = await axiosInstance.post(
-        "/users",
-        userData,
-        config
-      );
+      const response = await axiosInstance.post("/auth/register", userData);
 
       if (response.status === 201 || response.status === 200) {
         console.log("Đăng ký thành công:", response.data);
@@ -76,45 +63,7 @@ const Register = () => {
         toast.success(error.response?.data?.message);
       }
     }
-    // console.log(userData);
-    // console.log("Dữ liệu gửi lên:", JSON.stringify(userData, null, 2));
-    // console.log("UserName trước khi gửi:", username);
   };
-
-  //   const handleOnSubmit = async (event) => {
-  //     event.preventDefault();
-
-  //     if (password !== rewirtePassword) {
-  //         alert("Mật khẩu nhập lại không đúng");
-  //         return;
-  //     }
-
-  //     const userData = {
-  //         username,
-  //         password,
-  //         name,
-  //         dob,
-  //         email,
-  //         gender,
-  //     };
-
-  //     try {
-  //         const response = await axios.post(
-  //             "http://127.0.0.1:8080/api/v1/users",
-  //             userData,
-  //             { headers: { "Content-Type": "application/json" } } // Không cần token
-  //         );
-
-  //         if (response.status === 201 || response.status === 200) {
-  //             console.log("Đăng ký thành công:", response.data);
-  //             alert("Đăng ký thành công!");
-  //             // Chuyển hướng hoặc xử lý sau khi đăng ký thành công
-  //         }
-  //     } catch (error) {
-  //         console.error("Đăng ký thất bại:", error.response?.data || error.message);
-  //         toast.error(error.response?.data?.error || "Có lỗi xảy ra khi đăng ký!");
-  //     }
-  // };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -126,36 +75,18 @@ const Register = () => {
     }
   }, []);
 
-  // const onPasswordChange = (e) => {
-  //     setPassword(e.target.value);
-  // }
-  // const onRewirtePasswordChange = (e) => {
-  //     setRewirtePassword(e.target.value);
-  // }
-
-  const SCROLL_OFFSET = 70; // Adjust this value based on your header height
-
   const ScrollToTop = () => {
     const { pathname } = useLocation();
 
     useEffect(() => {
       window.scrollTo({
-        top: SCROLL_OFFSET,
+        top: 70,
         behavior: "smooth",
       });
     }, [pathname]);
 
     return null;
   };
-  // localStorage.setItem("name", {
-  //   // 'firstName': firstName,
-  //   // 'lastName': lastName,
-  //   dob: dob,
-  //   email: email,
-  //   userName: userName,
-  //   password: password,
-  //   rewirtePassword: rewirtePassword,
-  // });
 
   return (
     <div
@@ -318,13 +249,6 @@ const Register = () => {
               />
             )}
           </div>
-
-          {/* <div className="remember-forgot flex justify-between my-3 relative">
-                        <label className="text-xs ">
-                            <input type="checkbox" className="size-3.5" /> Lưu tài khoản
-                        </label >
-                        <a href="#" className="no-underline hover:underline text-xs">Quên mật khẩu ?</a>
-                    </div> */}
           <button
             type="submit"
             className="w-full bg-white text-black h-14 rounded-4xl shadow-2xl

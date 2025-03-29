@@ -19,7 +19,7 @@ const Books = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
-  const size = 8; // Số sách mỗi trang
+  const size = 16; // Số sách mỗi trang
   const sizeCategories = 20; // Số danh mục mỗi trang
   const [content, setContent] = useState("");
   const [change, setChange] = useState("");
@@ -65,8 +65,6 @@ const Books = () => {
             setBooks,
             setTotalPages,
             setTotalElements,
-            change,
-            content,
             id
           );
         } else if (idAuthor) {

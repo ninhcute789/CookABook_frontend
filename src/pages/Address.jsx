@@ -46,7 +46,7 @@ const Address = () => {
 
   const handleCancel = () => {
     setAnimateForm(false);
-    setTimeout(() => setShowForm(false), 1000); // Delay để hiệu ứng chạy mượt hơn
+    setTimeout(() => setShowForm(false), 500); // Delay để hiệu ứng chạy mượt hơn
   };
 
   const handleUpdateSuccess = (updatedId, updatedData) => {
@@ -77,7 +77,7 @@ const Address = () => {
   };
 
   return (
-    <div className="p-4 rounded-lg w-7/12 mx-auto my-5">
+    <div className="p-4 rounded-lg w-18/24 mx-auto my-5">
       <h2 className="text-2xl font-semibold">Địa chỉ giao hàng</h2>
       <div className="my-3">Chọn địa chỉ giao hàng có sẵn bên dưới:</div>
       <div className="grid grid-cols-2">
@@ -88,7 +88,7 @@ const Address = () => {
         {addresses?.map((ad, index) => (
           <div
             key={index}
-            className={`p-4 mt-2 mr-2 ${
+            className={`p-4 mt-2 mr-7 ${
               ad.defaultAddress ? "border-dashed border-green-500" : ""
             }
               rounded-lg bg-white shadow-md border border-gray-200 flex flex-col gap-1`}
@@ -100,7 +100,7 @@ const Address = () => {
               ) : null}
             </div>
             <p className="text-gray-600">
-              <span className="font-medium">Địa chỉ:</span> {ad?.address},{" "}
+              <span className="font-medium ">Địa chỉ:</span> {ad?.address},{" "}
               {ad.ward}, {ad.district}, {ad.city}
             </p>
             <p className="text-gray-600">
@@ -129,11 +129,11 @@ const Address = () => {
                   setNewForm(false);
                   setId(ad.id);
                   if (addresses.length >= 5) {
-                    scrollTo({ top: 378, behavior: "smooth" });
+                    scrollTo({ top: 458, behavior: "smooth" });
                   } else if (addresses.length >= 3) {
-                    scrollTo({ top: 180, behavior: "smooth" });
+                    scrollTo({ top: 280, behavior: "smooth" });
                   } else {
-                    scrollTo({ top: 0, behavior: "smooth" });
+                    scrollTo({ top: 100, behavior: "smooth" });
                   }
                 }}
               >
@@ -166,11 +166,11 @@ const Address = () => {
               setAnimateForm(true);
               setNewForm(true);
               if (addresses.length >= 5) {
-                scrollTo({ top: 378, behavior: "smooth" });
+                scrollTo({ top: 458, behavior: "smooth" });
               } else if (addresses.length >= 3) {
-                scrollTo({ top: 180, behavior: "smooth" });
+                scrollTo({ top: 280, behavior: "smooth" });
               } else {
-                scrollTo({ top: 0, behavior: "smooth" });
+                scrollTo({ top: 100, behavior: "smooth" });
               }
               // scrollTo({ top: 378, behavior: "smooth" });
             }}

@@ -62,7 +62,7 @@ const getAllAddressesByUserId = async (id, setAddresses) => {
     );
     setAddresses(res.data.data);
     console.log("✅ API trả về address:", res.data.data);
-    toast.success("🛒 Thêm địa chỉ thành công!");
+    // toast.success("🛒 Lấy danh sách địa chỉ thành công!");
   } catch (error) {
     console.error(
       "❌ Lỗi khi lấy danh sách:",
@@ -84,7 +84,7 @@ const deleteAddressById = async (id) => {
     });
 
     console.log("✅ API trả về address:", res.data.data);
-    toast.success("🛒 Thêm địa chỉ thành công!");
+    toast.success("🛒 Xóa địa chỉ thành công!");
   } catch (error) {
     console.error(
       "❌ Lỗi khi lấy danh sách:",
@@ -128,7 +128,7 @@ const updateAddress = async (
     );
 
     console.log("✅ API trả về address:", res.data.data);
-    toast.success("🛒 Thêm địa chỉ thành công!");
+    toast.success("🛒 Cập nhật địa chỉ thành công!");
   } catch (error) {
     console.error(
       "❌ Lỗi khi lấy danh sách:",
@@ -150,7 +150,7 @@ const getAddressById = async (id) => {
     });
 
     console.log("✅ API trả về address:", res.data.data);
-    toast.success("🛒 Thêm địa chỉ thành công!");
+    toast.success("🛒 Lấy địa chỉ thành công!");
     return res.data.data;
   } catch (error) {
     console.error(
@@ -173,7 +173,7 @@ const getDefautAddressByUserId = async (id) => {
     });
 
     console.log("✅ API trả về address:", res.data.data);
-    toast.success("🛒 Thêm địa chỉ thành công!");
+    // toast.success("🛒 Lấy địa chỉ thành công!");
     return res.data.data;
   } catch (error) {
     console.error(

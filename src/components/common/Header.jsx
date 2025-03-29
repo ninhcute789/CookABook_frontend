@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
@@ -6,35 +6,18 @@ import { getUserAvatarById, getUsersById } from "../../services/UserSevices";
 import axiosInstance from "../../services/axiosInstance";
 import toast from "react-hot-toast";
 import ava from "../../assets/ava.png";
-import { getQuantityOfCartItems } from "../../services/CartServices";
+import { AppContext } from "../../context/AppContext";
 
 const Header = () => {
+  const context = useContext(AppContext);
+
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
   const [isHovered, setIsHovered] = useState(false);
-  const [quantity, setQuantity] = useState(0);
+
+  // console.log("19", context.quantity);
 
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetchQuantity = async () => {
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) return; // Nếu không có user trong localStorage, không làm gì cả
-
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        // console.log("🚀 storedUser ID:", parsedUser.id);
-
-        const userData = await getQuantityOfCartItems(parsedUser.cartId);
-        // console.log("🚀 User từ API:", userData);
-        setQuantity(userData); // Cập nhật state với dữ liệu từ API
-      } catch (error) {
-        console.error("Lỗi khi lấy user từ API:", error);
-      }
-    };
-
-    fetchQuantity();
-  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -103,7 +86,7 @@ const Header = () => {
       //   token
       // );
       // Xóa token & username sau khi logout thành công
-      // localStorage.removeItem("token");
+      localStorage.removeItem("token");
       localStorage.removeItem("username");
       localStorage.removeItem("user");
       setUser(""); // Reset lại state
@@ -249,7 +232,7 @@ const Header = () => {
           {loggedInUser ? (
             <div className="flex items-center">
               <img
-                src={user?.avatar || ava}
+                src={context?.user.avatar || ava}
                 alt="Avatar"
                 className="w-10 h-10 mr-6 rounded-full object-cover border-2 border-gray-200"
               />
@@ -307,21 +290,24 @@ const Header = () => {
               Đăng nhập
             </Link>
           )}
-          <Link to="/gio-hang" className="ml-6 text-gray-700 ">
-            <div className="hover:bg-gray-200 p-2 rounded duration-300 relative">
-              {quantity > 0 && (
-                <div
-                  className="text-white absolute -top-1 -right-1
+          {user && (
+            <Link to="/gio-hang" className="ml-6 text-gray-700 ">
+              <div className="hover:bg-gray-200 p-2 rounded duration-300 relative">
+                {context.quantity > 0 && (
+                  <div
+                    className="text-white absolute -top-1 -right-1
                bg-[#f93333] rounded-full w-5 h-5 font-medium
                 justify-center flex items-center text-xs"
-                >
-                  {quantity}
-                  {/* {console.log("✅ Số lượng sách trong giỏ hàng:", quantity)} */}
-                </div>
-              )}
-              <BsCart3 className="size-6" />
-            </div>
-          </Link>
+                  >
+                    {context.quantity}
+                    {console.log("✅ Số lượng sách trong giỏ hàng:", context.quantity)}
+                    {/* {console.log("✅ Số lượng sách trong giỏ hàng:", quantity)} */}
+                  </div>
+                )}
+                <BsCart3 className="size-6" />
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </header>

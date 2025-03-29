@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 // import b1 from "../assets/books/b1.webp";
 // import b2 from "../assets/books/b2.webp";
@@ -14,10 +14,13 @@ import {
   updateCartItemSelectedById,
 } from "../services/CartServices";
 import { getDefautAddressByUserId } from "../services/AddressServices";
+import { AppContext } from "../context/AppContext.jsx";
 
 const Cart = () => {
+  const context = useContext(AppContext);
+
   const [cartItems, setCartItems] = useState([]);
-  const [totalQuantity, setTotalQuantity] = useState(0);
+  // const [totalQuantity, setTotalQuantity] = useState(context.quantity);
   const [totalOriginalPrice, setTotalOriginalPrice] = useState(0);
   const [totalDiscountPrice, setTotalDiscountPrice] = useState(0);
   const [totalFinalPrice, setTotalFinalPrice] = useState(0);
@@ -47,26 +50,20 @@ const Cart = () => {
       const res = await getCartById(user.cartId);
       console.log("✅ API trả về 49:", res);
       setCartItems(res.cartItems);
-      setTotalQuantity(res.totalQuantity);
+      context.setQuantity(res.totalQuantity);
       setTotalOriginalPrice(res.totalOriginalPrice);
       setTotalDiscountPrice(res.totalDiscountPrice);
       setTotalFinalPrice(res.totalFinalPrice);
 
-      // Khởi tạo checkedItems từ API
-      // const initialCheckedItems = res.cartItems.reduce((acc, item) => {
-      //   acc[item.id] = item.isSelected || false; // Giả sử API có `isSelected`
-      //   return acc;
-      // }, {});
-      // setCheckedItems(initialCheckedItems);
     };
     fetchCart();
-  }, [user.cartId]);
+  }, []); // Thêm user.cartId vào dependency array
 
   const fetchCart = async () => {
     const res = await getCartById(user.cartId);
     console.log("✅ API trả về 49:", res);
     setCartItems(res.cartItems);
-    setTotalQuantity(res.totalQuantity);
+    context.setQuantity(res.totalQuantity);
     setTotalOriginalPrice(res.totalOriginalPrice);
     setTotalDiscountPrice(res.totalDiscountPrice);
     setTotalFinalPrice(res.totalFinalPrice);
@@ -100,7 +97,9 @@ const Cart = () => {
       )
     );
   };
-
+  {
+    // console.log("context", context.theme);
+  }
   return (
     <>
       <div className="bg-gray-100 ">
@@ -142,7 +141,7 @@ const Cart = () => {
                           <img
                             src={item.book?.imageURL}
                             alt={item.book?.title}
-                            className="w-20 h-20 rounded-lg"
+                            className="w-20 h-20 rounded-lg mx-4"
                           />
                           <div>
                             <p className="font-medium">{item.store}</p>
@@ -190,7 +189,7 @@ const Cart = () => {
                                     (prevItem) => prevItem.id !== item.id
                                   )
                                 );
-                                setTotalQuantity((prev) => prev - 1);
+                                context.setQuantity((prev) => prev - 1);
                               } else {
                                 // Nếu quantity > 1 thì mới giảm số lượng
                                 await decreaseCartItem(item.id);
@@ -243,7 +242,7 @@ const Cart = () => {
                                   (prevItem) => prevItem.id !== item.id
                                 )
                               );
-                              setTotalQuantity((prev) => prev - 1);
+                              context.setQuantity((prev) => prev - 1);
                               await fetchCart();
                             }
                           };
@@ -269,7 +268,7 @@ const Cart = () => {
                 )}
               </div>
             </div>
-            <div className="RIGHT w-7/27">
+            <div className="RIGHT w-7/27 sticky top-10 h-fit mb-15">
               <div className="GiaoHang bg-white rounded-md shadow-lg h-fit mb-2">
                 <div className="flex justify-between items-center">
                   <div className="text-lg pt-2 ml-5 text-gray-500">
@@ -331,14 +330,16 @@ const Cart = () => {
                     text-white py-2 mt-4 rounded-lg text-lg 
                     font-semibold duration-300 hoh hover:bg-red-600"
                       onClick={() => {
-                        if (totalQuantity === 0) {
+                        if (context.quantity === 0) {
                           toast.error("Vui lòng chọn sản phẩm để mua!");
                         } else {
                           navigate(`/thanh-toan/${address.id}`);
                         }
                       }}
                     >
-                      Mua Hàng ({totalQuantity})
+                      {context.quantity === 0
+                        ? "Bạn chưa chọn sản phẩm nào"
+                        : `Mua Hàng (${context.quantity})`}
                       {/* {console.log("totalQuantity", totalQuantity)}/ */}
                     </button>
                   </div>

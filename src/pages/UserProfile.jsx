@@ -1,22 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // import toast from "react-hot-toast";
 // import { useNavigate } from "react-router";
 // import axiosInstance from "../services/axiosInstance";
-import { getAllArticlesByUserId, getUsersById } from "../services/UserSevices";
-import UserUpdate from "../components/update/UserUpdate";
 import {
-  getAllArticlesWithSizeAndPage,
-  getArticlesById,
-  handleDelete,
-} from "../services/ArticleServices";
+  getAllArticlesByUserId,
+  getUsersById,
+} from "../services/UserSevices";
+import UserUpdate from "../components/update/UserUpdate";
+import { handleDelete } from "../services/ArticleServices";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
 import ArticleUpdate from "../components/update/ArticleUpdate";
 import { truncateText } from "../services/CommonServices";
 import AddArticle from "../components/addForm/AddAritcle";
+import ava from "../assets/ava.png"; // Thay bằng ảnh đại diện thực tế
+import { AppContext } from "../context/AppContext";
 
 const UserProfile = () => {
-  const [user, setUser] = useState(localStorage.getItem("user"));
+  const context = useContext(AppContext);
+
+  // const [user, setUser] = useState({});
+
   const [editingUserId, setEditingUserId] = useState(null);
   const [articles, setArticles] = useState([]);
   const [editingArticleId, setEditingArticleId] = useState(null);
@@ -32,12 +36,7 @@ const UserProfile = () => {
 
       const parsedUser = JSON.parse(storedUser);
       const res = await getUsersById(parsedUser.id);
-      setUser(res);
-      // console.log("👤 Dữ liệu user:", res);
-      // setArticles(res.articles);
-      // console.log("👤 Ids bài báo:", res.articles);
-      // const id = await res.articles.map((article) => getArticlesById(article.id));
-      // console.log("👤 Dữ liệu bài báo:", id);
+      context.setUser(res);
       const fetchUserArticles = await getAllArticlesByUserId(parsedUser.id);
       setArticles(fetchUserArticles.data.data);
       // console.log("👤 Dữ liệu bài báo:", id);
@@ -78,7 +77,7 @@ const UserProfile = () => {
   };
 
   const handleUpdate = (updatedUser) => {
-    setUser((prev) => {
+    context.setUser((prev) => {
       console.log("🔄 Trước khi cập nhật:", prev);
       const updatedUserData = { ...prev, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
       console.log("✅ Sau khi cập nhật:", updatedUserData);
@@ -92,21 +91,21 @@ const UserProfile = () => {
       <div className="IMAGE py-4 flex flex-col items-center lg:w-2/5 px-10">
         <div className="relative">
           <img
-            src={user.avatar} // Thay bằng avatar thực tế
+            src={context?.user.avatar || ava} // Thay bằng avatar thực tế
             alt=""
             className="w-65 h-65 my-4 rounded-full border-2 border-gray-600 object-cover shadow-2xl shadow-neutral-900"
           />
-          {!user.avatar && (
+          {!context.user.avatar && (
             <p className="absolute left-1/2 -translate-1/2  top-1/2 font-bold text-center text-gray-500 w-full">
               Ảnh đại diện
             </p>
           )}
         </div>
-        <h2 className="mt-3 text-2xl font-bold">{user.name}</h2>
+        <h2 className="mt-3 text-2xl font-bold">{context.user.name}</h2>
         <p className="text-gray-400 text-lg">
-          {user.email} · {user.gender === "MALE" && "he/him"}
-          {user.gender === "FEMALE" && "she/her"}
-          {user.gender === "OTHER" && "they/them"}
+          {context.user.email} · {context.user.gender === "MALE" && "he/him"}
+          {context.user.gender === "FEMALE" && "she/her"}
+          {context.user.gender === "OTHER" && "they/them"}
         </p>
         {/* <button className="mt-3 px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
           Edit Profile
@@ -114,16 +113,16 @@ const UserProfile = () => {
         <button
           className="mt-3 px-4 py-2 hover:cursor-pointer hover:text-white border
           bg-white duration-300 rounded-md hover:bg-gray-600 text-lg"
-          onClick={() => setEditingUserId(user.id)}
+          onClick={() => setEditingUserId(context.user.id)}
         >
           Chỉnh sửa
         </button>
-        {editingUserId === user.id && (
+        {editingUserId === context.user.id && (
           <UserUpdate
-            user={user}
+            user={context.user}
             onUpdate={handleUpdate}
             onClose={handleCloseUser}
-            userId={user.id}
+            userId={context.user.id}
           />
         )}
       </div>
