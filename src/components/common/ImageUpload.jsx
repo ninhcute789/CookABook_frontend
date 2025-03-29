@@ -2,8 +2,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { FcPlus } from "react-icons/fc";
 
-const ImageUploader = ({ onUploadSuccess }) => {
-  const [imagePreview, setImagePreview] = useState(null);
+const ImageUploader = ({ onUploadSuccess, initialImageUrl }) => {
+  const [imagePreview, setImagePreview] = useState(initialImageUrl || null);
   const [loading, setLoading] = useState(false);
 
   const handleUpload = async (event) => {
@@ -40,6 +40,8 @@ const ImageUploader = ({ onUploadSuccess }) => {
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <div>
@@ -52,7 +54,7 @@ const ImageUploader = ({ onUploadSuccess }) => {
       /> */}
       <label
         className=" p-1 rounded flex items-center space-x-2 w-fit
-            bg-gray-300 hover:cursor-pointer mb-2"
+            bg-gray-300 hover:cursor-pointer mb-2 hover:bg-gray-400 duration-300"
         htmlFor="labelUpload"
       >
         <FcPlus className="text-white " />
@@ -71,7 +73,7 @@ const ImageUploader = ({ onUploadSuccess }) => {
         <img
           src={imagePreview}
           alt="Preview"
-          className="w-5/6 h-60 object-cover rounded mx-auto"
+          className="w-5/6 h-fit object-cover rounded mx-auto"
         />
       ) : (
         <div className="h-40 border-1 rounded w-full">
@@ -84,8 +86,9 @@ const ImageUploader = ({ onUploadSuccess }) => {
     </div>
   );
 };
+
 ImageUploader.propTypes = {
   onUploadSuccess: PropTypes.func.isRequired,
+  initialImageUrl: PropTypes.string,
 };
-
 export default ImageUploader;

@@ -2,16 +2,17 @@ import { useState, useEffect } from "react";
 // import axios from "axios";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
-import UserUpdate from "../update/UserUpdate";
-import AddUsers from "../addForm/AddUsers";
 import toast from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
+import AddCategory from "../addForm/AddCategory";
+import { handleDeleteCategory } from "../../services/CategoryServices";
+import CategoryUpdate from "../update/CategoryUpdate";
 // import { refreshAccessToken } from "../../api/AuthApi";
 
-const UserList = () => {
-  const [users, setUsers] = useState([]);
+const CategoryList = () => {
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editingUserId, setEditingUserId] = useState(null);
+  const [editingCategoryId, setEditingCategoryId] = useState(null);
 
   const [page, setPage] = useState(1);
   // const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +29,7 @@ const UserList = () => {
   //   }
   // };
 
-  const fetchUsers = async (page = 1) => {
+  const fetchCategories = async (page = 1) => {
     // console.log("📌 Giá trị page:", page); // Kiểm tra giá trị `page`
 
     if (typeof page !== "number") {
@@ -45,14 +46,17 @@ const UserList = () => {
         return;
       }
 
-      const res = await axiosInstance.get(`/users?page=${page}&size=${size}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axiosInstance.get(
+        `/categories/all?page=${page}&size=${size}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       // console.log("✅ Dữ liệu API trả về:", res.data);
-      setUsers(res.data?.data?.data || []);
+      setCategories(res.data?.data?.data || []);
       // console.log("Danh sách người dùng:", res.data?.data?.data);
       // setCurrentPage(res.data?.data?.meta?.page || 1);
       // console.log("current page", res.data?.data?.meta?.page);
@@ -65,7 +69,7 @@ const UserList = () => {
       // toast.success(<div className="w-90">🎉 Tải danh sách người dùng thành công!</div>);
     } catch (error) {
       console.error(
-        "❌ Lỗi khi lấy danh sách bài báo:",
+        "❌ Lỗi khi lấy danh sách thể loại sách:",
         error.response?.data || error.message
       );
     } finally {
@@ -74,120 +78,65 @@ const UserList = () => {
   };
   useEffect(() => {
     // console.log("🔄 useEffect đang gọi fetchUsers với page =", page);
-    fetchUsers(page);
+    fetchCategories(page);
   }, [page]);
 
-  const handleUpdate = (updatedUser) => {
-    setUsers((prev) => {
+  const handleUpdate = (updatedCategory) => {
+    setCategories((prev) => {
       console.log("🔄 Trước khi cập nhật:", prev);
-      const updatedUsers = prev.map((user) =>
-        user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+      const updatedCategories = prev.map((category) =>
+        category.id === updatedCategory.id
+          ? { ...category, ...updatedCategory }
+          : category
       );
-      console.log("✅ Sau khi cập nhật:", updatedUsers);
-      return updatedUsers;
+      console.log("✅ Sau khi cập nhật:", updatedCategories);
+      return updatedCategories;
     });
   };
 
   const handleClose = () => {
-    setEditingUserId(null);
-  };
-
-  const handleDelete = async (id) => {
-    toast(
-      (t) => (
-        <div className="flex flex-col">
-          <span>Bạn có chắc muốn xóa người dùng này không?</span>
-          <div className="mt-2 flex justify-end space-x-2 mr-auto ">
-            <button
-              onClick={async () => {
-                toast.dismiss(t.id);
-                await confirmDelete(id); // Gọi hàm xóa
-              }}
-              className="px-4 py-2 bg-red-500 text-white rounded"
-            >
-              Xóa
-            </button>
-            <button
-              onClick={() => toast.dismiss(t.id)}
-              className="px-4 py-2 bg-gray-500 text-white rounded"
-            >
-              Hủy
-            </button>
-          </div>
-        </div>
-      ),
-      { duration: Infinity }
-    );
-  };
-
-  const confirmDelete = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("❌ Không tìm thấy token!");
-        return;
-      }
-
-      await axiosInstance.delete(`/users/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-      setTotalElements((prev) => prev - 1);
-
-      toast.success("🗑 Xóa người dùng thành công!");
-    } catch (error) {
-      console.error("❌ Lỗi khi xóa người dùng:", error);
-      toast.error("Không thể xóa người dùng!");
-    }
+    setEditingCategoryId(null);
   };
 
   if (loading) return <p className="text-center">Đang tải...</p>;
 
   return (
     <div className="p-10">
-      <AddUsers
-        onSubmit={() => fetchUsers()}
+      <AddCategory
+        onSubmit={() => fetchCategories()}
         initialData={{
-          username: "",
-          password: "",
           name: "",
-          dob: "",
-          email: "",
-          gender: "",
         }}
       />
-      <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
-        <h2 className="text-xl font-bold">Danh sách người dùng</h2>
+      <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col w-3/4 mx-auto">
+        <h2 className="text-xl font-bold">Danh sách thể loại sách</h2>
         <p
           className="text-md 
           hover:-translate-2 duration-300 hover:cursor-context-menu
           font-medium ml-auto [@media(max-width:600px)]:mx-auto bg-[#7dd237] p-2 rounded-md"
         >
-          Số lượng người dùng: {totalElements}
+          Số lượng thể loại: {totalElements}
         </p>
       </div>
-      {users.length === 0 ? (
-        <p className="text-gray-500">Không có người dùng nào!</p>
+      {categories.length === 0 ? (
+        <p className="text-gray-500">Không có thể loại nào!</p>
       ) : (
         <>
-          <div className="rounded-lg overflow-hidden shadow-lg">
+          <div className="rounded-lg overflow-hidden shadow-lg w-3/4 mx-auto">
             <table className="min-w-full border-collapse border border-gray-300 rounded-xl">
               <thead>
                 <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">Id</th>
                   <th className="border border-gray-300 px-4 py-2">
-                    Tên tài khoản
+                    Thể loại
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">
-                    Họ và tên
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2">
-                    Giới tính
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  {/* <th className="border border-gray-300 px-4 py-2">
+                    Số lượng sách
+                  </th> */}
+                  {/* <th className="border border-gray-300 px-4 py-2">
                     Ngày sinh
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2">Email</th>
+                  </th> */}
+                  {/* <th className="border border-gray-300 px-4 py-2">Email</th> */}
                   <th className="border border-gray-300 px-4 py-2">
                     Thời gian tạo
                   </th>
@@ -198,51 +147,51 @@ const UserList = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map(
+                {categories.map(
                   (
-                    user // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
+                    category // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
                   ) => (
                     <tr
-                      key={user.id}
+                      key={category.id}
                       className="border border-gray-300 hover:bg-gray-300 transition-all"
                     >
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.username}
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {category.id}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
-                        {user.name}
+                        {category.name}
+                      </td>
+                      {/* <td className="border border-gray-300 px-4 py-2 text-center">
+                        {category.numberOfBooks}
+                      </td> */}
+                      {/* <td className="border border-gray-300 px-4 py-2">
+                        {new Date(category.dob).toLocaleDateString("vi-VN")}
+                      </td> */}
+                      {/* <td className="border border-gray-300 px-4 py-2">
+                        {category.email}
+                      </td> */}
+                      <td className="border border-gray-300 px-4 py-2">
+                        {category.createdAt}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
-                        {user.gender}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {new Date(user.dob).toLocaleDateString("vi-VN")}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.email}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.createdAt}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.updatedAt || "Chưa cập nhật"}
+                        {category.updatedAt || "Chưa cập nhật"}
                       </td>
                       <td className=" p-2 space-x-4 items-center justify-center flex h-10">
                         <LuPencilLine
                           className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
-                          onClick={() => setEditingUserId(user.id)}
+                          onClick={() => setEditingCategoryId(category.id)}
                         />
 
                         <GoTrash
                           className="text-red-700 hover:cursor-pointer hover:scale-150 duration-200"
-                          onClick={() => handleDelete(user.id)}
+                          onClick={() => handleDeleteCategory(category.id, setCategories, setTotalElements)}
                         />
-                        {editingUserId === user.id && (
-                          <UserUpdate
-                            user={user}
+                        {editingCategoryId === category.id && (
+                          <CategoryUpdate
+                            category={category}
                             onUpdate={handleUpdate}
                             onClose={handleClose}
-                            userId={user.id}
+                            categoryId={category.id}
                           />
                         )}
                       </td>
@@ -297,4 +246,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default CategoryList;

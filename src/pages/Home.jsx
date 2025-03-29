@@ -9,16 +9,18 @@ import th2 from "../assets/th-2.jpg";
 import th3 from "../assets/th-3.jpg";
 import th4 from "../assets/th-4.jpg";
 import th5 from "../assets/th-5.jpg";
-import s1 from "../assets/s1.jpg";
-import s2 from "../assets/s2.jpg";
-import s3 from "../assets/s3.jpg";
-import s4 from "../assets/s4.jpg";
-import { NavLink } from "react-router";
+// import s1 from "../assets/s1.jpg";
+// import s2 from "../assets/s2.jpg";
+// import s3 from "../assets/s3.jpg";
+// import s4 from "../assets/s4.jpg";
+// import b3 from "../assets/books/b3.webp";
+import { Link, NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import BannerDeal from "../components/banner/BannerDeal";
-import axios from "axios";
+// import axios from "axios";
 import { IoIosArrowBack } from "react-icons/io";
 import SidebarArticles from "../components/sideBar/SidebarArticles";
+import axiosInstance from "../services/axiosInstance";
 
 const Home = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -57,14 +59,15 @@ const Home = () => {
           return;
         }
 
-        const res = await axios.get("http://localhost:8080/api/v1/articles", {
+        const res = await axiosInstance.get("/articles/all", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        console.log("✅ Dữ liệu API trả về:", res.data);
+        // console.log("✅ Dữ liệu API trả về:", res.data);
         setArticles(res.data?.data?.data || []);
+        // console.log("Danh sách bài báo:", res.data?.data?.data);
       } catch (error) {
         console.error("❌ Lỗi khi lấy danh sách bài báo:", error.response?.data || error.message);
       } finally {
@@ -106,13 +109,17 @@ const Home = () => {
               chỉ ra cách giảm thiểu những sai lệch không cần thiết để cải thiện chất lượng phán
               đoán…
             </div>
-            <button
+            <Link
               className="px-4 py-2 bg-amber-300 text-black font-medium rounded 
-                            hover:bg-amber-500 w-28
-                            cursor-pointer">
+                            hover:bg-amber-500 w-28 text-center duration-300
+                            cursor-pointer"
+              to="/sách"
+            >
               Mua ngay
-            </button>
-            <div className="text-xs text-white">* eBook bao gồm iBooks, PDF và các bản ePub</div>
+            </Link>
+            <div className="text-xs text-white">
+              * eBook bao gồm iBooks, PDF và các bản ePub
+            </div>
           </div>
           <div className="flex-shrink-0 2xl:-translate-x-40 xl:-translate-x-25 ">
             <img src={book} alt="Book cover" className="w-96 h-auto shadow-2xl" />
@@ -278,199 +285,6 @@ const Home = () => {
         </div>
 
         <div className="grid max-w-6xl mx-auto grid-cols-1">
-          {/* <div
-            className="img1 flex justify-center items-center
-                    w-fit shadow-md shadow-emerald-950 mr-4 mb-4 rounded
-                    xl:flex-row flex-col"
-          >
-            <div className="flex flex-col space-y-2 ">
-              <img src={s1} className="max-h-full object-cover rounded" />
-            </div>
-            <div className="flex flex-col space-y-2 px-5">
-              <div>
-                <button
-                  className="bg-gray-400  
-                                text-cyan-800 font-bold py-1 
-                                text-xs px-3 rounded hover:bg-yellow-500 
-                                hover:text-black transition-all duration-200
-                                cursor-pointer"
-                >
-                  Tin tức
-                </button>
-              </div>
-              <div className="flex w-9/10 justify-between">
-                <div className="flex">
-                  <div>
-                    <LuCalendarFold className="translate-y-1 mr-1" />
-                  </div>
-                  <div>Th11 24, 2024</div>
-                </div>
-                <div className="flex ">
-                  <div>
-                    <FaUser className="translate-y-1 mr-1" />
-                  </div>
-                  <div>by hai múa</div>
-                </div>
-              </div>
-              <div>
-                <NavLink
-                  to="#"
-                  className="font-bold hover:text-yellow-300 duration-200 transition-all"
-                >
-                  Đường rộng thênh thang: Ứng dụng triết lý Phật giáo vào đời
-                  sống
-                </NavLink>
-              </div>
-              <div className="w-3/4 xl:mb-0 mb-10">
-                Tháng 11/2024, nhà văn Nguyễn Tường Bách ra mắt cuốn sách Đường
-                rộng thênh thang. Ông là tác…
-              </div>
-            </div>
-          </div>
-          <div
-            className="img2 flex justify-center items-center
-                    w-fit shadow-emerald-950 shadow-md mr-4 mb-4 rounded 
-                    xl:flex-row flex-col"
-          >
-            <div className="flex flex-col space-y-2  ">
-              <img src={s2} className="max-h-80 object-cover" />
-            </div>
-            <div className="flex flex-col space-y-2 px-5">
-              <div>
-                <button
-                  className="bg-gray-400  
-                                text-cyan-800 font-bold py-1 
-                                text-xs px-3 rounded hover:bg-yellow-500 
-                                hover:text-black transition-all duration-200
-                                cursor-pointer"
-                >
-                  Tin tức
-                </button>
-              </div>
-              <div className="flex w-9/10 justify-between">
-                <div className="flex">
-                  <div>
-                    <LuCalendarFold className="translate-y-1 mr-1" />
-                  </div>
-                  <div>Th11 24, 2024</div>
-                </div>
-                <div className="flex ">
-                  <div>
-                    <FaUser className="translate-y-1 mr-1" />
-                  </div>
-                  <div>by hai múa</div>
-                </div>
-              </div>
-              <div>
-                <NavLink
-                  to="#"
-                  className="font-bold hover:text-yellow-300 duration-200 transition-all"
-                >
-                  Sách khoa học Một sức khỏe: Sức khỏe con người và thiên nhiên
-                </NavLink>
-              </div>
-              <div className="w-3/4 xl:mb-0 mb-10">
-                Bức ảnh về sách một sức khỏe
-              </div>
-            </div>
-          </div>
-          <div
-            className="img3 flex justify-center items-center
-                    w-fit shadow-emerald-950 shadow-md mr-4 mb-4 rounded
-                    xl:flex-row flex-col"
-          >
-            <div className="flex flex-col space-y-2 min-w-max">
-              <img src={s3} className="max-h-full object-cover rounded" />
-            </div>
-            <div className="flex flex-col space-y-2 px-5 my-5">
-              <div>
-                <button
-                  className="bg-gray-400  
-                                text-cyan-800 font-bold py-1 
-                                text-xs px-3 rounded hover:bg-yellow-500 
-                                hover:text-black transition-all duration-200
-                                cursor-pointer"
-                >
-                  Tin tức
-                </button>
-              </div>
-              <div className="flex w-9/10 justify-between">
-                <div className="flex">
-                  <div>
-                    <LuCalendarFold className="translate-y-1 mr-1" />
-                  </div>
-                  <div>Th11 24, 2024</div>
-                </div>
-                <div className="flex ">
-                  <div>
-                    <FaUser className="translate-y-1 mr-1" />
-                  </div>
-                  <div>by hai múa</div>
-                </div>
-              </div>
-              <div>
-                <NavLink
-                  to="#"
-                  className="font-bold hover:text-yellow-300 duration-200 transition-all"
-                >
-                  Nắng Thổ Tang: Góc nhìn lịch sử qua lăng kính đao phủ
-                </NavLink>
-              </div>
-              <div className="w-3/4 xl:mb-0 mb-10">
-                ‘Nắng Thổ Tang’ của Đinh Phương là tác phẩm nổi bật năm 2024. Nó
-                nhận giải Sách Hay…
-              </div>
-            </div>
-          </div>
-          <div
-            className="img4 flex justify-center items-center
-                    w-fit shadow-emerald-950 shadow-md mr-4 mb-4 rounded
-                    xl:flex-row flex-col"
-          >
-            <div className="flex flex-col space-y-2 ">
-              <img src={s4} className="max-h-96 object-cover rounded " />
-            </div>
-            <div className="flex flex-col space-y-2 px-5 my-5">
-              <div>
-                <button
-                  className="bg-gray-400  
-                                text-cyan-800 font-bold py-1 
-                                text-xs px-3 rounded hover:bg-yellow-500 
-                                hover:text-black transition-all duration-200
-                                cursor-pointer"
-                >
-                  Tin tức
-                </button>
-              </div>
-              <div className="flex w-9/10 justify-between">
-                <div className="flex">
-                  <div>
-                    <LuCalendarFold className="translate-y-1 mr-1" />
-                  </div>
-                  <div>Th11 24, 2024</div>
-                </div>
-                <div className="flex ">
-                  <div>
-                    <FaUser className="translate-y-1 mr-1" />
-                  </div>
-                  <div>by hai múa</div>
-                </div>
-              </div>
-              <div>
-                <NavLink
-                  to="#"
-                  className="font-bold hover:text-yellow-300 duration-200 transition-all"
-                >
-                  Phá vỡ khuôn mẫu: Hành trình chữa lành từ những tổn thương
-                </NavLink>
-              </div>
-              <div className="w-3/4 xl:mb-0 mb-10">
-                Tháng 11/2024, Phá vỡ khuôn mẫu ra mắt ấn tượng. Cuốn sách khám
-                phá tâm lý học và…
-              </div>
-            </div>
-          </div> */}
-
           <div className=" px-10 pb-10">
             {/* <h2 className="text-xl font-bold mb-4">Danh sách bài báo</h2> */}
             {articles.length === 0 ? (
@@ -478,6 +292,7 @@ const Home = () => {
             ) : (
               <div
                 className={`grid gap-2 
+<<<<<<< HEAD
                 ${Selected ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}>
                 {!Selected ? (
                   articles
@@ -504,10 +319,42 @@ const Home = () => {
                             <div>
                               <button
                                 className="bg-gray-400  
+=======
+                ${
+                  Selected
+                    ? "grid-cols-1"
+                    : "grid-cols-1 [@media(min-width:910px)]:grid-cols-2 [@media(max-width:910px)]:w-2/3 [@media(max-width:910px)]:mx-auto"
+                }`}
+              >
+                {!Selected ? (
+                  articles.slice(0, 4).map(
+                    (
+                      article // Đảo ngược thứ tự bài viết
+                    ) => (
+                      <div
+                        key={article.id}
+                        className="img4 flex justify-center items-center
+                     shadow-xl mb-4 mr-2 bg-white p-2 
+                    xl:flex-row flex-col"
+                      >
+                        <div className="flex flex-col space-y-2 ">
+                          {article.imageURL && (
+                            <img
+                              src={article.imageURL}
+                              className="h-50 [@media(min-width:1280px)]:w-90 w-fit p-1 object-cover rounded-md "
+                            />
+                          )}
+                        </div>
+                        <div className="flex flex-col space-y-2 px-5 my-5 w-full">
+                          <div>
+                            <button
+                              className="bg-gray-400  
+>>>>>>> 95b940f87f65dff4e3929e02a7b7d1cd0cc8a8fa
                                 text-cyan-800 font-bold py-1 
                                 text-xs px-3 rounded hover:bg-yellow-500 
                                 hover:text-black transition-all duration-200
                                 cursor-pointer"
+<<<<<<< HEAD
                                 onClick={() => {
                                   setSelected(true);
                                   setArticle(article);
@@ -521,13 +368,28 @@ const Home = () => {
                                   <LuCalendarFold className="translate-y-1 mr-1" />
                                 </div>
                                 <div>{truncateDate(article.createdAt, 1)}</div>
+=======
+                              onClick={() => {
+                                setSelected(true);
+                                setArticle(article);
+                              }}
+                            >
+                              Tin tức
+                            </button>
+                          </div>
+                          <div className="grid sm:grid-cols-2 grid-cols-1 w-10/10">
+                            <div className="flex">
+                              <div>
+                                <LuCalendarFold className="translate-y-1 mr-1" />
+>>>>>>> 95b940f87f65dff4e3929e02a7b7d1cd0cc8a8fa
                               </div>
-                              <div className="flex sm:ml-auto">
-                                <div>
-                                  <FaUser className="translate-y-1 mr-1" />
-                                </div>
-                                <div>by {article.createdBy}</div>
+                              <div>{truncateDate(article.createdAt, 1)}</div>
+                            </div>
+                            <div className="flex sm:ml-auto">
+                              <div>
+                                <FaUser className="translate-y-1 mr-1" />
                               </div>
+<<<<<<< HEAD
                             </div>
                             <div>
                               <NavLink
@@ -542,11 +404,30 @@ const Home = () => {
                             </div>
                             <div className=" xl:mb-0 mb-10">
                               {truncateText(article.content, 10)}
+=======
+                              <div>{article.user?.name}</div>
+>>>>>>> 95b940f87f65dff4e3929e02a7b7d1cd0cc8a8fa
                             </div>
                           </div>
+                          <div>
+                            <NavLink
+                              to="#"
+                              className="font-bold hover:text-yellow-500 duration-200 transition-all"
+                              onClick={() => {
+                                setSelected(true);
+                                setArticle(article);
+                              }}
+                            >
+                              {truncateText(article.title, 10)}
+                            </NavLink>
+                          </div>
+                          <div className=" xl:mb-0 mb-10">
+                            {truncateText(article.content, 10)}
+                          </div>
                         </div>
-                      )
+                      </div>
                     )
+                  )
                 ) : (
                   <div className="flex ">
                     <div className="w-4/5">
@@ -561,7 +442,7 @@ const Home = () => {
                       </button>
                       <h2 className="text-2xl font-bold ">{article.title}</h2>
                       <p className="text-gray-600">
-                        Bởi {article.createdBy} - {article.createdAt}
+                        Bởi {article.user?.name} - {article.createdAt}
                       </p>
                       <img
                         src={article.imageURL}

@@ -1,129 +1,167 @@
 import { FaSearch } from "react-icons/fa";
-// import Header from "../components/common/Header";
-// import SideBar from "../components/common/SideBar";
-import { NavLink } from "react-router";
-// import { IoIosArrowBack } from "react-icons/io";
-import { useRef, useState } from "react";
-// import { newsArticles } from "../data/dataBooks";
+import { NavLink, useParams } from "react-router";
+import { use, useEffect, useState } from "react";
 import BookItem from "../components/common/BookItem";
 import SidebarBooks from "../components/sideBar/sideBarBooks";
+import {
+  getAllBooksPreview,
+  getAllBooksWithCategoryId,
+} from "../services/BookServices";
+import { getAllCategoriesWithSizeAndPage } from "../services/CategoryServices";
+import toast from "react-hot-toast";
+import { getAuthorsById } from "../services/AuthorServices";
 
 const Books = () => {
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const { idAuthor } = useParams(); // Lấy id từ URL
+  // const navigate = useNavigate(); // Dùng để điều hướng
+  const [books, setBooks] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
+  const size = 8; // Số sách mỗi trang
+  const sizeCategories = 20; // Số danh mục mỗi trang
+  const [content, setContent] = useState("");
+  const [change, setChange] = useState("");
+  const [id, setId] = useState(null);
+
   const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef(null);
-  const truncateText = (text, wordLimit) => {
-    const words = text.split(" ");
-    return words.length > wordLimit
-      ? words.slice(0, wordLimit).join(" ") + "..."
-      : text;
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        await getAllCategoriesWithSizeAndPage(
+          1, // Luôn lấy danh mục trang 1
+          sizeCategories,
+          setCategories,
+          setTotalPages,
+          setTotalElements
+        );
+      } catch (error) {
+        toast.error("Lỗi khi tải danh sách thể loại sách!");
+        console.error("Lỗi khi tải danh sách thể loại sách:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // Fetch sách (phân biệt khi có danh mục và khi không có danh mục)
+  useEffect(() => {
+    setPage(1); // Reset về trang 1 khi đổi danh mục hoặc tìm kiếm
+  }, [id, content]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (id) {
+          // Nếu có danh mục -> Lấy sách theo danh mục
+          await getAllBooksWithCategoryId(
+            page,
+            size,
+            setBooks,
+            setTotalPages,
+            setTotalElements,
+            change,
+            content,
+            id
+          );
+        } else if (idAuthor) {
+          await getAuthorsById(idAuthor).then((data) => {
+            if (data) {
+              console.log(data);
+            }
+            setBooks(data.data);
+            console.log("danh sách sách", data.data);
+          });
+        } else {
+          // Nếu không có danh mục hoặc id === null -> Lấy tất cả sách preview
+          await getAllBooksPreview(
+            page,
+            size,
+            setBooks,
+            setTotalPages,
+            setTotalElements,
+            change,
+            content
+          );
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu sách:", error);
+        toast.error("Lỗi khi tải danh sách sách!");
+      }
+    };
+    fetchData();
+  }, [page, id, content, change, idAuthor]); // Gọi lại API khi page, id, content, hoặc sắp xếp thay đổi
+
+  // Khi click vào danh mục
+  const handleCategoryClick = (categoryId) => {
+    console.log("Danh mục được chọn có ID:", categoryId);
+    setId(categoryId);
   };
+
   return (
-    <div className=" mx-auto py-5 px-[5%] flex gap-4 bg-gray-100">
-      {/* <h1 className="text-3xl font-bold mb-4">Tin tức về sách</h1> */}
-      <SidebarBooks />
-      <div>
-        <header className="news-header mb-5 shadow-xl sticky top-4 z-10 backdrop-blur-lg rounded-2xl opacity-100 bg-white">
-          <div className=" mx-auto flex items-center justify-between p-4">
-            {/* Logo / Tên trang */}
+    <div className="py-5 px-[5%] flex gap-4 bg-gray-100">
+      <div className="w-fit">
+        <SidebarBooks categories={categories} onClick={handleCategoryClick} />
+      </div>
+      <div className="w-full">
+        <header className="news-header shadow-xl sticky top-4 z-10 backdrop-blur-lg rounded-2xl bg-white">
+          <div className="mx-auto flex items-center justify-between p-4">
             <NavLink
               onClick={() => {
-                setSelectedArticle(null),
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth",
-                  });
+                setId(null);
+                scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="text-2xl font-medium text-gray-800 hover:cursor-pointer"
+              className="text-2xl font-medium text-gray-800 cursor-pointer"
             >
               Nhà sách CaB
             </NavLink>
-            {/* Ô tìm kiếm */}
+            <select
+              onChange={(e) => setChange(e.target.value)}
+              className="transition-all border-gray-300 appearance-none focus:outline-none
+              duration-300 ease-in-out border text-gray-500
+              rounded-full px-5 py-2 shadow-sm outline-none  ml-auto mr-2"
+            >
+              <option value="" className="hidden bg-gray-400">
+                Sắp xếp theo giá
+              </option>
+              <option value="desc">Cao đến thấp</option>
+              <option value="asc">Thấp đến cao</option>
+            </select>
             <div className="relative">
               <input
-                ref={inputRef} // Ref cho input
+                // ref={inputRef} // Ref cho input
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
                 type="text"
-                placeholder="Tìm sách..."
-                className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none 
+                placeholder="Tìm sách, tác giả..."
+                className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none
                 ${isFocused ? "w-80 border-gray-400" : "w-48 border-gray-300"}`}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                
               />
               <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
             </div>
           </div>
         </header>
 
-        {/* {!selectedArticle ? (
-        <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-col-1 ">
-          {newsArticles.map((article) => (
-            <div
-              key={article.id}
-              className="mt-5 mx-3 rounded-2xl inset-shadow-xl shadow-lg border-y-4 border-yellow-500 p-6"
-            >
-              <img
-                src={article.image}
-                alt={article.title}
-                className="h-72 object-cover mx-auto rounded shadow-gray-100 shadow-sm"
-              />
-              <div className="text-xl font-medium my-4">
-                {truncateText(article.title, 7)}
-              </div>
-              <div className="flex justify-between">
-                <div className="font-bold text-[12px]">{article.date}</div>
-                <div className="font-bold hover:underline cursor-pointer text-[12px]">
-                  {article.author}
-                </div>
-              </div>
-              <p className="text-gray-700 mb-5">
-                {truncateText(article.content, 10)}
-              </p>
-              <NavLink
-                onClick={() => {
-                  setSelectedArticle(article),
-                    window.scrollTo({
-                      top: 70,
-                      behavior: "smooth",
-                    });
-                }}
-                className=" text-yellow-500 hover:underline "
-              >
-                Đọc thêm
-              </NavLink>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <button
-            onClick={() => {
-              setSelectedArticle(null),
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-            }}
-            className="mb-4 px-4 py-2 hover:opacity-50 mt-5
-            bg-gray-200 rounded hover:cursor-pointer"
-          >
-            <IoIosArrowBack className="inline-block -translate-y-0.5 -translate-x-1" />
-            Quay lại
-          </button>
-          <h2 className="text-2xl font-bold ">{selectedArticle.title}</h2>
-          <p className="text-gray-600">
-            Bởi {selectedArticle.author} - {selectedArticle.date}
-          </p>
-          <img
-            src={selectedArticle.image}
-            alt={selectedArticle.title}
-            className=" max-h-96 object-cover rounded-md my-4 mx-auto"
+        {books.length === 0 ? (
+          <div className="text-center text-2xl font-semibold mt-5">
+            Không tìm thấy quyển sách nào!
+          </div>
+        ) : (
+          <BookItem
+            books={books}
+            setBooks={setBooks}
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
           />
-          <p>{selectedArticle.content}</p>
-        </div>
-      )} */}
-
-        <BookItem />
+        )}
       </div>
     </div>
   );

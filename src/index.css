@@ -61,7 +61,7 @@
 
 @keyframes goesIn {
   from {
-    translate: -200%;
+    translate: -400%;
   }
 
   to {

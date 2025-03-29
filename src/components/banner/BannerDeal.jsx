@@ -1,187 +1,66 @@
-import b1 from "../../assets/books/b1.webp";
-import b2 from "../../assets/books/b2.webp";
-import b3 from "../../assets/books/b3.webp";
-import b4 from "../../assets/books/b4.webp";
-import b5 from "../../assets/books/b5.webp";
-import b6 from "../../assets/books/b6.webp";
-import b7 from "../../assets/books/b7.webp";
-import b8 from "../../assets/books/b8.webp";
-import b9 from "../../assets/books/b9.webp";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-
-const products = [
-  {
-    id: 1,
-    image: b2, // Thay bằng link ảnh thật
-    title: "Phiếu Luyện Viết Cùng Gấu Kiki - Bé Viết Chữ Tiếng Việt",
-    price: "24.000đ",
-    oldPrice: "29.000đ",
-    discount: "-17%",
-    rating: 4,
-    sold: 100,
-  },
-  {
-    id: 2,
-    image: b3,
-    title: "2030: Những Xu Hướng Lớn Sẽ Định Hình Thế Giới Trong Tương Lai",
-    price: "150.000đ",
-    oldPrice: "209.000đ",
-    discount: "-28%",
-    rating: 5,
-    sold: 200,
-  },
-  {
-    id: 3,
-    image: b1,
-    title: "Kỷ Luật Bản Thân - Để Trở Thành Người Thành Công",
-    price: "127.800đ",
-    oldPrice: "189.000đ",
-    discount: "-32%",
-    rating: 4,
-    sold: 150,
-  },
-  {
-    id: 4,
-    image: b4,
-    title: "Bí Quyết Đọc Sách 1 Ngày 1 Cuốn - Tái Bản 2021",
-    price: "99.000đ",
-    oldPrice: "130.000đ",
-    discount: "-24%",
-    rating: 4,
-    sold: 120,
-  },
-  {
-    id: 5,
-    image: b5,
-    title: "Sức Mạnh Của Ngôn Từ, Sức Mạnh Của Lời Nói",
-    price: "75.000đ",
-    oldPrice: "100.000đ",
-    discount: "-25%",
-    rating: 5,
-    sold: 190,
-  },
-  {
-    id: 6,
-    image: b6,
-    title: "Dám Bị Ghét - Để Trở Thành Người Thành Công",
-    price: "120.000đ",
-    oldPrice: "160.000đ",
-    discount: "-25%",
-    rating: 5,
-    sold: 180,
-  },
-  {
-    id: 7,
-    image: b7,
-    title: "2030: Những Xu Hướng Lớn Sẽ Định Hình Thế Giới Trong Tương Lai",
-    price: "150.000đ",
-    oldPrice: "209.000đ",
-    discount: "-28%",
-    rating: 5,
-    sold: 200,
-  },
-  {
-    id: 8,
-    image: b2, // Thay bằng link ảnh thật
-    title: "Phiếu Luyện Viết Cùng Gấu Kiki - Bé Viết Chữ Tiếng Việt",
-    price: "24.000đ",
-    oldPrice: "29.000đ",
-    discount: "-17%",
-    rating: 4,
-    sold: 100,
-  },
-
-  {
-    id: 9,
-    image: b8,
-    title: "Bí Quyết Đọc Sách 1 Ngày 1 Cuốn - Tái Bản 2021",
-    price: "99.000đ",
-    oldPrice: "130.000đ",
-    discount: "-24%",
-    rating: 4,
-    sold: 120,
-  },
-  {
-    id: 10,
-    image: b1,
-    title: "Kỷ Luật Bản Thân - Để Trở Thành Người Thành Công",
-    price: "127.800đ",
-    oldPrice: "189.000đ",
-    discount: "-32%",
-    rating: 4,
-    sold: 150,
-  },
-
-  {
-    id: 11,
-    image: b9,
-    title: "Dám Bị Ghét - Để Trở Thành Người Thành Công",
-    price: "120.000đ",
-    oldPrice: "160.000đ",
-    discount: "-25%",
-    rating: 5,
-    sold: 180,
-  },
-  {
-    id: 12,
-    image: b5,
-    title: "Sức Mạnh Của Ngôn Từ, Sức Mạnh Của Lời Nói",
-    price: "75.000đ",
-    oldPrice: "100.000đ",
-    discount: "-25%",
-    rating: 5,
-    sold: 190,
-  },
-];
+import { getAllBooksPreview } from "../../services/BookServices";
+import { useNavigate } from "react-router";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { TiTickOutline } from "react-icons/ti";
 
 const TopDealBanner = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const navigate = useNavigate();
 
-  // Theo dõi kích thước màn hình và cập nhật số lượng item hiển thị
+  const [books, setBooks] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);// Số trang
+  const [totalElements, setTotalElements] = useState(0);
+  const [size, setSize] = useState(6); // Số sách mỗi trang
+  const [content, setContent] = useState("");
+  const [change, setChange] = useState("");
+
   useEffect(() => {
-    const updateItemsPerPage = () => {
-      if (window.innerWidth >= 1310) {
-        setItemsPerPage(6); // Màn hình lớn: 6 item
-      } else if (window.innerWidth >= 1090) {
-        setItemsPerPage(5); // Tablet: 4 item
-      } else if (window.innerWidth >= 888) {
-        setItemsPerPage(4); // Tablet: 4 item
-      } else if (window.innerWidth >= 686) {
-        setItemsPerPage(3); // Tablet: 4 item
-      } else if (window.innerWidth >= 500) {
-        setItemsPerPage(2); // Tablet: 4 item
-      } else {
-        setItemsPerPage(1); // Mobile: 2 item
+    const fetchData = async () => {
+      try {
+        // Nếu không có danh mục hoặc id === null -> Lấy tất cả sách preview
+        await getAllBooksPreview(
+          page,
+          size,
+          setBooks,
+          setTotalPages,
+          setTotalElements,
+          change,
+          content
+        );
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu sách:", error);
+        toast.error("Lỗi khi tải danh sách sách!");
       }
     };
 
-    updateItemsPerPage();
-    window.addEventListener("resize", updateItemsPerPage);
+    fetchData();
+  }, [page, content, change, size]);
 
-    return () => window.removeEventListener("resize", updateItemsPerPage);
+  // Theo dõi kích thước màn hình và cập nhật số lượng item hiển thị
+  useEffect(() => {
+    const updateSize = () => {
+      if (window.innerWidth >= 1310) {
+        setSize(6); // Màn hình lớn: 6 item
+      } else if (window.innerWidth >= 1090) {
+        setSize(5); // Tablet: 4 item
+      } else if (window.innerWidth >= 888) {
+        setSize(4); // Tablet: 4 item
+      } else if (window.innerWidth >= 686) {
+        setSize(3); // Tablet: 4 item
+      } else if (window.innerWidth >= 500) {
+        setSize(2); // Tablet: 4 item
+      } else {
+        setSize(1); // Mobile: 2 item
+      }
+    };
+
+    updateSize();
+    window.addEventListener("resize", updateSize);
+
+    return () => window.removeEventListener("resize", updateSize);
   }, []);
-  const truncateText = (text, wordLimit) => {
-    const words = text.split(" ");
-    return words.length > wordLimit
-      ? words.slice(0, wordLimit).join(" ") + "..."
-      : text;
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
-  };
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const selectedProducts = products.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
 
   return (
     <div className="bg-white p-5 shadow-md border-t-3 border-red-600 rounded-lg">
@@ -191,40 +70,70 @@ const TopDealBanner = () => {
         </span>
         TOP DEAL - SIÊU RẺ
       </h2>
+      {/* {console.log("tong so sach", totalElements)} */}
 
       <div className="flex space-x-2 mt-4 relative">
         <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className="p-3 bg-gray-300 hover:cursor-pointer
-          rounded-full disabled:opacity-50 items-center top-[45%] absolute left-2"
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className={`p-3 bg-gray-200 shadow-[0px_2px_8px_rgba(0,0,0,0.2)] shadow-neutral-900 z-10 hover:cursor-pointer hover:bg-white duration-300 ${
+            page === 1 ? "hidden" : ""
+          }
+          rounded-full disabled:opacity-50 items-center top-[45%] absolute left-2`}
         >
-          <SlArrowLeft className="mx-auto text-blue-700" />
+          <IoIosArrowBack className="text-black" />
         </button>
         <button
-          onClick={handleNextPage}
-          disabled={startIndex + itemsPerPage >= products.length}
-          className="p-3 bg-gray-300 hover:cursor-pointer
-          rounded-full disabled:opacity-50 items-center top-[45%] absolute right-0"
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={totalPages === books?.length}
+          className={`p-3 bg-gray-200 shadow-[0px_2px_8px_rgba(0,0,0,0.2)] shadow-neutral-900 z-10 hover:cursor-pointer hover:bg-white duration-300 ${
+            page === totalPages ? "hidden" : ""
+          }
+          rounded-full disabled:opacity-50 items-center top-[45%] absolute right-0`}
         >
-          <SlArrowRight className="mx-auto text-blue-700 " />
+          <IoIosArrowForward className="text-black" />
         </button>
-        {selectedProducts.map((product) => (
+        {books.map((product) => (
           <div
             key={product.id}
+            onClick={() => navigate(`/sách/${product.id}`)}
             className="w-[300px] hover:shadow-2xl shadow-md transition duration-200 
              border-cyan-700 p-3 rounded-lg "
           >
-            <img
-              src={product.image}
-              alt={product.title}
-              className="w-full h-72 object-cover "
-            />
-            <h3 className="text-sm font-semibold mt-2">
-              {truncateText(product.title, 10)}
+            <div className="relative">
+              <img
+                src={product.imageURL}
+                alt={product.title}
+                className="w-full h-72 object-cover rounded-md"
+              />
+              
+              {product.official ? (
+                <div className="absolute right-0 bottom-0 pl-[2px] pt-[2px] bg-white rounded-tl-lg">
+                  <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md font-semibold w-fit flex items-center">
+                    <TiTickOutline className="mr-1 bg-white rounded-full text-blue-600" />
+                    CHÍNH HÃNG
+                  </div>
+                </div>
+              ) : null}
+            </div>
+            <div className="mt-2 text-gray-500 text-sm">{product.author}</div>
+            <h3 className="text-sm font-semibold  line-clamp-2 h-10">
+              {product.title}
             </h3>
+
+            <p className="text-red-600 font-bold mt-2">
+              {product.discountPrice?.toLocaleString("vi-VN")}₫
+            </p>
+            <div className="flex items-center gap-2 ">
+              <p className="text-green-600 font-semibold bg-stone-100 p-1 rounded-lg shadow-md text-sm">
+                -{product.discountPercentage}%
+              </p>
+              <p className="text-gray-500 line-through">
+                {product.originalPrice?.toLocaleString("vi-VN")}₫
+              </p>
+            </div>
             <div className="flex items-center gap-1 text-yellow-500 mt-2">
-              {[...Array(product.rating)].map((_, i) => (
+              {[...Array(4)].map((_, i) => (
                 <svg
                   key={i}
                   xmlns="http://www.w3.org/2000/svg"
@@ -235,16 +144,18 @@ const TopDealBanner = () => {
                   {/* path vẽ ngôi sao */}
                 </svg>
               ))}
-              <span className="text-gray-600 text-sm">
-                (Đã bán {product.sold})
-              </span>
+              <span className="text-gray-600 text-sm">(Đã bán 200)</span>
             </div>
-            <p className="text-red-600 font-bold">{product.price}</p>
-            <div className="flex items-center gap-2">
-              <p className="text-green-600 font-semibold">{product.discount}</p>
-              <p className="text-gray-500 line-through">{product.oldPrice}</p>
-            </div>
-            <hr className="mt-10" />
+
+            {/* {!product.official ? (
+              <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold w-fit ml-auto mt-2">
+                CHÍNH HÃNG
+              </div>
+            ) : (
+              <span className="px-1"></span>
+            )} */}
+
+            <hr className="mt-5" />
           </div>
         ))}
       </div>

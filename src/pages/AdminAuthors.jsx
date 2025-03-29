@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import UserList from "../components/list/UserList";
-// import axios from "axios";
 import toast from "react-hot-toast";
+import SideBar from "../components/common/SideBar";
+import AuthorList from "../components/list/AuthorList";
 import axiosInstance from "../services/axiosInstance";
-
-const AdminUsers = () => {
-  const [users, setUsers] = useState([]);
+import { useEffect, useState } from "react";
+const AdminAuthors = () => {
+  const [authors, setAuthors] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,24 +17,27 @@ const AdminUsers = () => {
         });
 
         // Đảm bảo dữ liệu từ API là một mảng
-        setUsers(res.data?.data?.data || []);
+        setAuthors(res.data?.data?.data || []);
         // setUsers(Array.isArray(res.data?.data?.data) ? res.data?.data?.data : []);
         // console.log("Danh sách người dùng - adminNews:", res.data?.data?.data);
-        toast.success(<div className="w-90">🎉 Tải danh sách người dùng thành công!</div>);
+        toast.success(
+          <div className="w-fit">🎉 Tải danh sách tác giả thành công!</div>
+        );
       } catch (error) {
-        toast.error("Lỗi khi tải danh sách người dùng:", error);
-        console.error("Lỗi khi tải danh sách người dùng:", error);
-        setUsers([]); 
+        toast.error("Lỗi khi tải danh sách tác giả:", error);
+        console.error("Lỗi khi tải danh sách tác giả:", error);
+        setAuthors([]);
       }
     };
 
     fetchUsers();
   }, []);
+
   return (
-    <div className="w-full bg-gray-100">
-      <UserList />
+    <div className=" w-full bg-gray-100">
+      <AuthorList />
     </div>
   );
 };
 
-export default AdminUsers;
+export default AdminAuthors;

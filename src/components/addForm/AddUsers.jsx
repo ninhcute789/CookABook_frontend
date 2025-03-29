@@ -1,73 +1,67 @@
-import axios from "axios";
+// import axios from "axios";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
+import ImageUploader from "../common/ImageUpload";
 
-const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
-  // const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [userName, setUserName] = useState("");
-  // const [address, setAddress] = useState("");
-  // // const [users, setUsers] = useState([]);
-  // const [modal, setModal] = useState(false);
+const AddUsers = (props) => {
+  const { onSubmit, initialData = {} } = props;
 
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-    name: "",
-    dob: "",
-    email: "",
-    gender: "",
-    // createdAt: new Date().toISOString().split("T")[0],
-    // createdBy: "",
-  });
-  const handleChange = (e) =>
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [dob, setDob] = useState("");
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const [avatar, setAvatar] = useState("");
+
+  const handleChangeUsername = (e) => {
+    setUsername(e.target.value);
+  };
+  const handleChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleChangeName = (e) => {
+    setName(e.target.value);
+  };
+  const handleChangeDob = (e) => {
+    setDob(e.target.value);
+  };
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const handleChangeGender = (e) => {
+    setGender(e.target.value);
+  };
 
   useEffect(() => {
     if (isOpen) {
-      setUser({
-        // title: initialData.title || "",
-        // content: initialData.content || "",
-        // imageURL: null,
-        // imagePreview: "",
-        username: initialData.username || "",
-        password: initialData.password || "",
-        name: initialData.name || "",
-        dob: initialData.dob || "",
-        email: initialData.email || "",
-        gender: initialData.gender || "",
-        // createdAt:
-        //   initialData.createdAt || new Date().toISOString().split("T")[0],
-        // createdBy: initialData.createdBy || "",
-      });
+      setUsername(initialData.username || "");
+      setPassword(initialData.password || "");
+      setName(initialData.name || "");
+      setDob(initialData.dob || "");
+      setEmail(initialData.email || "");
+      setGender(initialData.gender || "");
+      setAvatar(initialData.avatar || "");
     }
   }, [isOpen, initialData]);
 
   const handleSubmit = async () => {
     try {
-      const data = new FormData();
-      data.append("username", user.username);
-      data.append("password", user.password);
-      data.append("name", user.name);
-      data.append("dob", user.dob);
-      data.append("email", user.email);
-      data.append("gender", user.gender);
-
-      // if (article.imageURL) {
-      //   data.append("image", article.imageURL); // Sử dụng file thật thay vì imageURL
-      // }
-
       const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
-      const res = await axios.post(
-        "http://localhost:8080/api/v1/users",
+      const res = await axiosInstance.post(
+        "/users",
         {
-          username: user.username,
-          password: user.password,
-          name: user.name,
-          dob: user.dob,
-          email: user.email,
-          gender: user.gender,
+          username: username,
+          password: password,
+          name: name,
+          dob: dob,
+          email: email,
+          gender: gender,
         },
         {
           headers: {
@@ -80,13 +74,18 @@ const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
 
       console.log("Check response:", res.data);
 
-      onSubmit(user); // Cập nhật danh sách bài viết
-      onClose(); // Đóng modal
+      onSubmit(res.data.data); // Cập nhật danh sách bài viết
+      console.log("✅ Thêm người dùng thành công:", res.data);
+      // alert("Thêm người dùng thành công!");
+      toast.success("🎉 Thêm người dùng thành công!");
+      setIsOpen(false); // Đóng modal
     } catch (error) {
+      toast.error("Lỗi khi gửi bài viết:", error);
       console.error("Lỗi khi gửi bài viết:", error);
-      alert("Lỗi khi gửi bài viết! Kiểm tra lại thông tin.");
+      // alert("Lỗi khi gửi bài viết! Kiểm tra lại thông tin.");
     }
   };
+
   useEffect(() => {
     // add or remove overflow-y-hidden class to body
     if (isOpen) {
@@ -97,111 +96,125 @@ const AddUsers = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
   }, [isOpen]);
 
   return (
-    isOpen && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
-          <h2 className="text-lg font-semibold mb-4">Thêm người dùng</h2>
-          <div className="space-y-4 grid grid-cols-2">
-            <label className="block mr-2">
-              Tên tài khoản
-              <input
-                type="text"
-                className="w-full border p-2 rounded "
-                name="username"
-                value={user.username}
-                onChange={(e) => handleChange(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Mật khẩu
-              <input
-                type="password"
-                className="w-full border p-2 rounded"
-                name="password"
-                value={user.password}
-                onChange={(e) => handleChange(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Họ và tên
-              <input
-                type="text"
-                className="w-full border p-2 rounded"
-                name="name"
-                value={user.name}
-                onChange={(e) => handleChange(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Ngày sinh
-              <input
-                id="dateAdminUser"
-                type="date"
-                className="w-full border p-2 rounded "
-                name="dob"
-                value={user.dob}
-                onChange={(e) => handleChange(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Email
-              <input
-                type="email"
-                className="w-full border p-2 rounded"
-                name="email"
-                value={user.email}
-                onChange={(e) => handleChange(e)}
-              />
-            </label>
-            <label className="block mr-2">
-              Giới tính
-              <select
-                required
-                name="gender"
-                value={user.gender}
-                onChange={(e) => handleChange(e)}
-                className="flex flex-col w-full  bg-transparent
-                rounded-md px-5 py-2 text-black my-auto hover:cursor-pointer
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="bg-blue-500 hover:cursor-pointer mb-5 w-50 duration-300
+          hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Thêm user
+      </button>
+      {isOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
+            <h2 className="text-lg font-semibold mb-4">Thêm người dùng</h2>
+            <div className="space-y-4 grid grid-cols-2">
+              <label className="block mr-2">
+                Tên tài khoản
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded "
+                  name="username"
+                  value={username}
+                  onChange={(e) => handleChangeUsername(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Mật khẩu
+                <input
+                  type="password"
+                  className="w-full border p-2 rounded"
+                  name="password"
+                  value={password}
+                  onChange={(e) => handleChangePassword(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Họ và tên
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded"
+                  name="name"
+                  value={name}
+                  onChange={(e) => handleChangeName(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Ngày sinh
+                <input
+                  id="dateAdminUser"
+                  type="date"
+                  className="w-full border p-2 rounded "
+                  name="dob"
+                  value={dob}
+                  onChange={(e) => handleChangeDob(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Email
+                <input
+                  type="email"
+                  className="w-full border p-2 rounded"
+                  name="email"
+                  value={email}
+                  onChange={(e) => handleChangeEmail(e)}
+                />
+              </label>
+              <label className="block mr-2">
+                Giới tính
+                <select
+                  required
+                  name="gender"
+                  value={gender}
+                  onChange={(e) => handleChangeGender(e)}
+                  className="flex flex-col w-full  bg-transparent
+                rounded px-2.5 py-2 text-black my-auto hover:cursor-pointer
                 border-1 border-cyan-950 appearance-none "
+                >
+                  <option value="" disabled hidden className=""></option>
+                  <option value="MALE" className="text-black">
+                    Nam
+                  </option>
+                  <option value="FEMALE" className="text-black">
+                    Nữ
+                  </option>
+                  <option value="OTHER" className="text-black">
+                    Khác
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div className="flex justify-end mt-4 space-x-2">
+              <button
+                className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
+                onClick={() => setIsOpen(false)}
               >
-                <option value="" disabled selected hidden className=""></option>
-                <option value="MALE" className="text-black">
-                  Nam
-                </option>
-                <option value="FEMALE" className="text-black">
-                  Nữ
-                </option>
-                <option value="OTHER" className="text-black">
-                  Khác
-                </option>
-              </select>
-            </label>
-          </div>
-          <div className="flex justify-end mt-4 space-x-2">
-            <button className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>
-              Hủy
-            </button>
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={handleSubmit}
-            >
-              Tạo
-            </button>
+                Hủy
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+                onClick={handleSubmit}
+              >
+                Tạo
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )}
+    </>
   );
 };
+
 AddUsers.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   initialData: PropTypes.shape({
+    username: PropTypes.string,
+    password: PropTypes.string,
     name: PropTypes.string,
     gender: PropTypes.string,
     dob: PropTypes.string,
     email: PropTypes.string,
   }),
 };
+
 export default AddUsers;

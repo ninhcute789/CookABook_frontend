@@ -1,86 +1,63 @@
-import { useState } from "react";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import PropTypes from "prop-types";
+import { useLocation, useNavigate } from "react-router";
 
-const SidebarBooks = () => {
-  const categories = [
-    {
-      name: "English Books",
-      subcategories: [
-        "Art & Photography",
-        "Biographies & Memoirs",
-        "Business & Economics",
-        "How-to - Self Help",
-        "Children's Books",
-        "Dictionary",
-        "Education - Teaching",
-        "Fiction - Literature",
-        "Magazines",
-        "Medical Books",
-        "Parenting & Relationships",
-        "Reference",
-        "Science - Technology",
-        "History, Politics & Social Sciences",
-        "Travel & Holiday",
-        "Cookbooks, Food & Wine",
-      ],
-    },
-    {
-      name: "Sách tiếng Việt",
-      subcategories: ["Văn học", "Kinh tế", "Tâm lý & Kỹ năng sống"],
-    },
-    {
-      name: "Văn phòng phẩm",
-      subcategories: ["Bút viết", "Sổ tay", "Dụng cụ học tập"],
-    },
-    {
-      name: "Quà lưu niệm",
-      subcategories: ["Đồ trang trí", "Thiệp & Phụ kiện", "Hộp quà"],
-    },
-    // { name: "Đồ chơi giáo dục", subcategories: [] },
-    // { name: "Thiết bị công nghệ", subcategories: [] },
-    // { name: "Dụng cụ học tập", subcategories: [] },
-  ];
-  const [openCategory, setOpenCategory] = useState(null);
+const SidebarBooks = (props) => {
+  const { onClick, categories } = props;
+  const location = useLocation();
 
-  const toggleCategory = (index) => {
-    setOpenCategory(openCategory === index ? null : index);
+  const decodedPath = decodeURIComponent(location.pathname); // Giải mã đường dẫn
+  console.log("Current path (decoded):", decodedPath);
+
+  const path = decodedPath === "/sách";
+
+  const navigate = useNavigate();
+
+  const handleAllBooksClick = () => {
+    navigate("/sách"); // Chuyển hướng về trang tất cả sách
   };
 
   return (
-    <div className="w-1/3 h-fit p-4 rounded-lg shadow-lg bg-white sticky top-4">
-      <h2 className="text-md font-medium border-b w-fit pb-2">Khám phá theo danh mục</h2>
-      
+    <div className="w-fit h-fit p-4 rounded-lg shadow-lg bg-white sticky top-4">
+      <h2 className="text-md font-medium border-b w-fit pb-2">
+        Khám phá theo danh mục
+      </h2>
+      <div
+        className="py-3 border-b border-gray-400 cursor-pointer hover:text-blue-500 
+               hover:underline flex items-center justify-between h-fit"
+        onClick={() => {
+          handleAllBooksClick();
+          onClick(null);
+          scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      >
+        Tất cả sách
+      </div>
+      {/* {console.log("Current path:", location.pathname)} */}
+
       {categories.map((category, index) => (
-        <div key={index}>
-          <div
-            className="py-3 border-b border-gray-400 cursor-pointer hover:text-blue-500 flex 
-            items-center justify-between"
-            onClick={() => toggleCategory(index)}
-          >
-            {category.name}
-            {category.subcategories.length > 0 && (
-              <span>
-                {openCategory === index ? <IoIosArrowUp /> : <IoIosArrowDown />}
-              </span>
-            )}
-          </div>
-          <div
-            className={`pl-4 text-gray-700 transition-max-height duration-700 ease-in-out overflow-hidden ${
-              openCategory === index ? "max-h-96" : "max-h-0"
-            }`}
-          >
-            {category.subcategories.map((sub, i) => (
-              <div
-                key={i}
-                className="py-1 hover:text-blue-500 hover:underline hover:cursor-pointer"
-              >
-                {sub}
-              </div>
-            ))}
-          </div>
+        <div
+          key={index}
+          className={`py-3 border-b ${
+            !path
+              ? "hidden opacity-50 text-gray-400 cursor-default hover:text-gray-400 hover:no-underline"
+              : " "
+          }
+            border-gray-400 cursor-pointer hover:text-blue-500 
+               hover:underline flex items-center justify-between h-fit`}
+          onClick={() => {
+            onClick(category.id);
+            scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          {category.name}
         </div>
       ))}
     </div>
   );
+};
+SidebarBooks.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  categories: PropTypes.array.isRequired,
 };
 export default SidebarBooks;
