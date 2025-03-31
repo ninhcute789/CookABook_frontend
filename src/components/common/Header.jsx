@@ -246,7 +246,7 @@ const Header = () => {
                   className=" hover:scale-120 duration-300 hover:cursor-pointer py-2"
                   // onClick={() => navigate("/user-profile")}
                 >
-                  Chào, {loggedInUser}!
+                  Chào, {context?.user?.username}!
                 </button>
                 {isHovered && (
                   <div

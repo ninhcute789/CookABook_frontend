@@ -25,6 +25,8 @@ import Address from "./pages/Address.jsx";
 import Payment from "./pages/Payment.jsx";
 import UserInfo from "./components/user/UserInfo.jsx";
 import UserOrder from "./components/user/UserOrder.jsx";
+import UserAddress from "./components/user/UserAddress.jsx";
+import UserArticles from "./components/user/UserArticles.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -46,8 +48,9 @@ ReactDOM.createRoot(root).render(
         <Route path="thanh-toan/:id" element={<Payment />} />
         <Route path="thong-tin-tai-khoan" element={<UserProfile />}>
           <Route index element={<UserInfo />} />
-          <Route path="dia-chi" element={<Address />} />
+          <Route path="dia-chi" element={<UserAddress />} />
           <Route path="don-hang" element={<UserOrder />} />
+          <Route path="tin-tuc-cua-toi" element={<UserArticles />} />
         </Route>
 
         {/* <Route path='admin' element={<Admin />} />

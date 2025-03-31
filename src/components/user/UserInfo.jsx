@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // import { getAllArticlesByUserId, getUsersById } from "../services/UserSevices";
 // import UserUpdate from "../components/update/UserUpdate";
 // import { handleDelete } from "../services/ArticleServices";
@@ -17,6 +17,13 @@ import { useNavigate } from "react-router";
 // import { FaUser } from "react-icons/fa6";
 import { FiPhone } from "react-icons/fi";
 import { HiOutlineMail } from "react-icons/hi";
+import {
+  getAllArticlesByUserId,
+  getUsersById,
+  handleUpdateUser,
+} from "../../services/UserSevices";
+import { SlLock } from "react-icons/sl";
+import { GoKey } from "react-icons/go";
 
 const UserInfo = () => {
   const context = useContext(AppContext);
@@ -25,13 +32,103 @@ const UserInfo = () => {
 
   const navigate = useNavigate();
 
-  const parsedUser = JSON.parse(localStorage.getItem("user"));
+  const [editingUserId, setEditingUserId] = useState(null);
+  const [editingArticleId, setEditingArticleId] = useState(null);
 
-  const [name, setName] = useState("Lê Minh Khánh");
-  const [nickname, setNickname] = useState("khanh-131");
-  const [dob, setDob] = useState({ day: "13", month: "10", year: "2004" });
-  const [gender, setGender] = useState("Nam");
-  const [country, setCountry] = useState("Việt Nam");
+  const genders = [
+    { label: "Nam", value: "MALE" },
+    { label: "Nữ", value: "FEMALE" },
+    { label: "Khác", value: "OTHER" },
+  ];
+
+  const parsedUser = JSON.parse(localStorage.getItem("user"));
+  const currentUserId = parsedUser.id;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("❌ Không tìm thấy token!");
+        return;
+      }
+
+      const res = await axiosInstance.put(
+        "/users",
+        {
+          id: id,
+          password: password,
+          name: name,
+          gender: gender || null,
+          dob: dob,
+          email: email,
+          avatar: avatar,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAvatar(res.data.data.avatar);
+      console.log("avatar đã được cập nhật:", res.data.data.avatar);
+      console.log("✅ Người dùng đã được cập nhật:", res.data);
+      onUpdate(res.data.data); // Cập nhật danh sách user
+      onClose();
+      // alert("🎉 Cập nhật người dùng thành công!");
+      toast.success("🎉 Cập nhật người dùng thành công!");
+    } catch (error) {
+      toast.error(
+        "❌ Lỗi khi cập nhật người dùng:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
+  const fetchUser = async () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return;
+
+      const parsedUser = JSON.parse(storedUser);
+      const res = await getUsersById(parsedUser.id);
+      context.setUser(res);
+      // const fetchUserArticles = await getAllArticlesByUserId(parsedUser.id);
+      // setArticles(fetchUserArticles.data.data);
+      // console.log("👤 Dữ liệu bài báo:", id);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu user:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    // add or remove overflow-y-hidden class to body
+    if (editingUserId || editingArticleId) {
+      document.body.classList.add("overflow-y-hidden");
+    } else {
+      document.body.classList.remove("overflow-y-hidden");
+    }
+  }, [editingUserId, editingArticleId]);
+
+  const handleCloseUser = () => {
+    setEditingUserId(null);
+  };
+
+  const handleUpdate = (updatedUser) => {
+    context.setUser((prev) => {
+      console.log("🔄 Trước khi cập nhật:", prev);
+      const updatedUserData = { ...prev, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
+      console.log("✅ Sau khi cập nhật:", updatedUserData);
+      return updatedUserData;
+    });
+  };
+
+  // const [user, setUser] = useState({});
 
   return (
     <div className="w-39/48">
@@ -42,81 +139,115 @@ const UserInfo = () => {
         <div className=" THONG-TIN-TAI-KHOAN bg-white  flex flex-row w-full">
           <div className="THONG-TIN-CA-NHAN pr-5 border-r-2 border-gray-400 w-15/27">
             <div className="mb-3 text-gray-500">Thông tin cá nhân</div>
-            <div className="ANH+TEN flex items-center justify-between space-x-4 w-full">
+            <div className="ANH+TEN flex xl:flex-row flex-col items-center justify-between space-x-4 w-full">
               <img
-                src={context.user?.avatar || ava}
+                src={context?.user?.avatar || ava}
                 alt="Avatar"
                 className="w-30 h-30 rounded-full border-2 border-gray-300"
               />
               <div className="TEN-NICKNAME flex flex-col w-full">
-                <div className="flex items-center space-x-2 ">
-                  <label className="block font-medium w-1/4">Họ và Tên</label>
+                <div className="flex flex-col [@media(min-width:1490px)]:flex-row items-center space-x-2 ">
+                  <label className="block font-medium [@media(min-width:1490px)]:w-1/4 w-fit">
+                    Họ và Tên
+                  </label>
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={context?.user?.name}
+                    onChange={(e) =>
+                      context?.setUser((prevState) => ({
+                        ...prevState,
+                        name: e.target.value,
+                      }))
+                    }
                     className="border p-2 rounded border-gray-300 w-3/4"
                   />
                 </div>
-                <div className="flex items-center space-x-2 mt-2">
-                  <label className="block font-medium w-1/4">Nickname</label>
+                <div className="flex flex-col [@media(min-width:1490px)]:flex-row items-center space-x-2 mt-2">
+                  <label className="block font-medium [@media(min-width:1490px)]:w-1/4 w-fit">
+                    Username
+                  </label>
                   <input
                     type="text"
-                    value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
+                    value={context?.user?.username}
+                    disabled
+                    onChange={(e) =>
+                      context?.setUser((prevState) => ({
+                        ...prevState,
+                        username: e.target.value,
+                      }))
+                    }
                     className="border p-2 rounded border-gray-300 w-3/4"
                   />
                 </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-600">Ngày sinh</label>
-                <div className="flex space-x-2">
-                  <select className="border rounded p-2 w-full">
-                    <option>13</option>
-                  </select>
-                  <select className="border rounded p-2 w-full">
-                    <option>10</option>
-                  </select>
-                  <select className="border rounded p-2 w-full">
-                    <option>2004</option>
-                  </select>
+                <div className="flex flex-col [@media(min-width:1490px)]:flex-row items-center space-x-2 mt-2">
+                  <label className="block font-medium [@media(min-width:1490px)]:w-1/4 w-fit ">
+                    Ngày sinh
+                  </label>
+                  <input
+                    type="date"
+                    className="border p-2 rounded border-gray-300 w-3/4"
+                    name="dob"
+                    value={context?.user?.dob}
+                    onChange={(e) =>
+                      context?.setUser((prevState) => ({
+                        ...prevState,
+                        dob: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="flex flex-col [@media(min-width:1490px)]:flex-row items-center space-x-2 mt-2">
+                  <label className="block font-medium [@media(min-width:1490px)]:w-1/4 w-fit">
+                    Giới tính
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    {genders.map((gender) => (
+                      <label
+                        key={gender.value}
+                        className="flex items-center space-x-2"
+                      >
+                        <input
+                          type="radio"
+                          name="gender"
+                          value={gender.value}
+                          className="mr-1 w-3/4"
+                          checked={context?.user?.gender === gender.value}
+                          onChange={(e) =>
+                            context?.setUser((prevState) => ({
+                              ...prevState,
+                              gender: e.target.value,
+                            }))
+                          }
+                        />{" "}
+                        {gender.label}
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="block text-gray-600">Giới tính</label>
-                <div className="flex items-center space-x-4">
-                  <label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      className="mr-1"
-                      checked
-                    />{" "}
-                    Nam
-                  </label>
-                  <label>
-                    <input type="radio" name="gender" className="mr-1" /> Nữ
-                  </label>
-                  <label>
-                    <input type="radio" name="gender" className="mr-1" /> Khác
-                  </label>
-                </div>
-              </div>
-              <div>
-                <label className="block text-gray-600">Quốc tịch</label>
-                <select className="border rounded p-2 w-full">
-                  <option>Việt Nam</option>
-                </select>
-              </div>
             </div>
-            <button
-              className="mt-4 bg-blue-500 hover:cursor-pointer duration-300
-                text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Lưu thay đổi
-            </button>
+            <div className="w-full flex xl:justify-end justify-center">
+              <button
+                className="mt-4 bg-green-700 w-fit 
+                  hover:cursor-pointer duration-300
+                text-white px-4 py-2 rounded hover:bg-green-800"
+                onClick={() =>
+                  handleUpdateUser(
+                    context?.user.id,
+                    context?.user.password,
+                    context?.user.name,
+                    context?.user.gender,
+                    context?.user.dob,
+                    context?.user.email,
+                    context?.user.avatar,
+                    context?.setUser,
+                    setEditingUserId
+                  )
+                }
+              >
+                Lưu thay đổi
+              </button>
+            </div>
           </div>
           <div className="SDT-EMAIL w-12/27 pl-5">
             <div className=" bg-white py-2">
@@ -127,7 +258,7 @@ const UserInfo = () => {
                 <div className="flex justify-between items-center border-b border-gray-300 pb-4">
                   <div className="flex flex-row items-center space-x-3">
                     <FiPhone className="text-gray-600 text-2xl " />
-                    <div className="flex  flex-col space-x-2">
+                    <div className="flex  flex-col ">
                       <span className=""> Số điện thoại</span>
                       <span className=""> 9034563488</span>
                     </div>
@@ -139,7 +270,7 @@ const UserInfo = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex flex-row items-center space-x-3">
                     <HiOutlineMail className="text-gray-600 text-2xl " />
-                    <div className="flex  flex-col space-x-2">
+                    <div className="flex  flex-col ">
                       <span className=""> Địa chỉ Email</span>
                       <span className="text-gray-600"> Thêm địa chỉ Email</span>
                     </div>
@@ -155,13 +286,19 @@ const UserInfo = () => {
               <h3 className="text-lg text-gray-500 mb-4">Bảo mật</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center border-b border-gray-300 pb-4">
-                  <span className="text-gray-600">🔒 Đổi mật khẩu</span>
+                  <div className="text-gray-600 flex items-center space-x-3">
+                    <SlLock className="text-gray-600 text-2xl " />
+                    <span>Đổi mật khẩu</span>
+                  </div>
                   <button className=" px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 hover:cursor-pointer">
                     Cập nhật
                   </button>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-300 pb-4">
-                  <span className="text-gray-600">🔐 Thiết lập mã PIN</span>
+                  <div className="text-gray-600 flex items-center space-x-3">
+                    <GoKey className="text-gray-600 text-2xl " />
+                    <span>Thiết lập mã pin</span>
+                  </div>
                   <button className=" px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 hover:cursor-pointer">
                     Thiết lập
                   </button>

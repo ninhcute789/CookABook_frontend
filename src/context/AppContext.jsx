@@ -9,12 +9,23 @@ const AppContext = createContext();
 
 // 2. Provider để bọc toàn bộ ứng dụng
 const AppProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    name: "",
+    username: "",
+    dob: "",
+    avatar: "",
+    gender: "",
+    email: "",
+    password: "",
+    id: "",
+    cartId: "",
+  }); // Thay đổi giá trị mặc định của user
+
   const [cart, setCart] = useState([]);
   const [theme, setTheme] = useState("light");
 
   const [quantity, setQuantity] = useState(0); // Thêm state quantity
-//   const [avatar, setAvatar] = useState(null); // Thêm state avatar
+  //   const [avatar, setAvatar] = useState(null); // Thêm state avatar
 
   // Hàm đăng nhập
   const login = (userData) => setUser(userData);
@@ -74,7 +85,7 @@ const AppProvider = ({ children }) => {
     theme,
     toggleTheme,
     quantity, // Thêm quantity vào value
-    setQuantity, // Thêm setQuantity vào value  
+    setQuantity, // Thêm setQuantity vào value
     // avatar, // Thêm avatar vào value
     // setAvatar, // Thêm setAvatar vào value
     user,

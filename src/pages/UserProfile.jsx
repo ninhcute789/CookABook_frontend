@@ -23,81 +23,32 @@ import { HiOutlineMail } from "react-icons/hi";
 
 const UserProfile = () => {
   const context = useContext(AppContext);
-
-  // const [user, setUser] = useState({});
-
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState("Thông tin tài khoản");
 
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [articles, setArticles] = useState([]);
-  const [editingArticleId, setEditingArticleId] = useState(null);
-
-  const [totalElements, setTotalElements] = useState(0); // Tổng số người dùng
-
-  const parsedUser = JSON.parse(localStorage.getItem("user"));
-  const currentUserId = parsedUser.id;
-  const fetchUser = async () => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) return;
-
-      const parsedUser = JSON.parse(storedUser);
-      const res = await getUsersById(parsedUser.id);
-      context.setUser(res);
-      const fetchUserArticles = await getAllArticlesByUserId(parsedUser.id);
-      setArticles(fetchUserArticles.data.data);
-      // console.log("👤 Dữ liệu bài báo:", id);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu user:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    // add or remove overflow-y-hidden class to body
-    if (editingUserId || editingArticleId) {
-      document.body.classList.add("overflow-y-hidden");
-    } else {
-      document.body.classList.remove("overflow-y-hidden");
-    }
-  }, [editingUserId, editingArticleId]);
-
-  const handleCloseArticle = () => {
-    setEditingArticleId(null);
-  };
-  const handleCloseUser = () => {
-    setEditingUserId(null);
-  };
-
-  const handleUpdateSuccess = (updatedArticle) => {
-    setEditingArticleId(null); // Đóng form chỉnh sửa
-    setArticles((prevArticles) =>
-      prevArticles.map((article) =>
-        article.id === updatedArticle.data.id
-          ? { ...article, ...updatedArticle.data }
-          : article
-      )
-    );
-  };
-
-  const handleUpdate = (updatedUser) => {
-    context.setUser((prev) => {
-      console.log("🔄 Trước khi cập nhật:", prev);
-      const updatedUserData = { ...prev, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
-      console.log("✅ Sau khi cập nhật:", updatedUserData);
-      return updatedUserData;
-    });
-  };
-
-  const [name, setName] = useState("Lê Minh Khánh");
-  const [nickname, setNickname] = useState("khanh-131");
-  const [dob, setDob] = useState({ day: "13", month: "10", year: "2004" });
-  const [gender, setGender] = useState("Nam");
-  const [country, setCountry] = useState("Việt Nam");
-
+  const menuItems = [
+    {
+      label: "Thông tin tài khoản",
+      icon: <FaUser />,
+      path: "/thong-tin-tai-khoan",
+    },
+    { label: "Thông báo của bạn", icon: <FaBell />, path: "#" },
+    {
+      label: "Quản lý đơn hàng",
+      icon: <RiFileList2Fill />,
+      path: "/thong-tin-tai-khoan/don-hang",
+    },
+    {
+      label: "Bài báo của bạn",
+      icon: <IoNewspaper />,
+      path: "/thong-tin-tai-khoan/tin-tuc-cua-toi",
+    },
+    {
+      label: "Địa chỉ",
+      icon: <PiAddressBookFill />,
+      path: "/thong-tin-tai-khoan/dia-chi",
+    },
+  ];
   return (
     <div
       className=" shadow-2xl w-full bg-[#e6e6e6] 
@@ -105,7 +56,7 @@ const UserProfile = () => {
     >
       <div className="flex mx-auto min-h-screen w-18/24">
         {/* Sidebar */}
-        <div className="w-9/48 bg-transparent p-4">
+        <div className="min-w-55 w-9/48 bg-transparent p-4">
           <div className="flex items-center space-x-3">
             <img
               src={context.user?.avatar || ava}
@@ -118,44 +69,24 @@ const UserProfile = () => {
             </div>
           </div>
           <ul className="mt-2 space-y-2">
-            <li
-              className="p-2 hover:bg-gray-400 text-sm flex items-center
-            hover:cursor-pointer duration-100 rounded cursor-pointer"
-              onClick={() => navigate("/thong-tin-tai-khoan")}
-            >
-              <FaUser className="mr-2" />
-              Thông tin tài khoản
-            </li>
-            <li
-              className="p-2 hover:bg-gray-400 text-sm flex items-center
-            hover:cursor-pointer duration-100 rounded cursor-pointer"
-            >
-              <FaBell className="mr-2" />
-              Thông báo của bạn
-            </li>
-            <li
-              className="p-2 hover:bg-gray-400 text-sm flex items-center
-            hover:cursor-pointer duration-100 rounded cursor-pointer"
-            onClick={() => navigate("/thong-tin-tai-khoan/don-hang")}
-            >
-              <RiFileList2Fill className="mr-2" />
-              Quản lý đơn hàng
-            </li>
-            <li
-              className="p-2 hover:bg-gray-400 text-sm flex items-center 
-            hover:cursor-pointer duration-100 rounded cursor-pointer"
-            >
-              <IoNewspaper className="mr-2" />
-              Bài báo của bạn
-            </li>
-            <li
-              className="p-2 hover:bg-gray-400 text-sm flex items-center 
-              hover:cursor-pointer duration-100 rounded cursor-pointer"
-              onClick={() => navigate("/thong-tin-tai-khoan/dia-chi")}
-            >
-              <PiAddressBookFill className="mr-2" />
-              Địa chỉ
-            </li>
+            {menuItems.map((item) => (
+              <li
+                key={item.label}
+                className={`p-2 text-sm flex items-center duration-100 rounded cursor-pointer 
+            ${
+              activeItem === item.label
+                ? "bg-neutral-600 text-white"
+                : "hover:bg-gray-400"
+            }`}
+                onClick={() => {
+                  setActiveItem(item.label);
+                  if (item.path !== "#") navigate(item.path);
+                }}
+              >
+                <span className="mr-2">{item.icon}</span>
+                {item.label}
+              </li>
+            ))}
           </ul>
         </div>
         <Outlet />
