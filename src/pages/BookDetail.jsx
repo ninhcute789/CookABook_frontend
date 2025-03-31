@@ -65,6 +65,7 @@ const BookDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!user) return;
       try {
         const res = await getDefautAddressByUserId(user.id);
         if (res) {
@@ -76,7 +77,7 @@ const BookDetail = () => {
       }
     };
     fetchData();
-  }, [user.id]);
+  }, [user]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -275,15 +276,17 @@ const BookDetail = () => {
               </h2>
 
               {/* Địa chỉ */}
-              <div className="flex justify-between items-center text-gray-700 text-sm">
-                <span>
-                  Giao đến {defaultAddress?.ward}, {defaultAddress?.district},{" "}
-                  {defaultAddress?.city}{" "}
-                </span>
-                <Link to="/dia-chi" className="text-blue-500 text-sm">
-                  Đổi
-                </Link>
-              </div>
+              {user && (
+                <div className="flex justify-between items-center text-gray-700 text-sm">
+                  <span>
+                    Giao đến {defaultAddress?.ward}, {defaultAddress?.district},{" "}
+                    {defaultAddress?.city}{" "}
+                  </span>
+                  <Link to="/dia-chi" className="text-blue-500 text-sm">
+                    Đổi
+                  </Link>
+                </div>
+              )}
 
               <hr className="my-2" />
 
@@ -330,6 +333,7 @@ const BookDetail = () => {
                   rounded-lg hover:shadow-md transition"
                       onClick={() => {
                         navigate(`/sách/${product.id}`);
+                        setQuantity(1);
                         window.scrollTo({
                           top: 0,
                           behavior: "smooth",

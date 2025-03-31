@@ -16,10 +16,14 @@ const App = () => {
     refreshToken(); // Gọi khi app khởi động
   }, []);
 
-  const refreshToken = () => {
+    const refreshToken = () => {
+    const token = localStorage.getItem("token");
     axiosInstance
       .get("/auth/refresh", {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // Gửi token trong header
+        },
+        // withCredentials: true,
       })
       .then((response) => {
         if (response.data.status === 200 && response.data.data?.accessToken) {

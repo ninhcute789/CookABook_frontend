@@ -46,7 +46,7 @@ const TopDealBanner = () => {
         setPage((prev) => (prev < totalPages ? prev + 1 : 1));
         setIsFading(false);
       }, 300); // Thời gian hiệu ứng trùng với transition
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [totalPages]);
@@ -106,7 +106,7 @@ const TopDealBanner = () => {
         >
           <IoIosArrowForward className="text-black" />
         </button> */}
-        {books.slice(0,26).map((product) => (
+        {books.map((product) => (
           <div
             key={product.id}
             onClick={() => navigate(`/sách/${product.id}`)}

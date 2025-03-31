@@ -180,10 +180,10 @@ const AddBook = (props) => {
         Thêm sách
       </button>
       {isModalOpen && (
-        <div className="z-50  fixed inset-0 flex items-center justify-center bg-black ">
+        <div className="z-50  fixed inset-0 flex items-center justify-center bg-black">
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-lg shadow-lg w-15/22"
+            className="bg-white p-6 rounded-lg shadow-lg w-20/22"
           >
             <h2 className="text-lg font-semibold mb-4">Thêm sách</h2>
             <div className="grid grid-cols-2 gap-3 mb-2">
@@ -353,7 +353,7 @@ const AddBook = (props) => {
                     name="categories"
                     value={selectedCategories.map((c) => c.id)} // Chỉ lấy danh sách ID
                     onChange={handleCategoryChange}
-                    className="flex flex-col w-full bg-transparent border p-2 rounded"
+                    className="flex flex-col w-full bg-transparent border p-2 rounded h-[41px]"
                   >
                     {categories?.map((category) => (
                       <option

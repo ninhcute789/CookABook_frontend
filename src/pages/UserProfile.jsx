@@ -2,10 +2,7 @@ import { useContext, useEffect, useState } from "react";
 // import toast from "react-hot-toast";
 // import { useNavigate } from "react-router";
 // import axiosInstance from "../services/axiosInstance";
-import {
-  getAllArticlesByUserId,
-  getUsersById,
-} from "../services/UserSevices";
+import { getAllArticlesByUserId, getUsersById } from "../services/UserSevices";
 import UserUpdate from "../components/update/UserUpdate";
 import { handleDelete } from "../services/ArticleServices";
 import { LuPencilLine } from "react-icons/lu";
@@ -211,57 +208,6 @@ const UserProfile = () => {
                 </tbody>
               </table>
             )}
-          </div>
-        </div>
-
-        {/* Popular Repositories */}
-        <div className="mt-6 flex flex-col">
-          <h3 className="text-lg font-semibold">Popular repositories</h3>
-          <div className="mt-3 space-y-3">
-            <div className="bg-gray-800 p-4 rounded-md">
-              <h4 className="text-blue-400 font-semibold">CookABook_backend</h4>
-              <p className="text-gray-400 text-sm">
-                Thiết kế trang web TMĐT làm đề án
-              </p>
-              <p className="text-gray-400 text-xs mt-1">🔶 Java · ⭐ 2</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-md">
-              <h4 className="text-yellow-400 font-semibold">
-                CookABook_frontend
-              </h4>
-              <p className="text-gray-400 text-sm">React + Tailwind</p>
-              <p className="text-gray-400 text-xs mt-1">🟡 JavaScript · ⭐ 1</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Contribution Graph (Giả lập) */}
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold">
-            280 contributions in the last year
-          </h3>
-          <div className="mt-3 grid grid-cols-70 gap-1 bg-gray-800 p-4 rounded">
-            {Array.from({ length: 280 }).map((_, index) => (
-              <div
-                key={index}
-                className="w-3 h-3 bg-green-500 rounded-sm"
-                style={{ opacity: Math.random() * 0.8 + 0.2 }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Contribution Activity */}
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold">Contribution Activity</h3>
-          <div className="bg-gray-800 p-4 mt-3 rounded-md">
-            <p className="text-gray-400">📅 March 2025</p>
-            <p className="mt-1 text-sm">
-              🟢 Created 12 commits in 1 repository
-            </p>
-            <p className="text-blue-400 text-sm">
-              CookABook_backend (12 commits)
-            </p>
           </div>
         </div>
       </div>

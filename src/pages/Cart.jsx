@@ -286,7 +286,7 @@ const Cart = () => {
                   <div className="ml-5 font-medium border-r-1 pr-2 w-fit">
                     {address?.name}
                   </div>
-                  <div className="pl-2">{address?.phonNumber}</div>
+                  <div className="pl-2">{address?.phoneNumber}</div>
                 </div>
                 <div className="flex w-full text-sm pb-3 mt-2">
                   <div className="ml-5 px-1 bg-gray-200 text-green-500 rounded-md w-fit h-fit mr-1">
