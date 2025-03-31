@@ -4,7 +4,7 @@ import axiosInstance from "./axiosInstance";
 const getBooksById = async (id) => {
   try {
     // const token = localStorage.getItem("token");
-    const response = await axiosInstance.get(`/books/${id}`, {
+    const response = await axiosInstance.get(`/books/${id}/detail`, {
       // headers: {
       //   Authorization: `Bearer ${token}`,
       // },
@@ -154,22 +154,43 @@ const getAllBooksWithCategoryId = async (
   setBooks,
   setTotalPages,
   setTotalElements,
-  // change,
+  change,
   // content,
   id
 ) => {
   try {
-    // const token = localStorage.getItem("token");
-    // if (!token) {
-    //   console.error("❌ Không tìm thấy token!");
-    //   return;
-    // }
-
     const res = await axiosInstance.get(
-      `/books/all-by-category-id/${id}?page=${page}&size=${size}`
-      // {
-      //   headers: { Authorization: `Bearer ${token}` },
-      // }
+      `/books/all-by-category-id/${id}?page=${page}&size=${size}&sort=finalPrice,${change}`
+    );
+
+    setBooks(res.data?.data?.data || []);
+    // console.log(
+    //   "Danh sách sách theo thể loại sách-777777:",
+    //   res.data?.data?.data
+    // );
+    setTotalPages(res.data?.data?.meta?.totalPages);
+    setTotalElements(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách sách theo thể loại sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const getAllBooksWithAuthorId = async (
+  page,
+  size,
+  setBooks,
+  setTotalPages,
+  setTotalElements,
+  change,
+  // content,
+  id
+) => {
+  try {
+    const res = await axiosInstance.get(
+      `/books/all-by-author-id/${id}?page=${page}&size=${size}&sort=finalPrice,${change}`
     );
 
     setBooks(res.data?.data?.data || []);
@@ -193,4 +214,5 @@ export {
   handleDeleteBook,
   getAllBooksWithCategoryId,
   getAllBooksPreview,
+  getAllBooksWithAuthorId,
 };
