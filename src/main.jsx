@@ -14,7 +14,7 @@ import AdminNews from "./pages/AdminNews.jsx";
 import News from "./pages/News.jsx";
 import Books from "./pages/Books.jsx";
 import Contact from "./pages/Contact.jsx";
-import UserProfile from "./pages/UserProfile.jsx";
+import { UserProfile } from "./pages/UserProfile.jsx";
 import BookDetail from "./pages/BookDetail.jsx";
 import AdminAuthors from "./pages/AdminAuthors.jsx";
 import AdminCategories from "./pages/AdminCategories.jsx";
@@ -23,6 +23,8 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Cart from "./pages/Cart.jsx";
 import Address from "./pages/Address.jsx";
 import Payment from "./pages/Payment.jsx";
+import UserInfo from "./components/user/UserInfo.jsx";
+import UserOrder from "./components/user/UserOrder.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -39,10 +41,14 @@ ReactDOM.createRoot(root).render(
         <Route path="về-chúng-tôi" element={<About />} />
         <Route path="lien-he" element={<Contact />} />
         <Route path="tin-tức" element={<News />} />
-        <Route path="user-profile" element={<UserProfile />} />
         <Route path="gio-hang" element={<Cart />} />
         <Route path="dia-chi" element={<Address />} />
         <Route path="thanh-toan/:id" element={<Payment />} />
+        <Route path="thong-tin-tai-khoan" element={<UserProfile />}>
+          <Route index element={<UserInfo />} />
+          <Route path="dia-chi" element={<Address />} />
+          <Route path="don-hang" element={<UserOrder />} />
+        </Route>
 
         {/* <Route path='admin' element={<Admin />} />
         <Route path='admin-books' element={<AdminBooks />} />

@@ -257,7 +257,7 @@ const Header = () => {
                       <div
                         className="hover:bg-gray-100 p-2 cursor-pointer 
                       duration-150 rounded"
-                        onClick={() => navigate("/user-profile")}
+                        onClick={() => navigate("/thong-tin-tai-khoan")}
                       >
                         Thông tin tài khoản
                       </div>

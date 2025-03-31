@@ -12,11 +12,21 @@ import { truncateText } from "../services/CommonServices";
 import AddArticle from "../components/addForm/AddAritcle";
 import ava from "../assets/ava.png"; // Thay bằng ảnh đại diện thực tế
 import { AppContext } from "../context/AppContext";
+import { Outlet, useNavigate } from "react-router";
+import { FaBell } from "react-icons/fa";
+import { RiFileList2Fill } from "react-icons/ri";
+import { IoNewspaper } from "react-icons/io5";
+import { PiAddressBookFill } from "react-icons/pi";
+import { FaUser } from "react-icons/fa6";
+import { FiPhone } from "react-icons/fi";
+import { HiOutlineMail } from "react-icons/hi";
 
 const UserProfile = () => {
   const context = useContext(AppContext);
 
   // const [user, setUser] = useState({});
+
+  const navigate = useNavigate();
 
   const [editingUserId, setEditingUserId] = useState(null);
   const [articles, setArticles] = useState([]);
@@ -82,137 +92,76 @@ const UserProfile = () => {
     });
   };
 
+  const [name, setName] = useState("Lê Minh Khánh");
+  const [nickname, setNickname] = useState("khanh-131");
+  const [dob, setDob] = useState({ day: "13", month: "10", year: "2004" });
+  const [gender, setGender] = useState("Nam");
+  const [country, setCountry] = useState("Việt Nam");
+
   return (
-    <div className="m-4 bg-white shadow-2xl shadow-neutral-600 rounded text-black min-h-fit p-6 flex lg:flex-row flex-col">
-      {/* Profile Section */}
-      <div className="IMAGE py-4 flex flex-col items-center lg:w-2/5 px-10">
-        <div className="relative">
-          <img
-            src={context?.user.avatar || ava} // Thay bằng avatar thực tế
-            alt=""
-            className="w-65 h-65 my-4 rounded-full border-2 border-gray-600 object-cover shadow-2xl shadow-neutral-900"
-          />
-          {!context.user.avatar && (
-            <p className="absolute left-1/2 -translate-1/2  top-1/2 font-bold text-center text-gray-500 w-full">
-              Ảnh đại diện
-            </p>
-          )}
-        </div>
-        <h2 className="mt-3 text-2xl font-bold">{context.user.name}</h2>
-        <p className="text-gray-400 text-lg">
-          {context.user.email} · {context.user.gender === "MALE" && "he/him"}
-          {context.user.gender === "FEMALE" && "she/her"}
-          {context.user.gender === "OTHER" && "they/them"}
-        </p>
-        {/* <button className="mt-3 px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
-          Edit Profile
-        </button> */}
-        <button
-          className="mt-3 px-4 py-2 hover:cursor-pointer hover:text-white border
-          bg-white duration-300 rounded-md hover:bg-gray-600 text-lg"
-          onClick={() => setEditingUserId(context.user.id)}
-        >
-          Chỉnh sửa
-        </button>
-        {editingUserId === context.user.id && (
-          <UserUpdate
-            user={context.user}
-            onUpdate={handleUpdate}
-            onClose={handleCloseUser}
-            userId={context.user.id}
-          />
-        )}
-      </div>
-      <div className="CONTENT w-full">
-        {/* Bio */}
-        <div className="ARTICLES mt-6">
-          <div className="bg-gray-800 p-4 rounded-md shadow-md shadow-neutral-700 mb-6">
-            <div className="text-white text-center font-semibold text-2xl">
-              Những bài báo bạn đã đăng
+    <div
+      className=" shadow-2xl w-full bg-[#e6e6e6] 
+    shadow-neutral-600 text-black min-h-fit px-6 flex lg:flex-row flex-col"
+    >
+      <div className="flex mx-auto min-h-screen w-18/24">
+        {/* Sidebar */}
+        <div className="w-9/48 bg-transparent p-4">
+          <div className="flex items-center space-x-3">
+            <img
+              src={context.user?.avatar || ava}
+              alt="Avatar"
+              className="w-12 h-12 rounded-full "
+            />
+            <div className="flex flex-col">
+              <p className="text-sm text-gray-900">Tài khoản của</p>
+              <p className="font-medium">{context?.user.name}</p>
             </div>
           </div>
-          <AddArticle
-            onSubmit={() => fetchUser()}
-            initialData={{
-              title: "",
-              content: "",
-              imageURL: "",
-              createdBy: "",
-            }}
-          />
-          <div className=" overflow-hidden rounded-lg border border-gray-300">
-            {articles.filter((article) => article.user?.id === currentUserId)
-              .length === 0 ? (
-              <div className="text-center p-4 text-gray-400">
-                Bạn chưa đăng bài nào
-              </div>
-            ) : (
-              <table className="min-w-full border-collapse border border-gray-300 shadow-md">
-                {/* Header */}
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="border border-gray-300 p-2">Tiêu đề</th>
-                    <th className="border border-gray-300 p-2">Nội dung</th>
-                    <th className="border border-gray-300 p-2">Ngày tạo</th>
-                    <th className="border border-gray-300 p-2">Cập nhật</th>
-                    {/* <th className="border border-gray-300 p-2">Hành động</th> */}
-                  </tr>
-                </thead>
-
-                {/* Body */}
-                <tbody>
-                  {articles.map((article) => (
-                    <tr
-                      key={article.id}
-                      className="border border-gray-300 hover:bg-gray-100"
-                    >
-                      <td className="border border-gray-300 p-2">
-                        {article.title}
-                      </td>
-                      <td className="border border-gray-300 p-2 text-center">
-                        {/* {article?.user?.name || "Không rõ"} */}
-                        {truncateText(article.content, 5)}
-                      </td>
-                      <td className="border border-gray-300 p-2 text-center">
-                        {article.createdAt}
-                      </td>
-                      <td className="border border-gray-300 p-2 text-center">
-                        {article.updatedAt || "Chưa cập nhật"}
-                      </td>
-                      <td className="items-center p-2 flex h-10 justify-center space-x-3">
-                        <LuPencilLine
-                          className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
-                          onClick={() => setEditingArticleId(article.id)}
-                        />
-                        <GoTrash
-                          className="text-red-500 hover:cursor-pointer hover:scale-150 duration-200"
-                          onClick={() =>
-                            handleDelete(
-                              article.id,
-                              setArticles,
-                              setTotalElements
-                            )
-                          }
-                        />
-                        {editingArticleId === article.id && (
-                          <ArticleUpdate
-                            articleId={article.id}
-                            onUpdateSuccess={handleUpdateSuccess}
-                            onClose={handleCloseArticle}
-                            article={article}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
+          <ul className="mt-2 space-y-2">
+            <li
+              className="p-2 hover:bg-gray-400 text-sm flex items-center
+            hover:cursor-pointer duration-100 rounded cursor-pointer"
+              onClick={() => navigate("/thong-tin-tai-khoan")}
+            >
+              <FaUser className="mr-2" />
+              Thông tin tài khoản
+            </li>
+            <li
+              className="p-2 hover:bg-gray-400 text-sm flex items-center
+            hover:cursor-pointer duration-100 rounded cursor-pointer"
+            >
+              <FaBell className="mr-2" />
+              Thông báo của bạn
+            </li>
+            <li
+              className="p-2 hover:bg-gray-400 text-sm flex items-center
+            hover:cursor-pointer duration-100 rounded cursor-pointer"
+            onClick={() => navigate("/thong-tin-tai-khoan/don-hang")}
+            >
+              <RiFileList2Fill className="mr-2" />
+              Quản lý đơn hàng
+            </li>
+            <li
+              className="p-2 hover:bg-gray-400 text-sm flex items-center 
+            hover:cursor-pointer duration-100 rounded cursor-pointer"
+            >
+              <IoNewspaper className="mr-2" />
+              Bài báo của bạn
+            </li>
+            <li
+              className="p-2 hover:bg-gray-400 text-sm flex items-center 
+              hover:cursor-pointer duration-100 rounded cursor-pointer"
+              onClick={() => navigate("/thong-tin-tai-khoan/dia-chi")}
+            >
+              <PiAddressBookFill className="mr-2" />
+              Địa chỉ
+            </li>
+          </ul>
         </div>
+        <Outlet />
       </div>
     </div>
   );
 };
 
-export default UserProfile;
+export { UserProfile };

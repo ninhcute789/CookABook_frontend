@@ -50,6 +50,7 @@ const Address = () => {
   };
 
   const handleUpdateSuccess = (updatedId, updatedData) => {
+    console.log("Địa chỉ đã cập nhật:", updatedId, updatedData);
     setAddresses((prevAddresses) =>
       prevAddresses.map((addr) =>
         addr.id === updatedId
@@ -59,6 +60,8 @@ const Address = () => {
           : addr
       )
     );
+    setIdDefault(updatedId); // Cập nhật id mặc định
+    // setId(null); // Reset id sau khi cập nhật
 
     handleCancel();
     scrollTo({ top: 0, behavior: "smooth" });
@@ -100,8 +103,9 @@ const Address = () => {
               ) : null}
             </div>
             <p className="text-gray-600">
-              <span className="font-medium ">Địa chỉ:</span> {ad?.address},{" "}
-              {ad.ward}, {ad.district}, {ad.city}
+              <span className="font-medium line-clamp-1">
+                Địa chỉ: {ad?.address}, {ad.ward}, {ad.district}, {ad.city}
+              </span>
             </p>
             <p className="text-gray-600">
               <span className="font-medium">Điện thoại:</span> {ad.phoneNumber}
@@ -316,16 +320,19 @@ const Address = () => {
                   type="submit"
                   onClick={(e) => {
                     e.preventDefault();
-                    updateAddress(
-                      id,
-                      name,
-                      phoneNumber,
-                      city,
-                      district,
-                      ward,
-                      address,
-                      defaultAddress
-                    );
+                    const update = async () => {
+                      await updateAddress(
+                        id,
+                        name,
+                        phoneNumber,
+                        city,
+                        district,
+                        ward,
+                        address,
+                        defaultAddress
+                      );
+                    };
+                    update();
                     handleUpdateSuccess(id, {
                       name,
                       phoneNumber,
