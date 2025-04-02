@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 // import { getAllArticlesByUserId, getUsersById } from "../services/UserSevices";
 // import UserUpdate from "../components/update/UserUpdate";
 // import { handleDelete } from "../services/ArticleServices";
@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 // import AddArticle from "../components/addForm/AddAritcle";
 import ava from "../../assets/ava.png"; // Thay bằng ảnh đại diện thực tế
 import { AppContext } from "../../context/AppContext";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 // import { FaBell } from "react-icons/fa";
 // import { RiFileList2Fill } from "react-icons/ri";
 // import { IoNewspaper } from "react-icons/io5";
@@ -18,7 +18,7 @@ import { useNavigate } from "react-router";
 import { FiPhone } from "react-icons/fi";
 import { HiOutlineMail } from "react-icons/hi";
 import {
-  getAllArticlesByUserId,
+  // getAllArticlesByUserId,
   getUsersById,
   handleUpdateUser,
 } from "../../services/UserSevices";
@@ -30,10 +30,10 @@ const UserInfo = () => {
 
   // const [user, setUser] = useState({});
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [editingArticleId, setEditingArticleId] = useState(null);
+  // const [editingUserId, setEditingUserId] = useState(null);
+  // const [editingArticleId, setEditingArticleId] = useState(null);
 
   const genders = [
     { label: "Nam", value: "MALE" },
@@ -41,50 +41,50 @@ const UserInfo = () => {
     { label: "Khác", value: "OTHER" },
   ];
 
-  const parsedUser = JSON.parse(localStorage.getItem("user"));
-  const currentUserId = parsedUser.id;
+  // const parsedUser = JSON.parse(localStorage.getItem("user"));
+  // const currentUserId = parsedUser.id;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("❌ Không tìm thấy token!");
-        return;
-      }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     if (!token) {
+  //       console.error("❌ Không tìm thấy token!");
+  //       return;
+  //     }
 
-      const res = await axiosInstance.put(
-        "/users",
-        {
-          id: id,
-          password: password,
-          name: name,
-          gender: gender || null,
-          dob: dob,
-          email: email,
-          avatar: avatar,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setAvatar(res.data.data.avatar);
-      console.log("avatar đã được cập nhật:", res.data.data.avatar);
-      console.log("✅ Người dùng đã được cập nhật:", res.data);
-      onUpdate(res.data.data); // Cập nhật danh sách user
-      onClose();
-      // alert("🎉 Cập nhật người dùng thành công!");
-      toast.success("🎉 Cập nhật người dùng thành công!");
-    } catch (error) {
-      toast.error(
-        "❌ Lỗi khi cập nhật người dùng:",
-        error.response?.data || error.message
-      );
-    }
-  };
+  //     const res = await axiosInstance.put(
+  //       "/users",
+  //       {
+  //         id: id,
+  //         password: password,
+  //         name: name,
+  //         gender: gender || null,
+  //         dob: dob,
+  //         email: email,
+  //         avatar: avatar,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     setAvatar(res.data.data.avatar);
+  //     console.log("avatar đã được cập nhật:", res.data.data.avatar);
+  //     console.log("✅ Người dùng đã được cập nhật:", res.data);
+  //     onUpdate(res.data.data); // Cập nhật danh sách user
+  //     onClose();
+  //     // alert("🎉 Cập nhật người dùng thành công!");
+  //     toast.success("🎉 Cập nhật người dùng thành công!");
+  //   } catch (error) {
+  //     toast.error(
+  //       "❌ Lỗi khi cập nhật người dùng:",
+  //       error.response?.data || error.message
+  //     );
+  //   }
+  // };
 
   const fetchUser = async () => {
     try {
@@ -106,27 +106,27 @@ const UserInfo = () => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    // add or remove overflow-y-hidden class to body
-    if (editingUserId || editingArticleId) {
-      document.body.classList.add("overflow-y-hidden");
-    } else {
-      document.body.classList.remove("overflow-y-hidden");
-    }
-  }, [editingUserId, editingArticleId]);
+  // useEffect(() => {
+  //   // add or remove overflow-y-hidden class to body
+  //   if (editingUserId || editingArticleId) {
+  //     document.body.classList.add("overflow-y-hidden");
+  //   } else {
+  //     document.body.classList.remove("overflow-y-hidden");
+  //   }
+  // }, [editingUserId, editingArticleId]);
 
-  const handleCloseUser = () => {
-    setEditingUserId(null);
-  };
+  // const handleCloseUser = () => {
+  //   setEditingUserId(null);
+  // };
 
-  const handleUpdate = (updatedUser) => {
-    context.setUser((prev) => {
-      console.log("🔄 Trước khi cập nhật:", prev);
-      const updatedUserData = { ...prev, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
-      console.log("✅ Sau khi cập nhật:", updatedUserData);
-      return updatedUserData;
-    });
-  };
+  // const handleUpdate = (updatedUser) => {
+  //   context.setUser((prev) => {
+  //     console.log("🔄 Trước khi cập nhật:", prev);
+  //     const updatedUserData = { ...prev, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
+  //     console.log("✅ Sau khi cập nhật:", updatedUserData);
+  //     return updatedUserData;
+  //   });
+  // };
 
   // const [user, setUser] = useState({});
 
@@ -240,8 +240,8 @@ const UserInfo = () => {
                     context?.user.dob,
                     context?.user.email,
                     context?.user.avatar,
-                    context?.setUser,
-                    setEditingUserId
+                    context?.setUser
+                    // setEditingUserId
                   )
                 }
               >

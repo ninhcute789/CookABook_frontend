@@ -24,31 +24,7 @@ import { HiOutlineMail } from "react-icons/hi";
 const UserProfile = () => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
-  const [activeItem, setActiveItem] = useState("Thông tin tài khoản");
 
-  const menuItems = [
-    {
-      label: "Thông tin tài khoản",
-      icon: <FaUser />,
-      path: "/thong-tin-tai-khoan",
-    },
-    { label: "Thông báo của bạn", icon: <FaBell />, path: "#" },
-    {
-      label: "Quản lý đơn hàng",
-      icon: <RiFileList2Fill />,
-      path: "/thong-tin-tai-khoan/don-hang",
-    },
-    {
-      label: "Bài báo của bạn",
-      icon: <IoNewspaper />,
-      path: "/thong-tin-tai-khoan/tin-tuc-cua-toi",
-    },
-    {
-      label: "Địa chỉ",
-      icon: <PiAddressBookFill />,
-      path: "/thong-tin-tai-khoan/dia-chi",
-    },
-  ];
   return (
     <div
       className=" shadow-2xl w-full bg-[#e6e6e6] 
@@ -69,17 +45,17 @@ const UserProfile = () => {
             </div>
           </div>
           <ul className="mt-2 space-y-2">
-            {menuItems.map((item) => (
+            {context?.userSidebar.map((item) => (
               <li
                 key={item.label}
                 className={`p-2 text-sm flex items-center duration-100 rounded cursor-pointer 
             ${
-              activeItem === item.label
+              context?.activeItem === item.label
                 ? "bg-neutral-600 text-white"
                 : "hover:bg-gray-400"
             }`}
                 onClick={() => {
-                  setActiveItem(item.label);
+                  context?.setActiveItem(item.label);
                   if (item.path !== "#") navigate(item.path);
                 }}
               >

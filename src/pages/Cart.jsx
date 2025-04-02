@@ -59,9 +59,18 @@ const Cart = () => {
     fetchCart();
   }, []); // Thêm user.cartId vào dependency array
 
+  const fetchCartWithHeader = async () => {
+    const res = await getCartById(user.cartId);
+    setCartItems(res.cartItems);
+    context.setHeaderQuantity(res.totalQuantity);
+    context.setQuantity(res.totalQuantity);
+    setTotalOriginalPrice(res.totalOriginalPrice);
+    setTotalDiscountPrice(res.totalDiscountPrice);
+    setTotalFinalPrice(res.totalFinalPrice);
+  };
+
   const fetchCart = async () => {
     const res = await getCartById(user.cartId);
-    console.log("✅ API trả về 49:", res);
     setCartItems(res.cartItems);
     context.setQuantity(res.totalQuantity);
     setTotalOriginalPrice(res.totalOriginalPrice);
@@ -125,7 +134,7 @@ const Cart = () => {
                       className=" text-gray-500
                         hover:text-gray-700 w-1/20 flex
                         duration-300 justify-center hover:cursor-pointer"
-                      onClick={() => handleDeleteCart(user, fetchCart)}
+                      onClick={() => handleDeleteCart(user, fetchCartWithHeader)}
                     >
                       <FaTrash />
                     </button>
@@ -206,7 +215,7 @@ const Cart = () => {
                               if (item.quantity === 1) {
                                 handleDeleteCartItem(
                                   item.id,
-                                  fetchCart,
+                                  fetchCartWithHeader,
                                   setCartItems,
                                   context
                                 );
@@ -252,7 +261,7 @@ const Cart = () => {
                         onClick={() =>
                           handleDeleteCartItem(
                             item.id,
-                            fetchCart,
+                            fetchCartWithHeader,
                             setCartItems,
                             context
                           )

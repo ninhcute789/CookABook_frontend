@@ -92,9 +92,9 @@ const Home = () => {
 
   // if (loading) return <p className="text-center">Đang tải...</p>;
   return (
-    <div className="home bg-[#efefef] h-fit">
+    <div className="home bg-[#efefef] h-fit w-full">
       <div
-        className="home banner container mx-auto p-4 bg-cover bg-center"
+        className="home banner container mx-auto p-4 bg-cover bg-center min-w-full"
         style={{ backgroundImage: `url(${libra})` }}
       >
         <div className="flex flex-col xl:flex-row justify-between items-center space-y-4 xl:space-y-0 relative">

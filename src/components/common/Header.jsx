@@ -11,6 +11,7 @@ import { AppContext } from "../../context/AppContext";
 const Header = () => {
   const context = useContext(AppContext);
 
+
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
   const [isHovered, setIsHovered] = useState(false);
@@ -257,15 +258,22 @@ const Header = () => {
                       <div
                         className="hover:bg-gray-100 p-2 cursor-pointer 
                       duration-150 rounded"
-                        onClick={() => navigate("/thong-tin-tai-khoan")}
+                        onClick={() => {
+                          context?.setActiveItem("Thông tin tài khoản");
+                          navigate("/thong-tin-tai-khoan");
+                        }}
                       >
                         Thông tin tài khoản
                       </div>
                       <div
                         className="hover:bg-gray-100 p-2 cursor-pointer 
                       duration-150 rounded"
+                        onClick={() => {
+                          context?.setActiveItem("Quản lý đơn hàng");
+                          navigate("/thong-tin-tai-khoan/don-hang");
+                        }}
                       >
-                        Đơn hàng của tôi
+                        Quản lý đơn hàng
                       </div>
                       <div
                         className="hover:bg-gray-100 p-2 cursor-pointer 
@@ -293,14 +301,17 @@ const Header = () => {
           {user && (
             <Link to="/gio-hang" className="ml-6 text-gray-700 ">
               <div className="hover:bg-gray-200 p-2 rounded duration-300 relative">
-                {context.quantity > 0 && (
+                {context.headerQuantity > 0 && (
                   <div
                     className="text-white absolute -top-1 -right-1
                bg-[#f93333] rounded-full w-5 h-5 font-medium
                 justify-center flex items-center text-xs"
                   >
-                    {context.quantity}
-                    {console.log("✅ Số lượng sách trong giỏ hàng:", context.quantity)}
+                    {context.headerQuantity}
+                    {console.log(
+                      "✅ Số lượng sách trong giỏ hàng:",
+                      context.quantity
+                    )}
                     {/* {console.log("✅ Số lượng sách trong giỏ hàng:", quantity)} */}
                   </div>
                 )}

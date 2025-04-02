@@ -27,6 +27,7 @@ import UserInfo from "./components/user/UserInfo.jsx";
 import UserOrder from "./components/user/UserOrder.jsx";
 import UserAddress from "./components/user/UserAddress.jsx";
 import UserArticles from "./components/user/UserArticles.jsx";
+import UserSupport from "./components/user/UserSupport.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -51,6 +52,7 @@ ReactDOM.createRoot(root).render(
           <Route path="dia-chi" element={<UserAddress />} />
           <Route path="don-hang" element={<UserOrder />} />
           <Route path="tin-tuc-cua-toi" element={<UserArticles />} />
+          <Route path="ho-tro" element={<UserSupport />} />
         </Route>
 
         {/* <Route path='admin' element={<Admin />} />

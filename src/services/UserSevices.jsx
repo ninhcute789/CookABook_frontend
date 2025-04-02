@@ -97,7 +97,7 @@ const handleUpdateUser = async (
   email,
   avatar,
   setUser,
-  setEditingUserId
+  // setEditingUserId
 ) => {
   try {
     const token = localStorage.getItem("token");
@@ -146,10 +146,10 @@ const handleUpdateUser = async (
     };
 
     handleUpdate(res.data.data); // Cập nhật danh sách user
-    const handleClose = () => {
-      setEditingUserId(null);
-    };
-    handleClose();
+    // const handleClose = () => {
+    //   setEditingUserId(null);
+    // };
+    // handleClose();
     // alert("🎉 Cập nhật người dùng thành công!");
     toast.success("🎉 Cập nhật người dùng thành công!");
   } catch (error) {

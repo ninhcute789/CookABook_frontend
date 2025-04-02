@@ -41,7 +41,7 @@ const BookDetail = () => {
   const fetchQuantity = async () => {
     try {
       const res = await getQuantityOfCartItems(user.cartId);
-      context.setQuantity(res);
+      context.setHeaderQuantity(res);
     } catch (error) {
       console.error("Lỗi khi lấy địa chỉ mặc định:", error);
     }
