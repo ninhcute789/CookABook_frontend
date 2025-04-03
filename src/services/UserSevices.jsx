@@ -17,22 +17,22 @@ const getUsersById = async (id) => {
   }
 };
 
-const getUserAvatarById = async (id) => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axiosInstance.get(`/users/${id}/avatar`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // toast.success("🎉 Lấy thông tin người dùng thành công!");
+// const getUserAvatarById = async (id) => {
+//   try {
+//     const token = localStorage.getItem("token");
+//     const response = await axiosInstance.get(`/users/${id}/avatar`, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     // toast.success("🎉 Lấy thông tin người dùng thành công!");
 
-    return response.data;
-  } catch (error) {
-    console.error("❌ Error in getUser:", error);
-    return null;
-  }
-};
+//     return response.data;
+//   } catch (error) {
+//     console.error("❌ Error in getUser:", error);
+//     return null;
+//   }
+// };
 
 const getAllArticlesByUserId = async (
   id,
@@ -164,7 +164,7 @@ const handleUpdateUser = async (
 export {
   getUsersById,
   fetchUsers,
-  getUserAvatarById,
+  // getUserAvatarById,
   getAllArticlesByUserId,
   handleUpdateUser,
 };

@@ -46,7 +46,7 @@ ReactDOM.createRoot(root).render(
         <Route path="tin-tức" element={<News />} />
         <Route path="gio-hang" element={<Cart />} />
         <Route path="dia-chi" element={<Address />} />
-        <Route path="thanh-toan/:id" element={<Payment />} />
+        <Route path="thanh-toan" element={<Payment />} />
         <Route path="thong-tin-tai-khoan" element={<UserProfile />}>
           <Route index element={<UserInfo />} />
           <Route path="dia-chi" element={<UserAddress />} />

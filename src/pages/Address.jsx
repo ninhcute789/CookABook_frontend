@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   createNewAddress,
@@ -7,8 +7,12 @@ import {
   getDefautAddressByUserId,
   updateAddress,
 } from "../services/AddressServices";
+import { AppContext } from "../context/AppContext";
+import { saveAddressToSession } from "../services/OrderServices";
 
 const Address = () => {
+  const context = useContext(AppContext);
+
   const [showForm, setShowForm] = useState(false);
   const [animateForm, setAnimateForm] = useState(false);
   const [newForm, setNewForm] = useState(false);
@@ -115,9 +119,12 @@ const Address = () => {
                 className="bg-gray-600 hover:bg-gray-500 hover:cursor-pointer
                  duration-300 text-white px-3 py-1 rounded-sm shadow-sm mr-auto"
                 onClick={() => {
-                  // Xử lý chọn địa chỉ giao hàng
-                  // console.log("Chọn địa chỉ:", ad.id);
-                  navigate("/thanh-toan/" + ad.id);
+                  const fetch = async () => {
+                    context?.setIdAddress(ad.id);
+                    await saveAddressToSession(ad.id);
+                    navigate("/thanh-toan/");
+                  };
+                  fetch();
                 }}
               >
                 Giao đến đây

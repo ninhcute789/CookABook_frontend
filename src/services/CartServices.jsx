@@ -237,7 +237,7 @@ const handleDeleteCart = async (user, fetchCart) => {
     ),
     {
       position: "top-center", // Hiển thị ở giữa màn hình
-      duration: 5000 , // 5 giây
+      duration: 5000, // 5 giây
       closeOnClick: false, // Không đóng khi bấm ngoài
     }
   );
@@ -298,6 +298,29 @@ const handleDeleteCartItem = async (
   confirmToast();
 };
 
+const getCartWithSelectedItemsById = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(`/carts/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("✅ API trả về:", res.data);
+
+    // toast.success("🛒 Lấy giỏ hàng thành công!");
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
 export {
   addBookToCart,
   getCartById,
@@ -309,4 +332,5 @@ export {
   deleteAllCartItems,
   handleDeleteCart,
   handleDeleteCartItem,
+  getCartWithSelectedItemsById,
 };

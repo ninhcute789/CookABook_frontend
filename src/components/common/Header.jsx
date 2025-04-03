@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
-import { getUserAvatarById, getUsersById } from "../../services/UserSevices";
+import { getUsersById } from "../../services/UserSevices";
 import axiosInstance from "../../services/axiosInstance";
 import toast from "react-hot-toast";
 import ava from "../../assets/ava.png";
@@ -48,26 +48,26 @@ const Header = () => {
     setLoggedInUser(localStorage.getItem("username"));
   }, []);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (!user?.id) return;
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       if (!user?.id) return;
 
-        const res = await getUserAvatarById(user.id);
-        // console.log("🚀 ~ file: Header.jsx ~ line 51 ~ fetchUser ~ res", res);
-        setUser((prev) => {
-          // Chỉ cập nhật nếu avatar thay đổi để tránh render không cần thiết
-          if (prev && prev.avatar !== res) {
-            return { ...prev, avatar: res };
-          }
-          return prev;
-        });
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu user:", error);
-      }
-    };
-    fetchUser();
-  }, [user]);
+  //       const res = await getUserAvatarById(user.id);
+  //       // console.log("🚀 ~ file: Header.jsx ~ line 51 ~ fetchUser ~ res", res);
+  //       setUser((prev) => {
+  //         // Chỉ cập nhật nếu avatar thay đổi để tránh render không cần thiết
+  //         if (prev && prev.avatar !== res) {
+  //           return { ...prev, avatar: res };
+  //         }
+  //         return prev;
+  //       });
+  //     } catch (error) {
+  //       console.error("Lỗi khi lấy dữ liệu user:", error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -308,11 +308,6 @@ const Header = () => {
                 justify-center flex items-center text-xs"
                   >
                     {context.headerQuantity}
-                    {console.log(
-                      "✅ Số lượng sách trong giỏ hàng:",
-                      context.quantity
-                    )}
-                    {/* {console.log("✅ Số lượng sách trong giỏ hàng:", quantity)} */}
                   </div>
                 )}
                 <BsCart3 className="size-6" />

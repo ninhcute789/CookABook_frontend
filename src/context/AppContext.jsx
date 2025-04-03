@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import { createContext, use, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { getQuantityOfCartItems } from "../services/CartServices";
-import { getUserAvatarById, getUsersById } from "../services/UserSevices";
-import { set } from "@cloudinary/url-gen/actions/variable";
-import { FaBell, FaUser } from "react-icons/fa";
+import { getUsersById } from "../services/UserSevices";
+import { FaUser } from "react-icons/fa";
 import { RiFileList2Fill } from "react-icons/ri";
 import { IoNewspaper } from "react-icons/io5";
 import { PiAddressBookFill } from "react-icons/pi";
@@ -62,6 +61,8 @@ const AppProvider = ({ children }) => {
   const [quantity, setQuantity] = useState(0); // Thêm state quantity
   const [headerQuantity, setHeaderQuantity] = useState(0); // Thêm state headerQuantity
   //   const [avatar, setAvatar] = useState(null); // Thêm state avatar
+
+  const [idAddress, setIdAddress] = useState(null); // Thêm state idAddress
 
   // Hàm đăng nhập
   const login = (userData) => setUser(userData);
@@ -131,6 +132,8 @@ const AppProvider = ({ children }) => {
     setActiveItem,
     headerQuantity,
     setHeaderQuantity,
+    idAddress,
+    setIdAddress, // Thêm setIdAddress vào value
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

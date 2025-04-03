@@ -16,6 +16,7 @@ import {
 } from "../services/CartServices";
 import { getDefautAddressByUserId } from "../services/AddressServices";
 import { AppContext } from "../context/AppContext.jsx";
+import { saveCartToSession } from "../services/OrderServices.jsx";
 
 const Cart = () => {
   const context = useContext(AppContext);
@@ -120,7 +121,6 @@ const Cart = () => {
                 className="bg-white flex justify-between items-center
               rounded-md px-9 mb-3 text-xl shadow-lg py-2"
               >
-                
                 <div className="lg:w-13/20 w-1/3 mr-4">Tất cả sản phẩm</div>
                 {cartItems.length > 0 && (
                   <>
@@ -134,7 +134,9 @@ const Cart = () => {
                       className=" text-gray-500
                         hover:text-gray-700 w-1/20 flex
                         duration-300 justify-center hover:cursor-pointer"
-                      onClick={() => handleDeleteCart(user, fetchCartWithHeader)}
+                      onClick={() =>
+                        handleDeleteCart(user, fetchCartWithHeader)
+                      }
                     >
                       <FaTrash />
                     </button>
@@ -155,11 +157,11 @@ const Cart = () => {
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-neutral-600 rounded-md px-6 mb-4 shadow-lg py-4 flex-col justify-between items-center"
+                    className="bg-white rounded-md px-6 mb-4 shadow-lg py-4 flex-col justify-between items-center"
                   >
                     <div
-                      className=" flex items-center text-white 
-                    font-medium text-lg mb-4 border-b-2 border-green-300 w-fit"
+                      className=" flex items-center text-gray-700
+                    font-medium text-lg mb-4 border-b-[1.5px] border-red-600 w-fit"
                     >
                       <FcHome className=" mr-2" />
                       Nhà sách Cook A Book
@@ -342,7 +344,14 @@ const Cart = () => {
                         if (context.quantity === 0) {
                           toast.error("Vui lòng chọn sản phẩm để mua!");
                         } else {
-                          navigate(`/thanh-toan/${address.id}`);
+                          const fetch = async () => {
+                            await saveCartToSession(user.cartId);
+                            navigate(`/dia-chi`);
+                          };
+                          fetch();
+                          
+
+                          // navigate(`/thanh-toan/${address.id}`);
                         }
                       }}
                     >

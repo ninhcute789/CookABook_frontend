@@ -150,7 +150,7 @@ const getAddressById = async (id) => {
     });
 
     console.log("✅ API trả về address:", res.data.data);
-    toast.success("🛒 Lấy địa chỉ thành công!");
+    // toast.success("🛒 Lấy địa chỉ thành công!");
     return res.data.data;
   } catch (error) {
     console.error(

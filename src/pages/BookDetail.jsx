@@ -77,7 +77,7 @@ const BookDetail = () => {
       }
     };
     fetchData();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
