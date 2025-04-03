@@ -37,7 +37,7 @@ const UserProfile = () => {
             <img
               src={context.user?.avatar || ava}
               alt="Avatar"
-              className="w-12 h-12 rounded-full "
+              className="w-12 h-12 rounded-full object-cover "
             />
             <div className="flex flex-col">
               <p className="text-sm text-gray-900">Tài khoản của</p>

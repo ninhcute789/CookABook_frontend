@@ -276,7 +276,7 @@ const BookDetail = () => {
               </h2>
 
               {/* Địa chỉ */}
-              {user && (
+              {defaultAddress && (
                 <div className="flex justify-between items-center text-gray-700 text-sm">
                   <span>
                     Giao đến {defaultAddress?.ward}, {defaultAddress?.district},{" "}

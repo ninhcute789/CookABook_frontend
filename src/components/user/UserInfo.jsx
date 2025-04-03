@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 // import { getAllArticlesByUserId, getUsersById } from "../services/UserSevices";
 // import UserUpdate from "../components/update/UserUpdate";
 // import { handleDelete } from "../services/ArticleServices";
@@ -24,6 +24,8 @@ import {
 } from "../../services/UserSevices";
 import { SlLock } from "react-icons/sl";
 import { GoKey } from "react-icons/go";
+import { IoMdClose } from "react-icons/io";
+import ImageUploader from "../common/ImageUpload";
 
 const UserInfo = () => {
   const context = useContext(AppContext);
@@ -40,6 +42,10 @@ const UserInfo = () => {
     { label: "Nữ", value: "FEMALE" },
     { label: "Khác", value: "OTHER" },
   ];
+
+  const [isOpenAvatar, setIsOpenAvatar] = useState(false);
+  const [isUpdateAvatar, setIsUpdateAvatar] = useState(false);
+  const popupRef = useRef(null);
 
   // const parsedUser = JSON.parse(localStorage.getItem("user"));
   // const currentUserId = parsedUser.id;
@@ -106,6 +112,18 @@ const UserInfo = () => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setIsOpenAvatar(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // useEffect(() => {
   //   // add or remove overflow-y-hidden class to body
   //   if (editingUserId || editingArticleId) {
@@ -139,13 +157,117 @@ const UserInfo = () => {
         <div className=" THONG-TIN-TAI-KHOAN bg-white  flex flex-row w-full">
           <div className="THONG-TIN-CA-NHAN pr-5 border-r-2 border-gray-400 w-15/27">
             <div className="mb-3 text-gray-500">Thông tin cá nhân</div>
-            <div className="ANH+TEN flex xl:flex-row flex-col items-center justify-between space-x-4 w-full">
-              <img
-                src={context?.user?.avatar || ava}
-                alt="Avatar"
-                className="w-30 h-30 rounded-full border-2 border-gray-300"
-              />
-              <div className="TEN-NICKNAME flex flex-col w-full">
+            <div className="ANH+TEN flex xl:flex-row flex-col items-center  space-x-4 ">
+              <div
+                className=" rounded-full hover:cursor-pointer relative"
+                ref={popupRef}
+                onClick={() => {
+                  setIsOpenAvatar(!isOpenAvatar);
+                  console.log("isOpenAvatar", isOpenAvatar);
+                }}
+              >
+                <img
+                  src={context?.user?.avatar || ava}
+                  alt="Avatar"
+                  className="w-30 h-30  object-cover rounded-full border-2 border-gray-300"
+                />
+                {isOpenAvatar && (
+                  <div
+                    className="absolute shadow-neutral-500
+                  left-[50%] -translate-x-[50%] mt-2 w-55 bg-white shadow-md rounded-lg z-50"
+                  >
+                    <ul className="py-2">
+                      {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                        <span className="mr-2">👁️</span> Xem ảnh đại diện
+                      </li> */}
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                        onClick={() => {
+                          setIsOpenAvatar(false);
+                          setIsUpdateAvatar(true);
+                        }}
+                      >
+                        <span className="mr-2">📤</span> Cập nhật ảnh đại diện
+                      </li>
+                      {/* <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center text-red-500"
+                        onClick={() => {
+                          const fetchUser = async () => {
+                            context?.setUser((prevState) => ({
+                              ...prevState,
+                              avatar: null,
+                            }));
+                            // await handleUpdateUser(
+                            //   context?.user.id,
+                            //   context?.user.password,
+                            //   context?.user.name,
+                            //   context?.user.gender,
+                            //   context?.user.dob,
+                            //   context?.user.email,
+                            //   context?.user.avatar,
+                            //   context?.setUser
+                            //   // setEditingUserId
+                            // );
+                          };
+                          fetchUser();
+                        }}
+                      >
+                        <span className="mr-2">🗑️</span> Xóa ảnh đại diện hiện
+                        tại
+                      </li> */}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              {isUpdateAvatar && (
+                <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] z-50">
+                  <div className="bg-white p-6 rounded-lg shadow-lg w-7/22">
+                    <h2 className="text-lg font-semibold mb-4">
+                      Đổi ảnh đại diện
+                    </h2>
+                    <div className="space-y-4 w-full">
+                      <ImageUploader
+                        onUploadSuccess={(url) =>
+                          context?.setUser((prevState) => ({
+                            ...prevState,
+                            avatar: url,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="flex justify-end mt-4 space-x-2">
+                      <button
+                        className="px-4 py-2 duration-300
+                        bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
+                        onClick={() => setIsUpdateAvatar(false)}
+                      >
+                        Hủy
+                      </button>
+                      <button
+                        className="px-4 py-2 duration-300
+                        bg-blue-500 hover:bg-blue-600 text-white rounded hover:cursor-pointer"
+                        onClick={() => {
+                          handleUpdateUser(
+                            context?.user.id,
+                            context?.user.password,
+                            context?.user.name,
+                            context?.user.gender,
+                            context?.user.dob,
+                            context?.user.email,
+                            context?.user.avatar,
+                            context?.setUser
+                            // setEditingUserId
+                          );
+                          setIsUpdateAvatar(false);
+                        }}
+                      >
+                        Cập nhật
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className="TEN-NICKNAME flex flex-col w-full xl:w-3/4">
                 <div className="flex flex-col [@media(min-width:1490px)]:flex-row items-center space-x-2 ">
                   <label className="block font-medium [@media(min-width:1490px)]:w-1/4 w-fit">
                     Họ và Tên
