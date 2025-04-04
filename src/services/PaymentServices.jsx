@@ -1,6 +1,12 @@
+import toast from "react-hot-toast";
 import axiosInstance from "./axiosInstance";
 
-const createPayment = async (method, amount, userId) => {
+const createPayment = async (
+  method,
+  amount,
+  userId,
+  // setPaymentId,
+) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -22,6 +28,8 @@ const createPayment = async (method, amount, userId) => {
 
     console.log("✅ API trả về address:", res.data.data);
     // toast.success("🛒 Lấy địa chỉ thành công!");
+    // setPaymentId(res.data.data.id); // Lưu paymentId vào state
+    console.log("🚀 paymentId:", res.data.data.id);
     return res.data.data;
   } catch (error) {
     console.error(
@@ -31,4 +39,54 @@ const createPayment = async (method, amount, userId) => {
   }
 };
 
-export { createPayment };
+const getCartPaymentById = async (cartId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(`/payments/get-cart/${cartId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    console.log("✅ API trả về address:", res.data.data);
+    // toast.success("🛒 Lấy địa chỉ thành công!");
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const savePaymentTosession = async (paymentId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.post(
+      `/orders/save-payment-to-session/${paymentId}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    // console.log("✅ API trả về address:", res.data.data);
+    toast.success(res.data.message);
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+export { createPayment, getCartPaymentById, savePaymentTosession };

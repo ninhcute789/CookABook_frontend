@@ -273,7 +273,7 @@ const Address = () => {
               />
               <label className="w-full ml-3">Đặt làm địa chỉ mặc định</label>
             </div>
-            {console.log("302", id)}
+            {/* {console.log("302", id)} */}
 
             <div className="flex mt-4 w-15/24 mx-auto">
               <button

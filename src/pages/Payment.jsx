@@ -1,43 +1,127 @@
-import { use, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAddressById } from "../services/AddressServices";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import ic1 from "../assets/iconCASH.png";
 import ic2 from "../assets/iconVNP.png";
 import { AppContext } from "../context/AppContext";
-import { createPayment } from "../services/PaymentServices";
+import {
+  createPayment,
+  getCartPaymentById,
+  savePaymentTosession,
+} from "../services/PaymentServices";
+import { FaTruck } from "react-icons/fa";
+import { CiDeliveryTruck } from "react-icons/ci";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import {
+  createOrder,
+  saveAddressToSession,
+  saveCartToSession,
+} from "../services/OrderServices";
 
 const Payment = () => {
   const context = useContext(AppContext);
   const [address, setAddress] = useState(null);
-  const [selectedPayment, setSelectedPayment] = useState("cash");
+  const [selectedPayment, setSelectedPayment] = useState(() => {
+    return sessionStorage.getItem("selectedPayment") || "COD";
+  });
+  const [cartPayment, setCartPayment] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Local loading state
+  const [expand, setExpand] = useState(false);
+  const [paymentId, setPaymentId] = useState(null); // Local state for paymentId
 
   const navigate = useNavigate();
 
   const paymentMethods = [
     { id: "COD", label: "Thanh toán tiền mặt", img: ic1 },
-    // { id: "viettel", label: "Viettel Money" },
-    // { id: "momo", label: "Ví Momo" },
-    // { id: "zalopay", label: "Ví ZaloPay" },
     {
       id: "VNPAY",
       label: "VNPAY - Quét mã QR từ ứng dụng ngân hàng",
       img: ic2,
     },
-    // { id: "credit", label: "Thẻ tín dụng/Ghi nợ" },
   ];
 
   useEffect(() => {
+    sessionStorage.setItem("selectedPayment", selectedPayment);
+  }, [selectedPayment]);
+
+  useEffect(() => {
     const fetchAddress = async () => {
-      const address = await getAddressById(context?.idAddress);
-      console.log("🏠 Địa chỉ:", address);
-      setAddress(address);
+      const storedUser = localStorage.getItem("user");
+      const parsedUser = JSON.parse(storedUser);
+
+      // if (!context?.idAddress || !context?.user?.cartId) {
+      //   console.log("User or address data is not ready yet.");
+      //   setIsLoading(false); // Stop loading if data is not ready
+      //   return;
+      // }
+
+      try {
+        console.log("👤 ID người dùng:", context?.idAddress);
+        const address = await getAddressById(context?.idAddress);
+        console.log("🏠 Địa chỉ:", address);
+        setAddress(address);
+
+        const paymentCart = await getCartPaymentById(parsedUser.cartId);
+        console.log("47:", paymentCart?.cartItems);
+        setCartPayment(paymentCart);
+        console.log("🛒 Cart ID:", context?.user.cartId);
+      } catch (error) {
+        console.error("Error fetching address or cart:", error);
+      } finally {
+        setIsLoading(false); // Stop loading after fetching data
+      }
     };
-    fetchAddress();
-  }, []);
+
+    if (!context.loadingUser) {
+      fetchAddress();
+    }
+  }, [context.loadingUser, context?.idAddress, context?.user?.cartId]);
+  const fetchOrdering = async () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      const parsedUser = JSON.parse(storedUser);
+
+      await saveCartToSession(parsedUser.cartId);
+
+      await saveAddressToSession(context?.idAddress);
+
+      // Gọi API createPayment và lấy paymentId từ kết quả trả về
+      const paymentId = await createPayment(
+        selectedPayment,
+        cartPayment?.totalFinalPrice,
+        context?.user.id
+      );
+
+      // Gọi API savePaymentTosession với paymentId
+      await savePaymentTosession(paymentId.id);
+
+      // Gọi API createOrder
+      await createOrder(context?.user.id);
+      console.log("✅ Order created successfully");
+    } catch (error) {
+      console.error("❌ Error in payment process:", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log("🔄 Context loadingUser:", context.loadingUser);
+  //   console.log("🔄 Context user:", context.user);
+  //   console.log("🔄 Context idAddress:", context.idAddress);
+  // }, [context.loadingUser, context.user, context.idAddress]);
 
   useEffect(() => {
     scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+  // if (context.loadingUser || isLoading) {
+  //   // Show a loading spinner or placeholder while data is being fetched
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (!context?.user || !context?.user.cartId) {
+  //   // Handle case where user data is not available
+  //   return <div>No user data available</div>;
+  // }
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -46,47 +130,97 @@ const Payment = () => {
       </div>
       <div className="CONTENT flex w-17/24 gap-4 p-6 mx-auto">
         {/* Chọn phương thức thanh toán */}
-        <div className="LEFT bg-white p-4 rounded-lg shadow-md w-17/24 h-fit">
-          <h2 className="text-lg font-semibold mb-3">
-            Chọn hình thức thanh toán
-          </h2>
-          <div className="space-y-2">
-            {paymentMethods.map((method) => (
-              <div key={method.id} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id={method.id}
-                  value={method.value}
-                  name="payment"
-                  checked={selectedPayment === method.id}
-                  onChange={() => setSelectedPayment(method.id)}
-                  className="w-4 h-4 cursor-pointer"
-                />
-                {console.log("🏦 selectedPayment:", selectedPayment)}
-                <img
-                  src={method.img}
-                  alt={method.label}
-                  className="w-8 h-8 object-cover "
-                />
-
-                <label htmlFor={method.id} className="cursor-pointer">
-                  {method.label}
-                </label>
+        <div className="LEFT  w-17/24 h-fit">
+          <div className="SANPHAM bg-white p-3 rounded-lg shadow-md">
+            <p className="text-lg font-semibold mb-3">Sản phẩm của bạn</p>
+            {cartPayment.cartItems?.map((item) => (
+              <div
+                key={item.id}
+                className="flex border-green-400  mt-2 border rounded-md p-2"
+              >
+                <div className="LEFT flex w-full items-center">
+                  <img
+                    src={item.book?.imageURL}
+                    alt={item.book?.title}
+                    className="w-12 h-12 mr-3 rounded-md"
+                  />
+                  <div className="flex-1">
+                    <p className="text-gray-800 font-medium">
+                      {item.book?.title}
+                    </p>
+                    <p className="text-gray-600">SL: x{item.quantity}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-red-600 font-semibold">
+                      {item.book?.finalPrice?.toLocaleString()} ₫
+                    </p>
+                    <p className="text-gray-400 line-through text-sm">
+                      {item.book?.originalPrice?.toLocaleString()} ₫
+                    </p>
+                  </div>
+                </div>
+                <div className="RIGHT  flex bg-gray-200 p-2 w-1/2 rounded-md ml-2">
+                  <CiDeliveryTruck className=" text-black size-7 mr-2" />
+                  <div className="text-gray-500">
+                    Được giao bởi hệ thống nhà sách CAB
+                  </div>
+                </div>
               </div>
             ))}
+            {/* <div className="flex justify-between items-center mt-3">
+              <p className="text-gray-600">Phí ship:</p>
+              <p className="text-gray-800">
+              </p>
+            </div> */}
+            {/* <div className="mt-2 flex items-center text-gray-500 text-sm">
+              <FaTruck className="mr-2" />
+              <span>{selectedShipping.provider}</span>
+            </div> */}
+          </div>
+          <div className="CHONHINHTHUC bg-white p-4 rounded-lg shadow-md mt-4">
+            <h2 className="text-lg font-semibold mb-3">
+              Chọn hình thức thanh toán
+            </h2>
+            <div className="space-y-2">
+              {paymentMethods.map((method) => (
+                <div key={method.id} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    id={method.id}
+                    value={method.id}
+                    name="payment"
+                    required
+                    checked={selectedPayment === method.id}
+                    onChange={() => setSelectedPayment(method.id)}
+                    className="w-4 h-4 cursor-pointer"
+                  />
+                  {console.log("🏦 selectedPayment:", selectedPayment)}
+                  <img
+                    src={method.img}
+                    alt={method.label}
+                    className="w-8 h-8 object-cover "
+                  />
+
+                  <label htmlFor={method.id} className="cursor-pointer">
+                    {method.label}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Tổng hợp đơn hàng */}
         <div className="RIGHT w-7/24 flex flex-col">
-          <div className="GiaoHang bg-white rounded-md shadow-lg h-fit mb-2">
+          <div className="GIAOHANG bg-white rounded-md shadow-lg h-fit ">
             <div className="flex justify-between items-center">
-              <div className="text-lg pt-2 ml-5 text-gray-500">Giao hàng</div>
+              <div className="text-lg pt-2 ml-5 text-gray-500 font-medium">
+                Giao hàng
+              </div>
               <div
                 className="text-sm pt-2 mr-5 text-blue-500 hover:cursor-pointer "
                 onClick={() => navigate("/dia-chi")}
               >
-                {" "}
                 Thay đổi
               </div>
             </div>
@@ -106,31 +240,87 @@ const Payment = () => {
               </div>
             </div>
           </div>
-          <div className="DONHANG bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-3">Đơn hàng</h2>
+          <div className="DONHANG bg-white p-4 rounded-lg shadow-md mt-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-medium text-gray-500">Đơn hàng</h2>
+              <div
+                className="text-sm text-blue-500 hover:cursor-pointer"
+                onClick={() => navigate("/gio-hang")}
+                // onClick={navigate("/gio-hang")}
+              >
+                Thay đổi
+              </div>
+            </div>
+            <div className=" flex text-sm mt-2">
+              <div className="">{cartPayment?.totalQuantity} sản phẩm.</div>
+              <div
+                className={`ml-1 text-blue-500 hover:cursor-pointer duration-300 `}
+                onClick={() => setExpand(!expand)}
+              >
+                {expand ? (
+                  <>
+                    <div>
+                      Thu gọn{" "}
+                      <IoIosArrowDown className="inline duration-500 rotate-180" />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      Xem thêm{" "}
+                      <IoIosArrowDown className="inline duration-500 rotate-0" />
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div
+              className={`overflow-hidden duration-600  ${
+                expand ? "max-h-[500px]" : "max-h-0"
+              }`}
+            >
+              <hr className="my-2 text-gray-500" />
+              {cartPayment.cartItems?.map((item) => (
+                <div
+                  key={item.id}
+                  className=" text-gray-600 font-medium text-sm flex"
+                >
+                  <div className="text-black w-4/24">{item.quantity}x</div>
+                  <div className="w-full">{item.book?.title}</div>
+                  <div className="w-8/24 text-black text-right">
+                    {item.book?.finalPrice?.toLocaleString("vi-VN")} ₫
+                  </div>
+                </div>
+              ))}
+            </div>
+            <hr className="my-2 text-gray-500" />
             <div className="text-sm space-y-2">
               <div className="flex justify-between">
-                <span>Tổng tiền hàng</span>
-                <span>229.000đ</span>
+                <span className="font-medium">Tổng tiền hàng</span>
+                <span className="font-medium">
+                  {cartPayment?.totalOriginalPrice?.toLocaleString("vi-VN")}₫
+                </span>
               </div>
               <div className="flex justify-between text-green-500">
-                <span>Giảm giá trực tiếp</span>
-                <span>-41.220đ</span>
+                <span className="font-medium">Giảm giá trực tiếp</span>
+                <span className="font-medium">
+                  - {cartPayment?.totalDiscountPrice?.toLocaleString("vi-VN")}₫
+                </span>
               </div>
-              <hr className="my-2" />
+              <hr className="my-2 text-gray-500" />
               <div className="flex justify-between font-bold text-red-500 text-lg">
                 <span>Tổng tiền thanh toán</span>
-                <span>200.780đ</span>
+                <span className="font-medium">
+                  {cartPayment?.totalFinalPrice?.toLocaleString("vi-VN")}₫
+                </span>
               </div>
             </div>
             <button
               className="mt-4 w-full bg-red-500 hover:cursor-pointer
              text-white py-2 rounded-lg hover:bg-red-600 duration-300"
               onClick={() => {
-                const fetch = async () => {
-                  await createPayment(selectedPayment, 200780, context?.userId);
-                };
-                fetch();
+                fetchOrdering();
               }}
             >
               Đặt hàng

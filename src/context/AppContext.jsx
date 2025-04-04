@@ -62,7 +62,17 @@ const AppProvider = ({ children }) => {
   const [headerQuantity, setHeaderQuantity] = useState(0); // Thêm state headerQuantity
   //   const [avatar, setAvatar] = useState(null); // Thêm state avatar
 
-  const [idAddress, setIdAddress] = useState(null); // Thêm state idAddress
+  const [loadingUser, setLoadingUser] = useState(true); // Add loading state
+
+  const [idAddress, setIdAddress] = useState(() => {
+    return sessionStorage.getItem("idAddress") || null;
+  });
+
+  useEffect(() => {
+    if (idAddress !== null) {
+      sessionStorage.setItem("idAddress", idAddress);
+    }
+  }, [idAddress]);
 
   // Hàm đăng nhập
   const login = (userData) => setUser(userData);
@@ -70,21 +80,29 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       const storedUser = localStorage.getItem("user");
-      if (!storedUser) return; // Nếu không có user trong localStorage, không làm gì cả
+      if (!storedUser) {
+        setLoadingUser(false); // No user, stop loading
+        return;
+      }
 
       try {
         const parsedUser = JSON.parse(storedUser);
-        // console.log("🚀 storedUser ID:", parsedUser.id);
-
         const userData = await getUsersById(parsedUser.id);
         console.log("🚀 User từ API:", userData);
-        setUser(userData); // Cập nhật state quantity với dữ liệu từ API
+        setUser((prevUser) => ({ ...prevUser, ...userData }));
       } catch (error) {
         console.error("Lỗi khi lấy user từ API:", error);
+      } finally {
+        setLoadingUser(false); // Data fetching complete
       }
     };
-    fetchUser(); // Gọi hàm fetchQuantity khi component mount
+
+    fetchUser();
   }, []);
+
+  useEffect(() => {
+    console.log("🚀 User sau khi cập nhật:", user);
+  }, [user]);
 
   useEffect(() => {
     const fetchQuantity = async () => {
@@ -134,6 +152,7 @@ const AppProvider = ({ children }) => {
     setHeaderQuantity,
     idAddress,
     setIdAddress, // Thêm setIdAddress vào value
+    loadingUser, // Thêm loadingUser vào value
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

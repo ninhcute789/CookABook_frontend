@@ -50,4 +50,28 @@ const saveAddressToSession = async (idAddress) => {
   }
 };
 
-export { saveCartToSession, saveAddressToSession };
+const createOrder = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.post(
+      `/orders`,
+      {userId},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    toast.success(res.data.message);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+export { saveCartToSession, saveAddressToSession, createOrder };
