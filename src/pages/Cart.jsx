@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 // import b1 from "../assets/books/b1.webp";
 // import b2 from "../assets/books/b2.webp";
@@ -10,14 +10,19 @@ import {
   deleteCartItemById,
   getCartById,
   handleDeleteCart,
+  handleDeleteCartItem,
   increaseCartItem,
   updateCartItemSelectedById,
 } from "../services/CartServices";
 import { getDefautAddressByUserId } from "../services/AddressServices";
+import { AppContext } from "../context/AppContext.jsx";
+import { getOrderSession, saveCartToSession } from "../services/OrderServices.jsx";
 
 const Cart = () => {
+  const context = useContext(AppContext);
+
   const [cartItems, setCartItems] = useState([]);
-  const [totalQuantity, setTotalQuantity] = useState(0);
+  // const [totalQuantity, setTotalQuantity] = useState(context.quantity);
   const [totalOriginalPrice, setTotalOriginalPrice] = useState(0);
   const [totalDiscountPrice, setTotalDiscountPrice] = useState(0);
   const [totalFinalPrice, setTotalFinalPrice] = useState(0);
@@ -47,26 +52,28 @@ const Cart = () => {
       const res = await getCartById(user.cartId);
       console.log("✅ API trả về 49:", res);
       setCartItems(res.cartItems);
-      setTotalQuantity(res.totalQuantity);
+      context.setQuantity(res.totalQuantity);
       setTotalOriginalPrice(res.totalOriginalPrice);
       setTotalDiscountPrice(res.totalDiscountPrice);
       setTotalFinalPrice(res.totalFinalPrice);
-
-      // Khởi tạo checkedItems từ API
-      // const initialCheckedItems = res.cartItems.reduce((acc, item) => {
-      //   acc[item.id] = item.isSelected || false; // Giả sử API có `isSelected`
-      //   return acc;
-      // }, {});
-      // setCheckedItems(initialCheckedItems);
     };
     fetchCart();
-  }, [user.cartId]);
+  }, []); // Thêm user.cartId vào dependency array
+
+  const fetchCartWithHeader = async () => {
+    const res = await getCartById(user.cartId);
+    setCartItems(res.cartItems);
+    context.setHeaderQuantity(res.totalQuantity);
+    context.setQuantity(res.totalQuantity);
+    setTotalOriginalPrice(res.totalOriginalPrice);
+    setTotalDiscountPrice(res.totalDiscountPrice);
+    setTotalFinalPrice(res.totalFinalPrice);
+  };
 
   const fetchCart = async () => {
     const res = await getCartById(user.cartId);
-    console.log("✅ API trả về 49:", res);
     setCartItems(res.cartItems);
-    setTotalQuantity(res.totalQuantity);
+    context.setQuantity(res.totalQuantity);
     setTotalOriginalPrice(res.totalOriginalPrice);
     setTotalDiscountPrice(res.totalDiscountPrice);
     setTotalFinalPrice(res.totalFinalPrice);
@@ -100,7 +107,9 @@ const Cart = () => {
       )
     );
   };
-
+  {
+    // console.log("context", context.theme);
+  }
   return (
     <>
       <div className="bg-gray-100 ">
@@ -108,9 +117,33 @@ const Cart = () => {
           <h2 className="text-2xl font-medium mb-4 text-black">GIỎ HÀNG</h2>
           <div className="PAYMENT flex gap-4">
             <div className="LEFT w-20/27">
-              <div className="bg-white rounded-md px-6 mb-3 text-xl shadow-lg py-2">
-                Tất cả sản phẩm
+              <div
+                className="bg-white flex justify-between items-center
+              rounded-md px-9 mb-3 text-xl shadow-lg py-2"
+              >
+                <div className="lg:w-13/20 w-1/3 mr-4">Tất cả sản phẩm</div>
+                {cartItems.length > 0 && (
+                  <>
+                    <div className="text-gray-500 w-3/20 text-[16px] text-center">
+                      Số lượng
+                    </div>
+                    <div className="text-gray-500 w-3/20 text-[16px] text-center">
+                      Thành tiền
+                    </div>
+                    <button
+                      className=" text-gray-500
+                        hover:text-gray-700 w-1/20 flex
+                        duration-300 justify-center hover:cursor-pointer"
+                      onClick={() =>
+                        handleDeleteCart(user, fetchCartWithHeader)
+                      }
+                    >
+                      <FaTrash />
+                    </button>
+                  </>
+                )}
               </div>
+
               <div className="w-full">
                 {cartItems.length === 0 && (
                   <div
@@ -120,12 +153,16 @@ const Cart = () => {
                     Chưa có sản phẩm nào trong giỏ hàng
                   </div>
                 )}
+
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-100 rounded-md px-6 mb-4 shadow-lg py-4 flex-col justify-between items-center"
+                    className="bg-white rounded-md px-6 mb-4 shadow-lg py-4 flex-col justify-between items-center"
                   >
-                    <div className=" flex items-center font-medium text-lg mb-4 border-b-2 border-green-300 w-fit">
+                    <div
+                      className=" flex items-center text-gray-700
+                    font-medium text-lg mb-4 border-b-[1.5px] border-red-600 w-fit"
+                    >
                       <FcHome className=" mr-2" />
                       Nhà sách Cook A Book
                     </div>
@@ -142,7 +179,7 @@ const Cart = () => {
                           <img
                             src={item.book?.imageURL}
                             alt={item.book?.title}
-                            className="w-20 h-20 rounded-lg"
+                            className="w-20 h-20 rounded-lg mx-4"
                           />
                           <div>
                             <p className="font-medium">{item.store}</p>
@@ -178,19 +215,12 @@ const Cart = () => {
                           onClick={() => {
                             const fetch = async () => {
                               if (item.quantity === 1) {
-                                const confirmDelete = window.confirm(
-                                  "Bạn có muốn xóa sách này khỏi giỏ hàng không?"
+                                handleDeleteCartItem(
+                                  item.id,
+                                  fetchCartWithHeader,
+                                  setCartItems,
+                                  context
                                 );
-                                if (!confirmDelete) return; // Nếu hủy thì dừng lại ngay lập tức
-
-                                // Nếu đồng ý xóa thì gọi API xóa
-                                await deleteCartItemById(item.id);
-                                setCartItems((prev) =>
-                                  prev.filter(
-                                    (prevItem) => prevItem.id !== item.id
-                                  )
-                                );
-                                setTotalQuantity((prev) => prev - 1);
                               } else {
                                 // Nếu quantity > 1 thì mới giảm số lượng
                                 await decreaseCartItem(item.id);
@@ -230,25 +260,14 @@ const Cart = () => {
                         đ
                       </p>
                       <button
-                        onClick={() => {
-                          const fetch = async () => {
-                            if (
-                              window.confirm(
-                                "Bạn có muốn xóa sách này khỏi giỏ hàng không?"
-                              )
-                            ) {
-                              await deleteCartItemById(item.id);
-                              setCartItems((prev) =>
-                                prev.filter(
-                                  (prevItem) => prevItem.id !== item.id
-                                )
-                              );
-                              setTotalQuantity((prev) => prev - 1);
-                              await fetchCart();
-                            }
-                          };
-                          fetch();
-                        }}
+                        onClick={() =>
+                          handleDeleteCartItem(
+                            item.id,
+                            fetchCartWithHeader,
+                            setCartItems,
+                            context
+                          )
+                        }
                         className="TRASH text-red-500 
                         hover:text-red-700 w-1/20 flex 
                         duration-300 justify-center hover:cursor-pointer"
@@ -258,18 +277,9 @@ const Cart = () => {
                     </div>
                   </div>
                 ))}
-                {cartItems.length > 0 && (
-                  <button
-                    className=" py-1 px-2 shadow-md hover:bg-gray-300 duration-300
-                   shadow-neutral-400 rounded hover:cursor-pointer mb-5"
-                    onClick={() => handleDeleteCart(user, fetchCart)}
-                  >
-                    Xóa hết
-                  </button>
-                )}
               </div>
             </div>
-            <div className="RIGHT w-7/27">
+            <div className="RIGHT w-7/27 sticky top-10 h-fit mb-2">
               <div className="GiaoHang bg-white rounded-md shadow-lg h-fit mb-2">
                 <div className="flex justify-between items-center">
                   <div className="text-lg pt-2 ml-5 text-gray-500">
@@ -287,7 +297,7 @@ const Cart = () => {
                   <div className="ml-5 font-medium border-r-1 pr-2 w-fit">
                     {address?.name}
                   </div>
-                  <div className="pl-2">{address?.phonNumber}</div>
+                  <div className="pl-2">{address?.phoneNumber}</div>
                 </div>
                 <div className="flex w-full text-sm pb-3 mt-2">
                   <div className="ml-5 px-1 bg-gray-200 text-green-500 rounded-md w-fit h-fit mr-1">
@@ -331,14 +341,24 @@ const Cart = () => {
                     text-white py-2 mt-4 rounded-lg text-lg 
                     font-semibold duration-300 hoh hover:bg-red-600"
                       onClick={() => {
-                        if (totalQuantity === 0) {
+                        if (context.quantity === 0) {
                           toast.error("Vui lòng chọn sản phẩm để mua!");
                         } else {
-                          navigate(`/thanh-toan/${address.id}`);
+                          const fetch = async () => {
+                            await saveCartToSession(user.cartId);
+                            navigate(`/dia-chi`);
+                            await getOrderSession();
+                          };
+                          fetch();
+                          
+
+                          // navigate(`/thanh-toan/${address.id}`);
                         }
                       }}
                     >
-                      Mua Hàng ({totalQuantity})
+                      {context.quantity === 0
+                        ? "Bạn chưa chọn sản phẩm nào"
+                        : `Mua Hàng (${context.quantity})`}
                       {/* {console.log("totalQuantity", totalQuantity)}/ */}
                     </button>
                   </div>

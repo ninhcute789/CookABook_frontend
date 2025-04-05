@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
-import App from "./App.jsx";
+import { App } from "./App.jsx";
 import "./index.css";
 import Home from "./pages/Home.jsx";
 import Admin from "./pages/Admin.jsx";
@@ -10,11 +10,11 @@ import Login from "./pages/Login.jsx";
 import AdminBooks from "./pages/AdminBooks.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
-import AdminNews from "./pages/AminNews.jsx";
+import AdminNews from "./pages/AdminNews.jsx";
 import News from "./pages/News.jsx";
 import Books from "./pages/Books.jsx";
 import Contact from "./pages/Contact.jsx";
-import UserProfile from "./pages/UserProfile.jsx";
+import { UserProfile } from "./pages/UserProfile.jsx";
 import BookDetail from "./pages/BookDetail.jsx";
 import AdminAuthors from "./pages/AdminAuthors.jsx";
 import AdminCategories from "./pages/AdminCategories.jsx";
@@ -23,6 +23,11 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Cart from "./pages/Cart.jsx";
 import Address from "./pages/Address.jsx";
 import Payment from "./pages/Payment.jsx";
+import UserInfo from "./components/user/UserInfo.jsx";
+import UserOrder from "./components/user/UserOrder.jsx";
+import UserAddress from "./components/user/UserAddress.jsx";
+import UserArticles from "./components/user/UserArticles.jsx";
+import UserSupport from "./components/user/UserSupport.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -39,10 +44,16 @@ ReactDOM.createRoot(root).render(
         <Route path="về-chúng-tôi" element={<About />} />
         <Route path="lien-he" element={<Contact />} />
         <Route path="tin-tức" element={<News />} />
-        <Route path="user-profile" element={<UserProfile />} />
         <Route path="gio-hang" element={<Cart />} />
         <Route path="dia-chi" element={<Address />} />
-        <Route path="thanh-toan/:id" element={<Payment />} />
+        <Route path="thanh-toan" element={<Payment />} />
+        <Route path="thong-tin-tai-khoan" element={<UserProfile />}>
+          <Route index element={<UserInfo />} />
+          <Route path="dia-chi" element={<UserAddress />} />
+          <Route path="don-hang" element={<UserOrder />} />
+          <Route path="tin-tuc-cua-toi" element={<UserArticles />} />
+          <Route path="ho-tro" element={<UserSupport />} />
+        </Route>
 
         {/* <Route path='admin' element={<Admin />} />
         <Route path='admin-books' element={<AdminBooks />} />

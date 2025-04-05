@@ -1,40 +1,24 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi"; // Icon Menu & Close
-import { getUserAvatarById, getUsersById } from "../../services/UserSevices";
+import { getUsersById } from "../../services/UserSevices";
 import axiosInstance from "../../services/axiosInstance";
 import toast from "react-hot-toast";
 import ava from "../../assets/ava.png";
-import { getQuantityOfCartItems } from "../../services/CartServices";
+import { AppContext } from "../../context/AppContext";
 
 const Header = () => {
+  const context = useContext(AppContext);
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
   const [isHovered, setIsHovered] = useState(false);
-  const [quantity, setQuantity] = useState(0);
+
+  // console.log("19", context.quantity);
 
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetchQuantity = async () => {
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) return; // Nếu không có user trong localStorage, không làm gì cả
-
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        // console.log("🚀 storedUser ID:", parsedUser.id);
-
-        const userData = await getQuantityOfCartItems(parsedUser.cartId);
-        // console.log("🚀 User từ API:", userData);
-        setQuantity(userData); // Cập nhật state với dữ liệu từ API
-      } catch (error) {
-        console.error("Lỗi khi lấy user từ API:", error);
-      }
-    };
-
-    fetchQuantity();
-  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,6 +33,7 @@ const Header = () => {
         // console.log("🚀 User từ API:", userData);
 
         setUser(userData); // Cập nhật state với dữ liệu từ API
+        console.log("36666666666666", userData);
       } catch (error) {
         console.error("Lỗi khi lấy user từ API:", error);
       }
@@ -64,26 +49,26 @@ const Header = () => {
     setLoggedInUser(localStorage.getItem("username"));
   }, []);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (!user?.id) return;
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       if (!user?.id) return;
 
-        const res = await getUserAvatarById(user.id);
-        // console.log("🚀 ~ file: Header.jsx ~ line 51 ~ fetchUser ~ res", res);
-        setUser((prev) => {
-          // Chỉ cập nhật nếu avatar thay đổi để tránh render không cần thiết
-          if (prev && prev.avatar !== res) {
-            return { ...prev, avatar: res };
-          }
-          return prev;
-        });
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu user:", error);
-      }
-    };
-    fetchUser();
-  }, [user]);
+  //       const res = await getUserAvatarById(user.id);
+  //       // console.log("🚀 ~ file: Header.jsx ~ line 51 ~ fetchUser ~ res", res);
+  //       setUser((prev) => {
+  //         // Chỉ cập nhật nếu avatar thay đổi để tránh render không cần thiết
+  //         if (prev && prev.avatar !== res) {
+  //           return { ...prev, avatar: res };
+  //         }
+  //         return prev;
+  //       });
+  //     } catch (error) {
+  //       console.error("Lỗi khi lấy dữ liệu user:", error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -103,9 +88,11 @@ const Header = () => {
       //   token
       // );
       // Xóa token & username sau khi logout thành công
-      // localStorage.removeItem("token");
+      localStorage.removeItem("token");
       localStorage.removeItem("username");
       localStorage.removeItem("user");
+      context.setUser({}); // Reset user in context
+      context.setHeaderQuantity(0);
       setUser(""); // Reset lại state
       toast.success(response.data.message);
       navigate("/dang-nhap"); // Chuyển về trang đăng nhập
@@ -249,7 +236,7 @@ const Header = () => {
           {loggedInUser ? (
             <div className="flex items-center">
               <img
-                src={user?.avatar || ava}
+                src={context?.user.avatar || ava}
                 alt="Avatar"
                 className="w-10 h-10 mr-6 rounded-full object-cover border-2 border-gray-200"
               />
@@ -263,7 +250,7 @@ const Header = () => {
                   className=" hover:scale-120 duration-300 hover:cursor-pointer py-2"
                   // onClick={() => navigate("/user-profile")}
                 >
-                  Chào, {loggedInUser}!
+                  Chào, {context?.user?.username}!
                 </button>
                 {isHovered && (
                   <div
@@ -274,15 +261,22 @@ const Header = () => {
                       <div
                         className="hover:bg-gray-100 p-2 cursor-pointer 
                       duration-150 rounded"
-                        onClick={() => navigate("/user-profile")}
+                        onClick={() => {
+                          context?.setActiveItem("Thông tin tài khoản");
+                          navigate("/thong-tin-tai-khoan");
+                        }}
                       >
                         Thông tin tài khoản
                       </div>
                       <div
                         className="hover:bg-gray-100 p-2 cursor-pointer 
                       duration-150 rounded"
+                        onClick={() => {
+                          context?.setActiveItem("Quản lý đơn hàng");
+                          navigate("/thong-tin-tai-khoan/don-hang");
+                        }}
                       >
-                        Đơn hàng của tôi
+                        Quản lý đơn hàng
                       </div>
                       <div
                         className="hover:bg-gray-100 p-2 cursor-pointer 
@@ -307,21 +301,22 @@ const Header = () => {
               Đăng nhập
             </Link>
           )}
-          <Link to="/gio-hang" className="ml-6 text-gray-700 ">
-            <div className="hover:bg-gray-200 p-2 rounded duration-300 relative">
-              {quantity > 0 && (
-                <div
-                  className="text-white absolute -top-1 -right-1
+          {user && (
+            <Link to="/gio-hang" className="ml-6 text-gray-700 ">
+              <div className="hover:bg-gray-200 p-2 rounded duration-300 relative">
+                {context.headerQuantity > 0 && (
+                  <div
+                    className="text-white absolute -top-1 -right-1
                bg-[#f93333] rounded-full w-5 h-5 font-medium
                 justify-center flex items-center text-xs"
-                >
-                  {quantity}
-                  {/* {console.log("✅ Số lượng sách trong giỏ hàng:", quantity)} */}
-                </div>
-              )}
-              <BsCart3 className="size-6" />
-            </div>
-          </Link>
+                  >
+                    {context.headerQuantity}
+                  </div>
+                )}
+                <BsCart3 className="size-6" />
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </header>

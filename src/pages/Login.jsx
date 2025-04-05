@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use, useContext } from "react";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 // import axios from "axios";
 import bg from "../assets/bg-10.jpg";
 import toast from "react-hot-toast";
 import axiosInstance from "../services/axiosInstance";
+import Cookies from "js-cookie";
+import { AppContext } from "../context/AppContext";
+import { getQuantityOfCartItems } from "../services/CartServices";
 
 const Login = () => {
+  const context = useContext(AppContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -77,10 +82,31 @@ const Login = () => {
         localStorage.setItem("token", response.data.data.accessToken);
         localStorage.setItem("user", JSON.stringify(response.data.data.user)); // Lưu toàn bộ user vào localStorage
         localStorage.setItem("username", response.data.data.user.username);
+
+        // document.cookie = `accessToken=${response.data.data.accessToken}`;
+        // const refreshToken = Cookies.get('refresh_token');
+
+        // If you have a refresh token
+        // if (response.data.data.refreshToken) {
+        //   document.cookie = `refresh-token=${response.data.data.refreshToken}`;
+        // }
+
+        context.setUser(response.data.data.user);
+
+        try {
+          const userData = JSON.parse(localStorage.getItem("user"));
+          const cartQuantity = await getQuantityOfCartItems(userData.cartId);
+          // console.log("Số lượng giỏ hàng:", userData.id);
+          context.setHeaderQuantity(cartQuantity);
+        } catch (error) {
+          console.error("Error fetching cart quantity:", error);
+          context.setHeaderQuantity(0);
+        }
+
         setLoggedInUser(username);
         // console.log(response.data.data.user);
         toast.success(response.data.message);
-        refreshToken();
+        // refreshToken();
         navigate("/");
         // window.location.reload();
       } else {
@@ -95,19 +121,19 @@ const Login = () => {
     }
   };
 
-  const refreshToken = () => {
-    axiosInstance
-      .get("/auth/refresh", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        if (response.data.status === 200 && response.data.data?.accessToken) {
-          document.cookie = `refreshToken=${response.data.data.accessToken}; path=/; Secure; HttpOnly`;
-          console.log("Refresh token đã lưu vào cookie!");
-        }
-      })
-      .catch((error) => console.error("Lỗi khi lấy refresh token:", error));
-  };
+  // const refreshToken = () => {
+  //   axiosInstance
+  //     .get("/auth/refresh", {
+  //       withCredentials: true,
+  //     })
+  //     .then((response) => {
+  //       if (response.data.status === 200 && response.data.data?.accessToken) {
+  //         document.cookie = `refreshToken=${response.data.data.accessToken}; path=/; Secure; HttpOnly`;
+  //         console.log("Refresh token đã lưu vào cookie!");
+  //       }
+  //     })
+  //     .catch((error) => console.error("Lỗi khi lấy refresh token:", error));
+  // };
 
   return (
     <div

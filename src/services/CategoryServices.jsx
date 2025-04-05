@@ -60,19 +60,20 @@ const getAllCategoriesWithSizeAndPage = async (
   setTotalElements
 ) => {
   try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("❌ Không tìm thấy token!");
-      return;
-    }
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   console.error("❌ Không tìm thấy token!");
+    //   return;
+    // }
 
     const res = await axiosInstance.get(
       `/categories/all?page=${page}&size=${size}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      // {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // }
     );
-
+    
+    console.log("✅ API trả về - CATEGORY:", res.data);
     // console.log("✅ API trả về:", res.data);
     setCategories(res.data?.data?.data || []);
     // console.log("Danh sách bài viết:", res.data?.data?.data);

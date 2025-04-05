@@ -1,11 +1,8 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 // import { books } from "../data/dataBooks";
-import { useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { FaCheckCircle, FaRegStar, FaStar } from "react-icons/fa";
-import {
-  getAllBooksWithSizeAndPage,
-  getBooksById,
-} from "../services/BookServices";
+import { getAllBooksPreview, getBooksById } from "../services/BookServices";
 import logo from "../assets/fav-icon/android-chrome-512x512.png";
 import { BsInfoCircle } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
@@ -13,9 +10,17 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { truncateDate } from "../services/CommonServices";
 import { TiTickOutline } from "react-icons/ti";
 import toast from "react-hot-toast";
-import { addBookToCart, getCartById } from "../services/CartServices";
+import {
+  addBookToCart,
+  getQuantityOfCartItems,
+} from "../services/CartServices";
+import { getDefautAddressByUserId } from "../services/AddressServices";
+import { AppContext } from "../context/AppContext";
+
 const BookDetail = () => {
   const { id } = useParams(); // Lấy id từ URL
+  const context = useContext(AppContext);
+
   const [book, setBook] = useState([]);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -27,10 +32,20 @@ const BookDetail = () => {
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const size = 8; // Số bài viết mỗi trang
   const [totalElements, setTotalElements] = useState(0); // Tổng số bài viết
-  const [cartItems, setCartItems] = useState(0);
+  const [defaultAddress, setDefaultAddress] = useState(null);
 
   const handleIncrease = () => setQuantity((prev) => prev + 1);
   const handleDecrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+
+  // Cập nhật số lượng giỏ hàng từ user
+  const fetchQuantity = async () => {
+    try {
+      const res = await getQuantityOfCartItems(user.cartId);
+      context.setHeaderQuantity(res);
+    } catch (error) {
+      console.error("Lỗi khi lấy địa chỉ mặc định:", error);
+    }
+  };
 
   useEffect(() => {
     getBooksById(id).then((data) => {
@@ -47,26 +62,27 @@ const BookDetail = () => {
       behavior: "smooth",
     });
   }, []);
-  const fetchData = async () => {
-    try {
-      const res = await getCartById(user.cartId);
-      console.log("danh sách sách", res);
-      ``;
-      setCartItems(res.cartItems);
 
-      console.log("số lượng sách trong giỏ hàng", res.cartItems);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu sách:", error);
-    }
-  };
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return;
+      try {
+        const res = await getDefautAddressByUserId(user.id);
+        if (res) {
+          setDefaultAddress(res);
+          // console.log("Địa chỉ mặc định:", res);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy địa chỉ mặc định:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getAllBooksWithSizeAndPage(
+        const res = await getAllBooksPreview(
           page,
           size,
           setBooks,
@@ -76,6 +92,7 @@ const BookDetail = () => {
           ""
         );
         // console.log("danh sách sách", res);
+        return res;
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu sách:", error);
       }
@@ -126,7 +143,7 @@ const BookDetail = () => {
             {/* Giá tiền */}
             <div className="bg-white shadow-md space-y-4 p-4 rounded-lg h-fit mb-5">
               <div className="text-gray-600 flex">
-                {!book.official ? (
+                {book.official ? (
                   <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold flex items-center mr-2">
                     <TiTickOutline className="mr-1 bg-white rounded-full text-blue-600" />
                     <div>CHÍNH HÃNG </div>
@@ -259,12 +276,17 @@ const BookDetail = () => {
               </h2>
 
               {/* Địa chỉ */}
-              <div className="flex justify-between items-center text-gray-700 text-sm">
-                <span>Giao đến Q. Hoàn Kiếm, P. Hàng Trống, Hà Nội</span>
-                <a href="#" className="text-blue-500 text-sm">
-                  Đổi
-                </a>
-              </div>
+              {defaultAddress && (
+                <div className="flex justify-between items-center text-gray-700 text-sm">
+                  <span>
+                    Giao đến {defaultAddress?.ward}, {defaultAddress?.district},{" "}
+                    {defaultAddress?.city}{" "}
+                  </span>
+                  <Link to="/dia-chi" className="text-blue-500 text-sm">
+                    Đổi
+                  </Link>
+                </div>
+              )}
 
               <hr className="my-2" />
 
@@ -311,6 +333,7 @@ const BookDetail = () => {
                   rounded-lg hover:shadow-md transition"
                       onClick={() => {
                         navigate(`/sách/${product.id}`);
+                        setQuantity(1);
                         window.scrollTo({
                           top: 0,
                           behavior: "smooth",
@@ -348,13 +371,6 @@ const BookDetail = () => {
             {/* Sản phẩm tương tự */}
             <div className="bg-white p-4 rounded-lg shadow-lg relative ">
               <h2 className="text-xl font-semibold mb-2">Thông tin chi tiết</h2>
-              {/* <div>
-                <div className="grid grid-cols-2 items-center">
-                  <div className="text-gray-500 py-1.5">Phiên bản sách </div>
-                  <div>def </div>
-                </div>
-                <hr className="text-gray-300" />
-              </div> */}
               <div>
                 <div className="grid grid-cols-2 items-center">
                   <div className="text-gray-500 py-1.5">Công ty phát hành </div>
@@ -509,11 +525,15 @@ const BookDetail = () => {
               toast.error("Bạn chưa đăng nhập!");
               navigate("/dang-nhap");
             } else {
-              addBookToCart(book.id, user.cartId, quantity);
-              // fetchData();
-              setTimeout(() => {
-                navigate("/gio-hang");
-              }, 100);
+              const fetch = async () => {
+                try {
+                  await addBookToCart(book.id, user.cartId, quantity);
+                  await fetchQuantity();
+                } catch (error) {
+                  console.error("Lỗi khi lấy địa chỉ mặc định:", error);
+                }
+              };
+              fetch();
             }
           }}
         >

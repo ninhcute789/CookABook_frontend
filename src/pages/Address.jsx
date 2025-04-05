@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   createNewAddress,
@@ -7,8 +7,12 @@ import {
   getDefautAddressByUserId,
   updateAddress,
 } from "../services/AddressServices";
+import { AppContext } from "../context/AppContext";
+import { getOrderSession, saveAddressToSession } from "../services/OrderServices";
 
 const Address = () => {
+  const context = useContext(AppContext);
+
   const [showForm, setShowForm] = useState(false);
   const [animateForm, setAnimateForm] = useState(false);
   const [newForm, setNewForm] = useState(false);
@@ -46,10 +50,11 @@ const Address = () => {
 
   const handleCancel = () => {
     setAnimateForm(false);
-    setTimeout(() => setShowForm(false), 1000); // Delay để hiệu ứng chạy mượt hơn
+    setTimeout(() => setShowForm(false), 500); // Delay để hiệu ứng chạy mượt hơn
   };
 
   const handleUpdateSuccess = (updatedId, updatedData) => {
+    console.log("Địa chỉ đã cập nhật:", updatedId, updatedData);
     setAddresses((prevAddresses) =>
       prevAddresses.map((addr) =>
         addr.id === updatedId
@@ -59,6 +64,8 @@ const Address = () => {
           : addr
       )
     );
+    setIdDefault(updatedId); // Cập nhật id mặc định
+    // setId(null); // Reset id sau khi cập nhật
 
     handleCancel();
     scrollTo({ top: 0, behavior: "smooth" });
@@ -77,7 +84,7 @@ const Address = () => {
   };
 
   return (
-    <div className="p-4 rounded-lg w-7/12 mx-auto my-5">
+    <div className="p-4 rounded-lg w-18/24 mx-auto my-5">
       <h2 className="text-2xl font-semibold">Địa chỉ giao hàng</h2>
       <div className="my-3">Chọn địa chỉ giao hàng có sẵn bên dưới:</div>
       <div className="grid grid-cols-2">
@@ -88,7 +95,7 @@ const Address = () => {
         {addresses?.map((ad, index) => (
           <div
             key={index}
-            className={`p-4 mt-2 mr-2 ${
+            className={`p-4 mt-2 mr-7 ${
               ad.defaultAddress ? "border-dashed border-green-500" : ""
             }
               rounded-lg bg-white shadow-md border border-gray-200 flex flex-col gap-1`}
@@ -100,8 +107,9 @@ const Address = () => {
               ) : null}
             </div>
             <p className="text-gray-600">
-              <span className="font-medium">Địa chỉ:</span> {ad?.address},{" "}
-              {ad.ward}, {ad.district}, {ad.city}
+              <span className="font-medium line-clamp-1">
+                Địa chỉ: {ad?.address}, {ad.ward}, {ad.district}, {ad.city}
+              </span>
             </p>
             <p className="text-gray-600">
               <span className="font-medium">Điện thoại:</span> {ad.phoneNumber}
@@ -111,9 +119,13 @@ const Address = () => {
                 className="bg-gray-600 hover:bg-gray-500 hover:cursor-pointer
                  duration-300 text-white px-3 py-1 rounded-sm shadow-sm mr-auto"
                 onClick={() => {
-                  // Xử lý chọn địa chỉ giao hàng
-                  // console.log("Chọn địa chỉ:", ad.id);
-                  navigate("/thanh-toan/" + ad.id);
+                  const fetch = async () => {
+                    context?.setIdAddress(ad.id);
+                    await saveAddressToSession(ad.id);
+                    await getOrderSession();
+                    navigate("/thanh-toan/");
+                  };
+                  fetch();
                 }}
               >
                 Giao đến đây
@@ -129,11 +141,11 @@ const Address = () => {
                   setNewForm(false);
                   setId(ad.id);
                   if (addresses.length >= 5) {
-                    scrollTo({ top: 378, behavior: "smooth" });
+                    scrollTo({ top: 458, behavior: "smooth" });
                   } else if (addresses.length >= 3) {
-                    scrollTo({ top: 180, behavior: "smooth" });
+                    scrollTo({ top: 280, behavior: "smooth" });
                   } else {
-                    scrollTo({ top: 0, behavior: "smooth" });
+                    scrollTo({ top: 100, behavior: "smooth" });
                   }
                 }}
               >
@@ -166,11 +178,11 @@ const Address = () => {
               setAnimateForm(true);
               setNewForm(true);
               if (addresses.length >= 5) {
-                scrollTo({ top: 378, behavior: "smooth" });
+                scrollTo({ top: 458, behavior: "smooth" });
               } else if (addresses.length >= 3) {
-                scrollTo({ top: 180, behavior: "smooth" });
+                scrollTo({ top: 280, behavior: "smooth" });
               } else {
-                scrollTo({ top: 0, behavior: "smooth" });
+                scrollTo({ top: 100, behavior: "smooth" });
               }
               // scrollTo({ top: 378, behavior: "smooth" });
             }}
@@ -262,7 +274,7 @@ const Address = () => {
               />
               <label className="w-full ml-3">Đặt làm địa chỉ mặc định</label>
             </div>
-            {console.log("302", id)}
+            {/* {console.log("302", id)} */}
 
             <div className="flex mt-4 w-15/24 mx-auto">
               <button
@@ -316,16 +328,19 @@ const Address = () => {
                   type="submit"
                   onClick={(e) => {
                     e.preventDefault();
-                    updateAddress(
-                      id,
-                      name,
-                      phoneNumber,
-                      city,
-                      district,
-                      ward,
-                      address,
-                      defaultAddress
-                    );
+                    const update = async () => {
+                      await updateAddress(
+                        id,
+                        name,
+                        phoneNumber,
+                        city,
+                        district,
+                        ward,
+                        address,
+                        defaultAddress
+                      );
+                    };
+                    update();
                     handleUpdateSuccess(id, {
                       name,
                       phoneNumber,

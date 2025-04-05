@@ -126,7 +126,7 @@ const updateCartItemSelectedById = async (id) => {
   }
 };
 
-const getQuantityOfCartItems = async (id) => {
+const getQuantityOfCartItems = async (cartId) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -134,7 +134,7 @@ const getQuantityOfCartItems = async (id) => {
       return;
     }
 
-    const res = await axiosInstance.get(`/carts/${id}/quantity`, {
+    const res = await axiosInstance.get(`/carts/${cartId}/quantity`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log("✅ API trả về:", res.data);
@@ -200,33 +200,93 @@ const handleDeleteCart = async (user, fetchCart) => {
     (t) => (
       <div className="flex flex-col">
         <span>Bạn có muốn xóa hết giỏ hàng không?</span>
-        <div className="mt-2 flex justify-end space-x-2 mr-auto">
+        <div className="mt-2 flex justify-center space-x-2">
           <button
             onClick={async () => {
               toast.dismiss(t.id); // Đóng toast hiện tại
               try {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                  console.error("❌ Không tìm thấy token!");
-                  toast.error("Bạn chưa đăng nhập!");
-                  return;
-                }
+                // const token = localStorage.getItem("token");
+                // if (!token) {
+                //   console.error("❌ Không tìm thấy token!");
+                //   toast.error("Bạn chưa đăng nhập!");
+                //   return;
+                // }
 
                 await deleteAllCartItems(user.cartId);
                 await fetchCart();
                 // toast.success("🗑 Đã xóa hết giỏ hàng!");
               } catch (error) {
-                console.error("❌ Lỗi khi xóa bài viết:", error);
-                toast.error("Không thể xóa bài viết!");
+                console.error("❌ Lỗi khi xóa giỏ:", error);
+                toast.error("Không thể xóa giỏ hàng!");
               }
             }}
-            className="px-4 py-2 bg-red-500 text-white rounded"
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 duration-300
+             text-white rounded hover:cursor-pointer"
           >
             Xóa
           </button>
           <button
             onClick={() => toast.dismiss(t.id)}
-            className="px-4 py-2 bg-gray-500 text-white rounded"
+            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 duration-300
+             text-white rounded hover:cursor-pointer"
+          >
+            Hủy
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      position: "top-center", // Hiển thị ở giữa màn hình
+      duration: 5000, // 5 giây
+      closeOnClick: false, // Không đóng khi bấm ngoài
+    }
+  );
+  confirmToast();
+};
+
+const handleDeleteCartItem = async (
+  idItem,
+  fetchCart,
+  setCartItems,
+  context
+) => {
+  const confirmToast = toast(
+    (t) => (
+      <div className="flex flex-col">
+        <span>Bạn có muốn xóa sách này khỏi giỏ hàng không?</span>
+        <div className="mt-2 flex justify-end space-x-2 mr-auto">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id); // Đóng toast hiện tại
+              try {
+                // const token = localStorage.getItem("token");
+                // if (!token) {
+                //   console.error("❌ Không tìm thấy token!");
+                //   toast.error("Bạn chưa đăng nhập!");
+                //   return;
+                // }
+
+                await deleteCartItemById(idItem);
+                setCartItems((prev) =>
+                  prev.filter((prevItem) => prevItem.id !== idItem)
+                );
+                context.setQuantity((prev) => prev - 1);
+                await fetchCart();
+                // toast.success("🗑 Đã xóa hết giỏ hàng!");
+              } catch (error) {
+                console.error("❌ Lỗi khi xóa sách:", error);
+                toast.error("Không thể xóa sách!");
+              }
+            }}
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 duration-300
+             text-white rounded hover:cursor-pointer"
+          >
+            Xóa
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 duration-300
+             text-white rounded hover:cursor-pointer"
           >
             Hủy
           </button>
@@ -236,6 +296,29 @@ const handleDeleteCart = async (user, fetchCart) => {
     { duration: Infinity }
   );
   confirmToast();
+};
+
+const getCartWithSelectedItemsById = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(`/carts/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("✅ API trả về:", res.data);
+
+    // toast.success("🛒 Lấy giỏ hàng thành công!");
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
 };
 
 export {
@@ -248,4 +331,6 @@ export {
   deleteCartItemById,
   deleteAllCartItems,
   handleDeleteCart,
+  handleDeleteCartItem,
+  getCartWithSelectedItemsById,
 };
