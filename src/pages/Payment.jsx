@@ -14,6 +14,7 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import {
   createOrder,
+  getOrderSession,
   saveAddressToSession,
   saveCartToSession,
 } from "../services/OrderServices";
@@ -78,12 +79,12 @@ const Payment = () => {
   }, [context.loadingUser, context?.idAddress, context?.user?.cartId]);
   const fetchOrdering = async () => {
     try {
-      const storedUser = localStorage.getItem("user");
-      const parsedUser = JSON.parse(storedUser);
+      // const storedUser = localStorage.getItem("user");
+      // const parsedUser = JSON.parse(storedUser);
 
-      await saveCartToSession(parsedUser.cartId);
+      // await saveCartToSession(parsedUser.cartId);
 
-      await saveAddressToSession(context?.idAddress);
+      // await saveAddressToSession(context?.idAddress);
 
       // Gọi API createPayment và lấy paymentId từ kết quả trả về
       const paymentId = await createPayment(
@@ -94,6 +95,9 @@ const Payment = () => {
 
       // Gọi API savePaymentTosession với paymentId
       await savePaymentTosession(paymentId.id);
+
+      await getOrderSession();
+      
 
       // Gọi API createOrder
       await createOrder(context?.user.id);

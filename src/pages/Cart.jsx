@@ -16,7 +16,7 @@ import {
 } from "../services/CartServices";
 import { getDefautAddressByUserId } from "../services/AddressServices";
 import { AppContext } from "../context/AppContext.jsx";
-import { saveCartToSession } from "../services/OrderServices.jsx";
+import { getOrderSession, saveCartToSession } from "../services/OrderServices.jsx";
 
 const Cart = () => {
   const context = useContext(AppContext);
@@ -347,6 +347,7 @@ const Cart = () => {
                           const fetch = async () => {
                             await saveCartToSession(user.cartId);
                             navigate(`/dia-chi`);
+                            await getOrderSession();
                           };
                           fetch();
                           

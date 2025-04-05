@@ -8,7 +8,7 @@ import {
   updateAddress,
 } from "../services/AddressServices";
 import { AppContext } from "../context/AppContext";
-import { saveAddressToSession } from "../services/OrderServices";
+import { getOrderSession, saveAddressToSession } from "../services/OrderServices";
 
 const Address = () => {
   const context = useContext(AppContext);
@@ -122,6 +122,7 @@ const Address = () => {
                   const fetch = async () => {
                     context?.setIdAddress(ad.id);
                     await saveAddressToSession(ad.id);
+                    await getOrderSession();
                     navigate("/thanh-toan/");
                   };
                   fetch();

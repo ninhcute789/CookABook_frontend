@@ -8,6 +8,8 @@ import { Toaster } from "react-hot-toast";
 import axiosInstance from "./services/axiosInstance.jsx";
 import { useEffect } from "react";
 import { AppProvider } from "./context/AppContext.jsx";
+// import Cookies from 'js-cookie';
+
 
 const App = () => {
   const location = useLocation();
@@ -16,22 +18,26 @@ const App = () => {
     refreshToken(); // Gọi khi app khởi động
   }, []);
 
-    const refreshToken = () => {
-    const token = localStorage.getItem("token");
-    axiosInstance
-      .get("/auth/refresh", {
-        headers: {
-          Authorization: `Bearer ${token}`, // Gửi token trong header
-        },
-        // withCredentials: true,
-      })
-      .then((response) => {
-        if (response.data.status === 200 && response.data.data?.accessToken) {
-          document.cookie = `refreshToken=${response.data.data.accessToken}; path=/; Secure; HttpOnly`;
-          console.log("Refresh token đã lưu vào cookie!");
-        }
-      })
-      .catch((error) => console.error("Lỗi khi lấy refresh token:", error));
+  const refreshToken = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("❌ Không tìm thấy token!");
+        return;
+      }
+
+      const res = await axiosInstance.get(`/auth/refresh`);
+      // const refreshToken = Cookies.get("refresh_token");
+
+      if (res.data.status === 200 && res.data.data?.accessToken) {
+        // Lưu access token vào localStorage
+        localStorage.setItem("token", res.data.data.accessToken);
+
+        console.log("Refresh token đã lưu vào cookie!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy refresh token:", error);
+    }
   };
 
   return (

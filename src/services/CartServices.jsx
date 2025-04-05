@@ -126,7 +126,7 @@ const updateCartItemSelectedById = async (id) => {
   }
 };
 
-const getQuantityOfCartItems = async (id) => {
+const getQuantityOfCartItems = async (cartId) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -134,7 +134,7 @@ const getQuantityOfCartItems = async (id) => {
       return;
     }
 
-    const res = await axiosInstance.get(`/carts/${id}/quantity`, {
+    const res = await axiosInstance.get(`/carts/${cartId}/quantity`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log("✅ API trả về:", res.data);

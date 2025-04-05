@@ -4,7 +4,7 @@ import axiosInstance from "./axiosInstance";
 const createPayment = async (
   method,
   amount,
-  userId,
+  userId
   // setPaymentId,
 ) => {
   try {
@@ -75,6 +75,7 @@ const savePaymentTosession = async (paymentId) => {
       {},
       {
         headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       }
     );
 

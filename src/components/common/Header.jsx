@@ -33,6 +33,7 @@ const Header = () => {
         // console.log("🚀 User từ API:", userData);
 
         setUser(userData); // Cập nhật state với dữ liệu từ API
+        console.log("36666666666666", userData);
       } catch (error) {
         console.error("Lỗi khi lấy user từ API:", error);
       }
@@ -90,6 +91,8 @@ const Header = () => {
       localStorage.removeItem("token");
       localStorage.removeItem("username");
       localStorage.removeItem("user");
+      context.setUser({}); // Reset user in context
+      context.setHeaderQuantity(0);
       setUser(""); // Reset lại state
       toast.success(response.data.message);
       navigate("/dang-nhap"); // Chuyển về trang đăng nhập

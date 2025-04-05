@@ -187,7 +187,7 @@ const News = () => {
                           {article?.user?.name || "Không rõ tác giả"}
                         </div>
                         <div className="font-medium text-[12px]">
-                          {truncateDate(article.createdAt, 2)}
+                          {article?.updatedAt ? truncateDate(article.updatedAt, 2) : truncateDate(article.createdAt, 2)}
                         </div>
                       </div>
                       <NavLink

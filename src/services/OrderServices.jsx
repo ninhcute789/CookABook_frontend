@@ -14,9 +14,10 @@ const saveCartToSession = async (idCart) => {
       {},
       {
         headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       }
     );
-    console.log("✅ Lưu giỏ hàng vào session thành công:", res.data);
+    console.log("✅ Lưu giỏ hàng vào session thành công:", res.data.message);
     toast.success("Lưu giỏ hàng vào session thành công!");
   } catch (error) {
     console.error(
@@ -39,6 +40,7 @@ const saveAddressToSession = async (idAddress) => {
       {},
       {
         headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       }
     );
     toast.success("Lưu địa chỉ giao hàng vào session thành công!");
@@ -60,7 +62,7 @@ const createOrder = async (userId) => {
 
     const res = await axiosInstance.post(
       `/orders`,
-      {userId},
+      { userId },
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -74,4 +76,29 @@ const createOrder = async (userId) => {
   }
 };
 
-export { saveCartToSession, saveAddressToSession, createOrder };
+const getOrderSession = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(`/orders/session`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    toast.success(res.data.message);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+export {
+  saveCartToSession,
+  saveAddressToSession,
+  createOrder,
+  getOrderSession,
+};
