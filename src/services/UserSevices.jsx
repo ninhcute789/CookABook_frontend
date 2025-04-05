@@ -96,7 +96,7 @@ const handleUpdateUser = async (
   dob,
   email,
   avatar,
-  setUser,
+  setUser
   // setEditingUserId
 ) => {
   try {
@@ -161,10 +161,39 @@ const handleUpdateUser = async (
   }
 };
 
+const getAllOrdersByUserId = async (
+  userId,
+  page,
+  size,
+  change,
+  setTotalPages
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axiosInstance.get(
+      `/users/${userId}/orders?page=${page}&size=${size}&sort=createdAt,${change}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+      { withCredentials: true }
+    );
+    setTotalPages(response.data.data.meta.totalPages);
+    return response.data.data.data;
+    // return response.data;
+  } catch (error) {
+    console.error("❌ Error in getUser:", error);
+    return null;
+  }
+};
+
 export {
   getUsersById,
   fetchUsers,
   // getUserAvatarById,
   getAllArticlesByUserId,
   handleUpdateUser,
+  getAllOrdersByUserId,
 };

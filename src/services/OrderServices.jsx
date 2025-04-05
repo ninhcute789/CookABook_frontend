@@ -96,9 +96,31 @@ const getOrderSession = async () => {
   }
 };
 
+const getOrderById = async (orderId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(`/orders/${orderId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    toast.success(res.data.message);
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
 export {
   saveCartToSession,
   saveAddressToSession,
   createOrder,
   getOrderSession,
+  getOrderById,
 };

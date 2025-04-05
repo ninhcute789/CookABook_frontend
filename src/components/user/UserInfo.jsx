@@ -92,6 +92,10 @@ const UserInfo = () => {
   //   }
   // };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const fetchUser = async () => {
     try {
       const storedUser = localStorage.getItem("user");

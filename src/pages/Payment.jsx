@@ -18,6 +18,7 @@ import {
   saveAddressToSession,
   saveCartToSession,
 } from "../services/OrderServices";
+import toast from "react-hot-toast";
 
 const Payment = () => {
   const context = useContext(AppContext);
@@ -97,7 +98,6 @@ const Payment = () => {
       await savePaymentTosession(paymentId.id);
 
       await getOrderSession();
-      
 
       // Gọi API createOrder
       await createOrder(context?.user.id);
@@ -215,7 +215,7 @@ const Payment = () => {
         </div>
 
         {/* Tổng hợp đơn hàng */}
-        <div className="RIGHT w-7/24 flex flex-col">
+        <div className="RIGHT w-8/24 flex flex-col">
           <div className="GIAOHANG bg-white rounded-md shadow-lg h-fit ">
             <div className="flex justify-between items-center">
               <div className="text-lg pt-2 ml-5 text-gray-500 font-medium">
@@ -257,26 +257,32 @@ const Payment = () => {
             </div>
             <div className=" flex text-sm mt-2">
               <div className="">{cartPayment?.totalQuantity} sản phẩm.</div>
-              <div
-                className={`ml-1 text-blue-500 hover:cursor-pointer duration-300 `}
-                onClick={() => setExpand(!expand)}
-              >
-                {expand ? (
-                  <>
-                    <div>
-                      Thu gọn{" "}
-                      <IoIosArrowDown className="inline duration-500 rotate-180" />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      Xem thêm{" "}
-                      <IoIosArrowDown className="inline duration-500 rotate-0" />
-                    </div>
-                  </>
-                )}
-              </div>
+              {cartPayment?.totalQuantity === 0 ? (
+                <div className="ml-2 text-red-500 font-medium">
+                  Giỏ hàng trống
+                </div>
+              ) : (
+                <div
+                  className={`ml-1 text-blue-500 hover:cursor-pointer duration-300 `}
+                  onClick={() => setExpand(!expand)}
+                >
+                  {expand ? (
+                    <>
+                      <div>
+                        Thu gọn{" "}
+                        <IoIosArrowDown className="inline duration-500 rotate-180" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        Xem thêm{" "}
+                        <IoIosArrowDown className="inline duration-500 rotate-0" />
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
 
             <div
@@ -324,10 +330,24 @@ const Payment = () => {
               className="mt-4 w-full bg-red-500 hover:cursor-pointer
              text-white py-2 rounded-lg hover:bg-red-600 duration-300"
               onClick={() => {
-                fetchOrdering();
+                if (cartPayment.cartItems?.length === 0) {
+                  toast.error("Giỏ hàng trống!");
+                  navigate("/sách");
+                  return;
+                }
+                const placeOrder = async () => {
+                  await fetchOrdering();
+                  context.setHeaderQuantity(0);
+                  setTimeout(() => {
+                    navigate("/thong-tin-tai-khoan/don-hang");
+                  }, 100);
+                };
+                placeOrder();
               }}
             >
-              Đặt hàng
+              {cartPayment.cartItems?.length > 0
+                ? "Đặt hàng"
+                : "Giỏ hàng trống"}
             </button>
           </div>
         </div>

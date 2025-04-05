@@ -19,6 +19,10 @@ const UserArticles = () => {
   const size = 6;
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -102,8 +106,10 @@ const UserArticles = () => {
               createdBy: "",
             }}
           />
-          <p className="text-white hover:cursor-default hover:-translate-2 duration-300
-          mb-6 bg-green-700 py-1 px-2 rounded">
+          <p
+            className="text-white hover:cursor-default hover:-translate-2 duration-300
+          mb-6 bg-green-700 py-1 px-2 rounded"
+          >
             Bạn đã đăng <span className="font-bold">{totalElements}</span> bài
             báo
           </p>

@@ -16,7 +16,10 @@ import {
 } from "../services/CartServices";
 import { getDefautAddressByUserId } from "../services/AddressServices";
 import { AppContext } from "../context/AppContext.jsx";
-import { getOrderSession, saveCartToSession } from "../services/OrderServices.jsx";
+import {
+  getOrderSession,
+  saveCartToSession,
+} from "../services/OrderServices.jsx";
 
 const Cart = () => {
   const context = useContext(AppContext);
@@ -299,14 +302,22 @@ const Cart = () => {
                   </div>
                   <div className="pl-2">{address?.phoneNumber}</div>
                 </div>
-                <div className="flex w-full text-sm pb-3 mt-2">
-                  <div className="ml-5 px-1 bg-gray-200 text-green-500 rounded-md w-fit h-fit mr-1">
-                    Địa chỉ
-                  </div>
-                  <div className=" w-8/12">
-                    {address?.address}, {address?.ward}, {address?.district},{" "}
-                    {address?.city}
-                  </div>
+                <div className="pb-3">
+                  {address ? (
+                    <div className="flex w-full text-sm pb-3 mt-2">
+                      <div className="ml-5 px-1 bg-gray-200 text-green-500 rounded-md w-fit h-fit mr-1">
+                        Địa chỉ
+                      </div>
+                      <div className=" w-8/12">
+                        {address?.address}, {address?.ward}, {address?.district}
+                        , {address?.city}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="ml-5 px-1 bg-gray-200 text-green-500 rounded-md w-fit h-fit mr-1 ">
+                      Thêm địa chỉ
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="TongTien bg-white rounded-md shadow-lg mb-2">
@@ -350,16 +361,16 @@ const Cart = () => {
                             await getOrderSession();
                           };
                           fetch();
-                          
 
                           // navigate(`/thanh-toan/${address.id}`);
                         }
                       }}
                     >
-                      {context.quantity === 0
-                        ? "Bạn chưa chọn sản phẩm nào"
-                        : `Mua Hàng (${context.quantity})`}
-                      {/* {console.log("totalQuantity", totalQuantity)}/ */}
+                      {address
+                        ? context.quantity === 0
+                          ? "Bạn chưa chọn sản phẩm nào"
+                          : `Mua Hàng (${context.quantity})`
+                        : "Vui lòng thêm địa chỉ"}
                     </button>
                   </div>
                 </div>

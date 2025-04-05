@@ -511,7 +511,19 @@ const BookDetail = () => {
               toast.error("Bạn chưa đăng nhập!");
               navigate("/dang-nhap");
             } else {
-              navigate("/dia-chi");
+              const fetch = async () => {
+                try {
+                  await addBookToCart(book.id, user.cartId, quantity);
+                  await fetchQuantity();
+                } catch (error) {
+                  console.error("Lỗi khi lấy địa chỉ mặc định:", error);
+                }
+              };
+              fetch();
+              setTimeout(() => {
+                navigate("/gio-hang");
+              }, 100);
+              
             }
           }}
         >

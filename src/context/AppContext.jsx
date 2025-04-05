@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { getQuantityOfCartItems } from "../services/CartServices";
 import { getUsersById } from "../services/UserSevices";
 import { FaUser } from "react-icons/fa";
@@ -25,7 +26,7 @@ const AppProvider = ({ children }) => {
     cartId: "",
   }); // Thay đổi giá trị mặc định của user
 
-  const userSidebar = [
+  const userSidebar = useMemo(() => [
     {
       label: "Thông tin tài khoản",
       icon: <FaUser />,
@@ -51,9 +52,25 @@ const AppProvider = ({ children }) => {
       icon: <TfiHeadphoneAlt />,
       path: "/thong-tin-tai-khoan/ho-tro",
     },
-  ];
+  ], []);
 
-  const [activeItem, setActiveItem] = useState("Thông tin tài khoản");
+  const [activeItem, setActiveItem] = useState(() => {
+    return sessionStorage.getItem("activeItem") || "Thông tin tài khoản";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("activeItem", activeItem);
+  }, [activeItem]);
+  const location = useLocation();
+
+  useEffect(() => {
+    const matchedItem = userSidebar.find(
+      (item) => item.path === location.pathname
+    );
+    if (matchedItem) {
+      setActiveItem(matchedItem.label);
+    }
+  }, [location.pathname, userSidebar]);
 
   const [cart, setCart] = useState([]);
   const [theme, setTheme] = useState("light");
@@ -63,6 +80,9 @@ const AppProvider = ({ children }) => {
   //   const [avatar, setAvatar] = useState(null); // Thêm state avatar
 
   const [loadingUser, setLoadingUser] = useState(true); // Add loading state
+
+  const [userOrders, setUserOrders] = useState([]);
+
 
   const [idAddress, setIdAddress] = useState(() => {
     return sessionStorage.getItem("idAddress") || null;

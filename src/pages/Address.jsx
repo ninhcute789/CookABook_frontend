@@ -8,7 +8,10 @@ import {
   updateAddress,
 } from "../services/AddressServices";
 import { AppContext } from "../context/AppContext";
-import { getOrderSession, saveAddressToSession } from "../services/OrderServices";
+import {
+  getOrderSession,
+  saveAddressToSession,
+} from "../services/OrderServices";
 
 const Address = () => {
   const context = useContext(AppContext);
@@ -123,7 +126,9 @@ const Address = () => {
                     context?.setIdAddress(ad.id);
                     await saveAddressToSession(ad.id);
                     await getOrderSession();
-                    navigate("/thanh-toan/");
+                    setTimeout(() => {
+                      navigate("/thanh-toan/");
+                    }, 100);
                   };
                   fetch();
                 }}
@@ -291,35 +296,50 @@ const Address = () => {
               {newForm ? (
                 <button
                   type="submit"
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.preventDefault();
-                    createNewAddress(
-                      name,
-                      phoneNumber,
-                      city,
-                      district,
-                      ward,
-                      address,
-                      defaultAddress,
-                      userId
-                      // setAddresses
-                    );
-                    setAddresses([
-                      ...addresses,
-                      {
+                    // If this is the first address, set it as default
+                    const isFirstAddress = addresses.length === 0;
+                    const defaultForFirst = isFirstAddress
+                      ? true
+                      : defaultAddress;
+
+                    try {
+                      await createNewAddress(
                         name,
                         phoneNumber,
                         city,
                         district,
                         ward,
                         address,
-                        defaultAddress,
-                      },
-                    ]);
-                    handleCancel();
+                        defaultForFirst, // Use the modified default value
+                        userId
+                      );
+
+                      setAddresses([
+                        ...addresses,
+                        {
+                          name,
+                          phoneNumber,
+                          city,
+                          district,
+                          ward,
+                          address,
+                          defaultAddress: defaultForFirst, // Use the same modified value
+                        },
+                      ]);
+
+                      if (isFirstAddress) {
+                        setIdDefault(addresses.length + 1); // Update default address ID
+                      }
+
+                      handleCancel();
+                    } catch (error) {
+                      console.error("Error creating address:", error);
+                    }
                   }}
                   className="bg-red-500 hover:bg-red-600 duration-300
-              text-white px-4 py-2 rounded hover:cursor-pointer"
+                 text-white px-4 py-2 rounded hover:cursor-pointer"
                 >
                   Giao đến địa chỉ này
                 </button>

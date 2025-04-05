@@ -28,6 +28,7 @@ import UserOrder from "./components/user/UserOrder.jsx";
 import UserAddress from "./components/user/UserAddress.jsx";
 import UserArticles from "./components/user/UserArticles.jsx";
 import UserSupport from "./components/user/UserSupport.jsx";
+import UserSelectedOrder from "./components/user/UserSelectedOrder.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -50,9 +51,10 @@ ReactDOM.createRoot(root).render(
         <Route path="thong-tin-tai-khoan" element={<UserProfile />}>
           <Route index element={<UserInfo />} />
           <Route path="dia-chi" element={<UserAddress />} />
-          <Route path="don-hang" element={<UserOrder />} />
           <Route path="tin-tuc-cua-toi" element={<UserArticles />} />
           <Route path="ho-tro" element={<UserSupport />} />
+          <Route path="don-hang" element={<UserOrder />} />
+          <Route path="don-hang/:id" element={<UserSelectedOrder />} />
         </Route>
 
         {/* <Route path='admin' element={<Admin />} />
