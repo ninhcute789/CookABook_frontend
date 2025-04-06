@@ -117,10 +117,62 @@ const getOrderById = async (orderId) => {
   }
 };
 
+const getAllOrders = async (page, size, change) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(
+      `/orders?page=${page}&size=${size}&sort=createdAt,${change}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    toast.success(res.data.message);
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const updateOrderStatus = async (orderId, status) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.put(
+      `/orders`,
+      { orderId, status },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    toast.success(res.data.message);
+    // toast.success(res.data.message);
+    // return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
 export {
   saveCartToSession,
   saveAddressToSession,
   createOrder,
   getOrderSession,
   getOrderById,
+  getAllOrders,
+  updateOrderStatus,
 };

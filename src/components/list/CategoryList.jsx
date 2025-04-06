@@ -108,7 +108,7 @@ const CategoryList = () => {
           name: "",
         }}
       />
-      <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col w-3/4 mx-auto">
+      <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col w-full mx-auto">
         <h2 className="text-xl font-bold">Danh sách thể loại sách</h2>
         <p
           className="text-md 
@@ -122,120 +122,102 @@ const CategoryList = () => {
         <p className="text-gray-500">Không có thể loại nào!</p>
       ) : (
         <>
-          <div className="rounded-lg overflow-hidden shadow-lg w-3/4 mx-auto">
-            <table className="min-w-full border-collapse border border-gray-300 rounded-xl">
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="min-w-full">
               <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2">Id</th>
-                  <th className="border border-gray-300 px-4 py-2">
+                <tr className="bg-gray-50 border-b">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
+                    Id
+                  </th>
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Thể loại
                   </th>
-                  {/* <th className="border border-gray-300 px-4 py-2">
-                    Số lượng sách
-                  </th> */}
-                  {/* <th className="border border-gray-300 px-4 py-2">
-                    Ngày sinh
-                  </th> */}
-                  {/* <th className="border border-gray-300 px-4 py-2">Email</th> */}
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Thời gian tạo
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Thời gian sửa
                   </th>
-                  <th className="border border-gray-300 px-4 py-2"></th>
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
+                    Thao tác
+                  </th>
                 </tr>
               </thead>
-              <tbody>
-                {categories.map(
-                  (
-                    category // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
-                  ) => (
-                    <tr
-                      key={category.id}
-                      className="border border-gray-300 hover:bg-gray-300 transition-all"
-                    >
-                      <td className="border border-gray-300 px-4 py-2 text-center">
-                        {category.id}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {category.name}
-                      </td>
-                      {/* <td className="border border-gray-300 px-4 py-2 text-center">
-                        {category.numberOfBooks}
-                      </td> */}
-                      {/* <td className="border border-gray-300 px-4 py-2">
-                        {new Date(category.dob).toLocaleDateString("vi-VN")}
-                      </td> */}
-                      {/* <td className="border border-gray-300 px-4 py-2">
-                        {category.email}
-                      </td> */}
-                      <td className="border border-gray-300 px-4 py-2">
-                        {category.createdAt}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {category.updatedAt || "Chưa cập nhật"}
-                      </td>
-                      <td className=" p-2 space-x-4 items-center justify-center flex h-10">
+              <tbody className="divide-y divide-gray-200">
+                {categories.map((category) => (
+                  <tr key={category.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-center">
+                      {category.id}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {category.name}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {category.createdAt}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {category.updatedAt || "Chưa cập nhật"}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      <div className="flex items-center justify-center space-x-4">
                         <LuPencilLine
-                          className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
+                          className="text-blue-600 hover:text-blue-900 hover:cursor-pointer hover:scale-125 duration-200"
                           onClick={() => setEditingCategoryId(category.id)}
                         />
-
                         <GoTrash
-                          className="text-red-700 hover:cursor-pointer hover:scale-150 duration-200"
-                          onClick={() => handleDeleteCategory(category.id, setCategories, setTotalElements)}
+                          className="text-red-600 hover:text-red-900 hover:cursor-pointer hover:scale-125 duration-200"
+                          onClick={() =>
+                            handleDeleteCategory(
+                              category.id,
+                              setCategories,
+                              setTotalElements
+                            )
+                          }
                         />
-                        {editingCategoryId === category.id && (
-                          <CategoryUpdate
-                            category={category}
-                            onUpdate={handleUpdate}
-                            onClose={handleClose}
-                            categoryId={category.id}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  )
-                )}
+                      </div>
+                      {editingCategoryId === category.id && (
+                        <CategoryUpdate
+                          category={category}
+                          onUpdate={handleUpdate}
+                          onClose={handleClose}
+                          categoryId={category.id}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-          <div className="flex justify-center mt-4 space-x-2">
+          <div className="flex justify-center mt-4 gap-2">
             <button
               onClick={() => {
-                setPage((prev) => Math.max(prev - 1, 1));
-                setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
+                setPage((prev) => Math.max(1, prev - 1));
+                // window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
-                page === 1
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
-              }`}
               disabled={page === 1}
+              className={`px-4 py-2 rounded ${
+                page === 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
+              }`}
             >
               Trước
             </button>
-
-            <span className="px-4 py-2 rounded-lg shadow-md">
-              {page} / {totalPages}
+            <span className="px-4 py-2 bg-white rounded">
+              {page} / {totalPages || 1}
             </span>
-
             <button
               onClick={() => {
-                setPage((prev) => Math.min(prev + 1, totalPages));
-                setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
+                setPage((prev) => Math.min(totalPages, prev + 1));
+                // window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
-                page === totalPages
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
-              }`}
               disabled={page === totalPages}
+              className={`px-4 py-2 rounded ${
+                page === totalPages
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
+              }`}
             >
               Tiếp
             </button>

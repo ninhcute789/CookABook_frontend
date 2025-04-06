@@ -97,7 +97,7 @@ const Payment = () => {
       // Gọi API savePaymentTosession với paymentId
       await savePaymentTosession(paymentId.id);
 
-      await getOrderSession();
+      // await getOrderSession();
 
       // Gọi API createOrder
       await createOrder(context?.user.id);

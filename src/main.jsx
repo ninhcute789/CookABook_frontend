@@ -29,6 +29,7 @@ import UserAddress from "./components/user/UserAddress.jsx";
 import UserArticles from "./components/user/UserArticles.jsx";
 import UserSupport from "./components/user/UserSupport.jsx";
 import UserSelectedOrder from "./components/user/UserSelectedOrder.jsx";
+import AdminOrderDetail from "./pages/AdminOrderDetail.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -67,6 +68,7 @@ ReactDOM.createRoot(root).render(
           <Route index element={<AdminDashboard />} />
           <Route path="admin-books" element={<AdminBooks />} />
           <Route path="admin-orders" element={<AdminOrders />} />
+          <Route path="admin-orders/:id" element={<AdminOrderDetail />} />
           <Route path="admin-users" element={<AdminUsers />} />
           <Route path="admin-news" element={<AdminNews />} />
           <Route path="admin-authors" element={<AdminAuthors />} />

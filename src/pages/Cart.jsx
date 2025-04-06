@@ -358,7 +358,7 @@ const Cart = () => {
                           const fetch = async () => {
                             await saveCartToSession(user.cartId);
                             navigate(`/dia-chi`);
-                            await getOrderSession();
+                            // await getOrderSession();
                           };
                           fetch();
 

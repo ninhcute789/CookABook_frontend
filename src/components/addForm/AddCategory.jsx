@@ -65,7 +65,7 @@ const AddCategory = (props) => {
 
   return (
     <>
-      <div className="w-3/4 mx-auto">
+      <div className="w-full mx-auto">
         <button
           onClick={() => setIsOpen(true)}
           className="bg-blue-500 hover:cursor-pointer mb-5 w-50 duration-300

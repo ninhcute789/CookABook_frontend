@@ -74,17 +74,17 @@ const UserOrder = () => {
 
   return (
     <div className="w-39/48">
-      <div className="flex items-center justify-between px-4 rounded-lg mb-4">
+      <div className="flex items-center justify-between px-4 mb-4">
         <h2 className="text-xl font-semibold  py-[22px]">Đơn hàng của bạn</h2>
         <select
           value={change}
           onChange={(e) => setChange(e.target.value)}
-          className="transition-all border-gray-300 appearance-none focus:outline-none
+          className=" border-gray-300 appearance-none focus:outline-none 
               duration-300 ease-in-out border text-gray-500 bg-white
               rounded-full px-5 py-2 shadow-sm outline-none"
         >
           <option value="" className="hidden bg-gray-400">
-            Sắp xếp theo giá
+            Sắp xếp theo thời gian
           </option>
           <option value="desc">Mới nhất</option>
           <option value="asc">Cũ nhất</option>
@@ -100,21 +100,23 @@ const UserOrder = () => {
                   <span
                     className={`${
                       order.status === "COMPLETED"
-                        ? "bg-green-600 "
+                        ? "bg-green-600 text-[#333]"
                         : order.status === "PENDING"
                         ? "bg-yellow-400 text-[#333]"
-                        : order.status === "PROCESSING"
-                        ? "bg-blue-600"
+                        : order.status === "CONFIRMED"
+                        ? "bg-blue-600 text-white"
                         : order.status === "CANCELLED"
-                        ? "bg-red-600"
-                        : order.status === "SHIPPED"
-                        ? "bg-orange-600"
+                        ? "bg-red-600 text-white"
+                        : order.status === "DELIVERED"
+                        ? "bg-orange-600 text-white"
                         : ""
                     } bg-amber-400 px-2 rounded-md  text-sm font-semibold flex items-center`}
                   >
                     {order.status === "COMPLETED" && "Đã giao hàng"}
                     {order.status === "PENDING" && "Đang xử lý"}
                     {order.status === "CANCELLED" && "Đã hủy"}
+                    {order.status === "CONFIRMED" && "Đã xác nhận"}
+                    {order.status === "DELIVERED" && "Đã giao hàng"}
                   </span>
                 </div>
                 {order.orderItems?.length > 0 ? (

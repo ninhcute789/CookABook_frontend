@@ -125,7 +125,7 @@ const Address = () => {
                   const fetch = async () => {
                     context?.setIdAddress(ad.id);
                     await saveAddressToSession(ad.id);
-                    await getOrderSession();
+                    // await getOrderSession();
                     setTimeout(() => {
                       navigate("/thanh-toan/");
                     }, 100);
