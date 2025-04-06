@@ -17,23 +17,6 @@ const getUsersById = async (id) => {
   }
 };
 
-// const getUserAvatarById = async (id) => {
-//   try {
-//     const token = localStorage.getItem("token");
-//     const response = await axiosInstance.get(`/users/${id}/avatar`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     // toast.success("🎉 Lấy thông tin người dùng thành công!");
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("❌ Error in getUser:", error);
-//     return null;
-//   }
-// };
-
 const getAllArticlesByUserId = async (
   id,
   page,
@@ -189,11 +172,25 @@ const getAllOrdersByUserId = async (
   }
 };
 
+const getTotalUserQuantity = async (setTotalUsers) => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axiosInstance.get("/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setTotalUsers(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error("Lỗi khi tải số lượng người dùng:", error);
+  }
+};
+
 export {
   getUsersById,
   fetchUsers,
-  // getUserAvatarById,
   getAllArticlesByUserId,
   handleUpdateUser,
   getAllOrdersByUserId,
+  getTotalUserQuantity,
 };

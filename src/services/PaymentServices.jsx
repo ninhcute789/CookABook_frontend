@@ -90,4 +90,57 @@ const savePaymentTosession = async (paymentId) => {
   }
 };
 
-export { createPayment, getCartPaymentById, savePaymentTosession };
+const getPaymentById = async (paymentId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(`/payments/${paymentId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const updatePaymentStatus = async (id, status) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.put(
+      `/payments`,
+      { id, status },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    toast.success(res.data.message);
+
+    return res.data.data;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+export {
+  createPayment,
+  getCartPaymentById,
+  savePaymentTosession,
+  getPaymentById,
+  updatePaymentStatus,
+};

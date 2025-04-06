@@ -33,7 +33,7 @@ const Header = () => {
         // console.log("🚀 User từ API:", userData);
 
         setUser(userData); // Cập nhật state với dữ liệu từ API
-        console.log("36666666666666", userData);
+        // console.log("36666666666666", userData);
       } catch (error) {
         console.error("Lỗi khi lấy user từ API:", error);
       }

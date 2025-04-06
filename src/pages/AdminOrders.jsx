@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAllOrders } from "../services/OrderServices";
+import { getAllOrders, getOrderById } from "../services/OrderServices";
 import { truncateDate } from "../services/CommonServices";
 import { useNavigate } from "react-router";
+import { getPaymentById } from "../services/PaymentServices";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -9,58 +10,26 @@ const AdminOrders = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [change, setChange] = useState("");
   const [status, setStatus] = useState("");
+  const [payment, setPayment] = useState("");
+
   const size = 10;
-  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-
-  // Filter orders based on status
-  const filteredOrders = orders.filter((order) => {
-    if (!status) return true;
-    return order.status === status;
-  });
-
-  // Get orders for current page
-  const getCurrentPageOrders = () => {
-    const startIndex = (page - 1) * size;
-    const endIndex = startIndex + size;
-    return filteredOrders.slice(startIndex, endIndex);
-  };
-
-  // Update when orders or status changes
-  useEffect(() => {
-    const newTotalPages = Math.ceil(filteredOrders.length / size);
-    setTotalPages(newTotalPages);
-
-    // Reset to page 1 if current page is out of bounds
-    if (page > newTotalPages) {
-      setPage(1);
-    }
-  }, [filteredOrders.length, page, size]);
-
-  // Fetch orders from API
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        setLoading(true);
-        const response = await getAllOrders(1, 100, change); // Get all orders at once
+        const response = await getAllOrders(page, size, change, status); // Get all orders at once
         setOrders(response.data);
+        setTotalPages(response.meta.totalPages); // Set total pages from response
+        const payment = await getOrderById(response.id); // Get payment by ID
+        // console.log("255555555555:", response.data);
+        setPayment(payment);
       } catch (error) {
         console.error("Error fetching orders:", error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchOrders();
-  }, [change]);
-
-  if (loading) {
-    return (
-      <div className="w-full flex justify-center items-center p-6">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
-      </div>
-    );
-  }
+  }, [page, size, change, status]);
 
   return (
     <div className="w-full bg-gray-100 p-6">
@@ -69,7 +38,10 @@ const AdminOrders = () => {
         <div className="SORT+FILTER flex gap-4">
           <select
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => {
+              setStatus(e.target.value);
+              setPage(1); // Reset to page 1 when status changes
+            }}
             className=" border-gray-300 appearance-none focus:outline-none
               duration-300 ease-in-out border text-gray-500 bg-white
               rounded-full px-5 py-2 shadow-sm outline-none"
@@ -77,10 +49,10 @@ const AdminOrders = () => {
             <option value="" className="hidden bg-gray-400">
               Lọc theo trạng thái
             </option>
-            <option value="COMPLETED">Đã hoàn thành</option>
+            <option value="CANCELLED">Đã hủy</option>
             <option value="PENDING">Đang chờ xử lý</option>
             <option value="CONFIRMED">Đang xử lý</option>
-            <option value="CANCELLED">Đã hủy</option>
+            <option value="COMPLETED">Đã hoàn thành</option>
             <option value="DELIVERED">Đã giao hàng</option>
             <option value="">Tất cả</option>
           </select>
@@ -117,15 +89,18 @@ const AdminOrders = () => {
                 Tổng tiền
               </th>
               <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
-                Trạng thái
+                Trạng thái đơn hàng
               </th>
+              {/* <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
+                Trạng thái thanh toán
+              </th> */}
               <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                 Thao tác
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {getCurrentPageOrders().map((order) => (
+            {orders.map((order) => (
               <tr key={order.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm text-center">#{order.id}</td>
                 {/* <td className="px-6 py-4 text-sm text-center">
@@ -160,6 +135,23 @@ const AdminOrders = () => {
                     {order.status === "DELIVERED" && "Đã giao hàng"}
                   </span>
                 </td>
+                {/* <td className="px-6 py-4 text-center">
+                  <span
+                    className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                      payment?.status === "COMPLETED"
+                        ? "text-green-800 bg-green-100"
+                        : payment?.status === "PENDING"
+                        ? "text-yellow-800 bg-yellow-100"
+                        : payment?.status === "FAILED"
+                        ? "text-red-800 bg-red-100"
+                        : ""
+                    }`}
+                  >
+                    {payment?.status === "COMPLETED" && "Đã thanh toán"}
+                    {payment?.status === "PENDING" && "Đang chờ xử lý"}
+                    {payment?.status === "FAILED" && "Thanh toán thất bại"}
+                  </span>
+                </td> */}
                 <td className="px-6 py-4 text-sm text-center">
                   <button
                     className="text-blue-600 hover:text-blue-900 hover:cursor-pointer"
@@ -176,7 +168,7 @@ const AdminOrders = () => {
         </table>
       </div>
 
-      {filteredOrders.length > 0 ? (
+      {orders.length > 0 ? (
         <div className="flex justify-center mt-4 gap-2">
           <button
             onClick={() => setPage((prev) => Math.max(1, prev - 1))}

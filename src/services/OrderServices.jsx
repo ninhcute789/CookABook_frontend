@@ -107,7 +107,7 @@ const getOrderById = async (orderId) => {
     const res = await axiosInstance.get(`/orders/${orderId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    toast.success(res.data.message);
+    // toast.success(res.data.message);
     return res.data.data;
   } catch (error) {
     console.error(
@@ -117,7 +117,7 @@ const getOrderById = async (orderId) => {
   }
 };
 
-const getAllOrders = async (page, size, change) => {
+const getAllOrders = async (page, size, change, status) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -126,7 +126,7 @@ const getAllOrders = async (page, size, change) => {
     }
 
     const res = await axiosInstance.get(
-      `/orders?page=${page}&size=${size}&sort=createdAt,${change}`,
+      `/orders?page=${page}&size=${size}&sort=createdAt,${change}&filter=status ~ '${status}'`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -141,7 +141,7 @@ const getAllOrders = async (page, size, change) => {
   }
 };
 
-const updateOrderStatus = async (orderId, status) => {
+const updateOrderStatus = async (id, status) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -151,17 +151,40 @@ const updateOrderStatus = async (orderId, status) => {
 
     const res = await axiosInstance.put(
       `/orders`,
-      { orderId, status },
+      { id, status },
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
     toast.success(res.data.message);
-    // toast.success(res.data.message);
-    // return res.data.data;
+    return res;
   } catch (error) {
     console.error(
       "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const getTotalOrderQuantity = async (setTotalOrders) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(
+      `/orders`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    setTotalOrders(res.data?.data?.meta?.totalElements);
+
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy số lượng đơn hàng:",
       error.response?.data || error.message
     );
   }
@@ -175,4 +198,5 @@ export {
   getOrderById,
   getAllOrders,
   updateOrderStatus,
+  getTotalOrderQuantity,
 };
