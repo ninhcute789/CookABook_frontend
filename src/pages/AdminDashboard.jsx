@@ -107,7 +107,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 ">
           {/* Recent Orders */}
           <div className="bg-white rounded-lg shadow-sm h-fit">
             <div className="px-6 py-4 border-b border-gray-200">
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="p-6 pt-1">
-              <div className="overflow-x-auto">
+              <div className="">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead>
                     <tr>
@@ -201,7 +201,7 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="p-6 pt-1">
-              <div className="overflow-x-auto">
+              <div className="">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead>
                     <tr>

@@ -10,7 +10,7 @@ const OrderList = () => {
   const [status, setStatus] = useState("");
   const [payment, setPayment] = useState("");
 
-  const size = 10;
+  const size = 8;
 
   const navigate = useNavigate();
   useEffect(() => {
