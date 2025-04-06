@@ -123,7 +123,7 @@ const AdminDashboard = () => {
                 </Link>
               </div>
             </div>
-            <div className="p-6">
+            <div className="p-6 pt-1">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead>
@@ -200,7 +200,7 @@ const AdminDashboard = () => {
                 </Link>
               </div>
             </div>
-            <div className="p-6">
+            <div className="p-6 pt-1">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead>
