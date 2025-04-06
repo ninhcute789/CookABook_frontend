@@ -159,13 +159,30 @@ const UserList = () => {
       />
       <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
         <h2 className="text-xl font-bold">Danh sách người dùng</h2>
-        <p
-          className="text-md 
-          hover:-translate-2 duration-300 hover:cursor-context-menu
-          font-medium ml-auto [@media(max-width:600px)]:mx-auto bg-[#7dd237] p-2 rounded-md"
+        <div
+          className="flex items-center gap-2 ml-auto [@media(max-width:600px)]:mx-auto 
+          bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg 
+          shadow-md hover:shadow-lg transition-all duration-300 group"
         >
-          Số lượng người dùng: {totalElements}
-        </p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 group-hover:scale-110 transition-transform duration-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+          <span className="font-medium">
+            Tổng số người dùng:
+            <span className="ml-1 font-bold">{totalElements}</span>
+          </span>
+        </div>
       </div>
       {users.length === 0 ? (
         <p className="text-gray-500">Không có người dùng nào!</p>

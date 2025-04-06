@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import PropTypes from "prop-types";
 import { getOrderById, updateOrderStatus } from "../services/OrderServices";
-import { truncateDate } from "../services/CommonServices";
-import { getPaymentById, updatePaymentStatus } from "../services/PaymentServices";
+import {
+  getPaymentById,
+  updatePaymentStatus,
+} from "../services/PaymentServices";
 
 // Add this component inside AdminOrderDetail but before the return statement
 const OrderStatusUpdatePopup = ({
@@ -226,10 +228,27 @@ const AdminOrderDetail = () => {
         currentStatus={payment?.status}
         onUpdate={handlePaymentStatusUpdate}
       />
-      
 
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-semibold bg-[#75d535] rounded px-2 py-1 w-fit">
+        <h2
+          className="text-xl font-semibold flex items-center gap-2
+          bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg 
+          px-4 py-2 shadow-md w-fit hover:shadow-lg transition-shadow duration-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
           Chi tiết đơn hàng #{id}
         </h2>
         <div className=" flex gap-2">
@@ -295,8 +314,7 @@ const AdminOrderDetail = () => {
           <div className="THONG_TIN_DON_HANG">
             <h3 className="font-semibold mb-2">Thông tin đơn hàng</h3>
             <p>
-              <span className="text-gray-500">Ngày đặt:</span>{" "}
-              {order.createdAt}
+              <span className="text-gray-500">Ngày đặt:</span> {order.createdAt}
             </p>
             <p>
               <span className="text-gray-500">Tổng tiền:</span>{" "}

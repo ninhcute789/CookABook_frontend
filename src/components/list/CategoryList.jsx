@@ -110,13 +110,30 @@ const CategoryList = () => {
       />
       <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col w-full mx-auto">
         <h2 className="text-xl font-bold">Danh sách thể loại sách</h2>
-        <p
-          className="text-md 
-          hover:-translate-2 duration-300 hover:cursor-context-menu
-          font-medium ml-auto [@media(max-width:600px)]:mx-auto bg-[#7dd237] p-2 rounded-md"
+        <div
+          className="flex items-center gap-2 ml-auto [@media(max-width:600px)]:mx-auto 
+          bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg 
+          shadow-md hover:shadow-lg transition-all duration-300 group"
         >
-          Số lượng thể loại: {totalElements}
-        </p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 group-hover:scale-110 transition-transform duration-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"
+            />
+          </svg>
+          <span className="font-medium">
+            Số lượng thể loại:
+            <span className="ml-1 font-bold">{totalElements}</span>
+          </span>
+        </div>
       </div>
       {categories.length === 0 ? (
         <p className="text-gray-500">Không có thể loại nào!</p>

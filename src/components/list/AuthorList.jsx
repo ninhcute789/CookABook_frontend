@@ -111,13 +111,30 @@ const AuthorList = () => {
       />
       <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col w-full mx-auto">
         <h2 className="text-xl font-bold">Danh sách tác giả</h2>
-        <p
-          className="text-md 
-          hover:-translate-2 duration-300 hover:cursor-context-menu
-          font-medium ml-auto [@media(max-width:600px)]:mx-auto bg-[#7dd237] p-2 rounded-md"
+        <div
+          className="flex items-center gap-2 ml-auto [@media(max-width:600px)]:mx-auto 
+          bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg 
+          shadow-md hover:shadow-lg transition-all duration-300 group"
         >
-          Số lượng tác giả: {totalElements}
-        </p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 group-hover:scale-110 transition-transform duration-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <span className="font-medium">
+            Số lượng tác giả:
+            <span className="ml-1 font-bold">{totalElements}</span>
+          </span>
+        </div>
       </div>
       {authors.length === 0 ? (
         <p className="text-gray-500">Không có tác giả nào!</p>
