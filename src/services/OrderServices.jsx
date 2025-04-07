@@ -131,7 +131,7 @@ const getAllOrders = async (page, size, change, status) => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    toast.success(res.data.message);
+    // toast.success(res.data.message);
     return res.data.data;
   } catch (error) {
     console.error(
