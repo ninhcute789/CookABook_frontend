@@ -127,7 +127,9 @@ const handleDeleteBook = async (id, setBooks, setTotalElements) => {
                 toast.success("🗑 Xóa sách thành công!");
               } catch (error) {
                 console.error("❌ Lỗi khi xóa sách:", error);
-                toast.error("Không thể xóa sách!");
+                toast.error(
+                  error.response?.data?.error || "Xóa sách thất bại!"
+                );
               }
             }}
             className="px-4 py-2 bg-red-500 text-white rounded"

@@ -1,8 +1,5 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { getAllOrdersByUserId } from "../../services/UserSevices";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
-import { truncateDate } from "../../services/CommonServices";
-import toast from "react-hot-toast";
 import { getOrderById } from "../../services/OrderServices";
 import { useNavigate, useParams } from "react-router";
 
@@ -72,11 +69,11 @@ const UserSelectedOrder = () => {
                 ? "text-green-600"
                 : order.status === "PENDING"
                 ? "text-[#e8b22c]"
-                : order.status === "PROCESSING"
+                : order.status === "CONFIRMED"
                 ? "text-blue-600"
                 : order.status === "CANCELLED"
                 ? "text-red-600"
-                : order.status === "SHIPPED"
+                : order.status === "DELIVERED"
                 ? "text-orange-600"
                 : ""
             }`}
@@ -84,8 +81,8 @@ const UserSelectedOrder = () => {
             {order.status === "COMPLETED" && " Đã hoàn thành"}
             {order.status === "CANCELLED" && "Đã hủy"}
             {order.status === "PENDING" && "Đang chờ xử lý"}
-            {order.status === "PROCESSING" && "Đang xử lý"}
-            {order.status === "SHIPPED" && "Đã giao hàng"}
+            {order.status === "CONFIRMED" && "Được xác nhận"}
+            {order.status === "DELIVERED" && "Đã giao hàng"}
           </div>
         </div>
 
@@ -108,7 +105,17 @@ const UserSelectedOrder = () => {
             <h2 className="font-bold mb-2">HÌNH THỨC GIAO HÀNG</h2>
             <div className="bg-white rounded p-4 shadow-sm flex-1">
               <div className="mb-2">FAST Giao Tiết Kiệm</div>
-              <div>Phí vận chuyển: 46.100₫</div>
+              <div className="mb-2">Phí vận chuyển: 46.100₫</div>
+              <div>
+                Giao hàng trước ngày{" "}
+                {new Date(
+                  new Date(order.createdAt).getTime() + 2 * 24 * 60 * 60 * 1000
+                ).toLocaleDateString("vi-VN", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}
+              </div>
             </div>
           </div>
 
@@ -189,7 +196,7 @@ const UserSelectedOrder = () => {
                   </td>
                   <td className="p-3 text-center">{product.quantity}</td>
                   <td className="p-3 text-center">
-                    {product.discount?.toLocaleString("vi-VN")}₫
+                    {product.book.bookDiscountPrice?.toLocaleString("vi-VN")}₫
                   </td>
                   <td className="p-3 text-center">
                     {product.price?.toLocaleString("vi-VN")}₫

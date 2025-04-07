@@ -186,6 +186,61 @@ const getTotalUserQuantity = async (setTotalUsers) => {
   }
 };
 
+const handleUpdatePassword = async (
+  username,
+  oldPassword,
+  newPassword,
+  setUser
+  // setEditingUserId
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.put(
+      "/users/update-password",
+      {
+        username,
+        oldPassword,
+        newPassword,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const handleUpdate = (updatedUser) => {
+      setUser((prevUser) => {
+        if (!prevUser || typeof prevUser !== "object") {
+          console.error(
+            "❌ Lỗi: `prevUser` không phải là một object!",
+            prevUser
+          );
+          return {};
+        }
+
+        console.log("🔄 Trước khi cập nhật:", prevUser);
+
+        const updatedUserData = { ...prevUser, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
+
+        console.log("✅ Sau khi cập nhật:", updatedUserData);
+        return updatedUserData;
+      });
+    };
+
+    handleUpdate(res.data.data);
+    toast.success("🎉 Cập nhật mật khẩu thành công!");
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật người dùng:", error.response.data.error);
+    toast.error(error.response.data.error);
+  }
+};
+
 export {
   getUsersById,
   fetchUsers,
@@ -193,4 +248,5 @@ export {
   handleUpdateUser,
   getAllOrdersByUserId,
   getTotalUserQuantity,
+  handleUpdatePassword,
 };

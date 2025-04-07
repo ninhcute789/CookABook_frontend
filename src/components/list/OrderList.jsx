@@ -48,7 +48,7 @@ const OrderList = () => {
             </option>
             <option value="CANCELLED">Đã hủy</option>
             <option value="PENDING">Đang chờ xử lý</option>
-            <option value="CONFIRMED">Đang xử lý</option>
+            <option value="CONFIRMED">Được chấp nhận</option>
             <option value="COMPLETED">Đã hoàn thành</option>
             <option value="DELIVERED">Đã giao hàng</option>
             <option value="">Tất cả</option>

@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { getAllOrdersByUserId } from "../../services/UserSevices";
 import { AppContext } from "../../context/AppContext";
-import { truncateDate } from "../../services/CommonServices";
 import toast from "react-hot-toast";
-import { getOrderById } from "../../services/OrderServices";
+import { getOrderById, reorderByOrderId } from "../../services/OrderServices";
 import { useNavigate } from "react-router";
+import { getQuantityOfCartItems } from "../../services/CartServices";
 
 const UserOrder = () => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
@@ -180,7 +181,15 @@ const UserOrder = () => {
 
                   <p>
                     <span className="text-gray-600">Ngày đặt:</span>{" "}
-                    {truncateDate(order.createdAt, 2)}
+                    {new Date(
+                      new Date(order.createdAt).getTime()
+                    ).toLocaleDateString("vi-VN", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </p>
                   <p className="text-right text-lg text-black font-medium">
                     <span className="text-gray-500">Tổng tiền: </span>{" "}
@@ -190,8 +199,26 @@ const UserOrder = () => {
                 <div className="flex justify-end mt-1 text-sm text-gray-500">
                   <button
                     className="px-4 py-1.5 mr-2 rounded-md bg-white text-blue-500 
-                   border border-blue-700 duration-300 font-medium text-sm
-                     hover:shadow-md active:scale-85 hover:cursor-pointer"
+                    border border-blue-700 duration-300 font-medium text-sm
+                    hover:shadow-md active:scale-85 hover:cursor-pointer"
+                    onClick={async () => {
+                      try {
+                        await reorderByOrderId(order.id);
+
+                        context?.setHeaderQuantity(
+                          await getQuantityOfCartItems(user.cartId)
+                        );
+
+                        toast.success(`Đơn hàng đã được mua lại: ${order.id}`);
+
+                        setTimeout(() => {
+                          navigate("/gio-hang");
+                        }, 100);
+                      } catch (error) {
+                        console.error("Lỗi khi mua lại:", error);
+                        toast.error("Có lỗi xảy ra khi mua lại đơn hàng");
+                      }
+                    }}
                   >
                     Mua lại
                   </button>

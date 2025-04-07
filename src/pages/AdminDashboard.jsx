@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FiBook, FiShoppingBag, FiUsers, FiDollarSign } from "react-icons/fi";
 import { getTopBooks, getTotalBookQuantity } from "../services/BookServices";
-import { getAllOrders, getTotalOrderQuantity } from "../services/OrderServices";
+import { getAllOrders, getTotalOrderQuantity, getTotalRevenue } from "../services/OrderServices";
 import { getTotalUserQuantity } from "../services/UserSevices";
+import { set } from "@cloudinary/url-gen/actions/variable";
 
 const AdminDashboard = () => {
   const [statistics, setStatistics] = useState({
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
   const [totalBooks, setTotalBooks] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
   // const [totalRevenue, setTotalRevenue] = useState(0);
 
   useEffect(() => {
@@ -30,6 +32,7 @@ const AdminDashboard = () => {
       const orders = await getAllOrders(0, 5, "DESC", "");
       setRecentOrders(orders.data);
       await getTopBooks(0, 5, setTopBooks);
+      await getTotalRevenue(setTotalRevenue);
     };
 
     fetchStatistics();
@@ -100,7 +103,7 @@ const AdminDashboard = () => {
               <div className="ml-4">
                 <h2 className="text-sm font-medium text-gray-600">Doanh thu</h2>
                 <p className="text-2xl font-semibold text-gray-900">
-                  {statistics.totalRevenue?.toLocaleString("vi-VN")}₫
+                  {totalRevenue?.toLocaleString("vi-VN")}₫
                 </p>
               </div>
             </div>

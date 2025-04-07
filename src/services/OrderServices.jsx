@@ -174,17 +174,56 @@ const getTotalOrderQuantity = async (setTotalOrders) => {
       return;
     }
 
-    const res = await axiosInstance.get(
-      `/orders`,
+    const res = await axiosInstance.get(`/orders`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setTotalOrders(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy số lượng đơn hàng:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const reorderByOrderId = async (orderId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.post(
+      `/orders/${orderId}/reorder`,
+      {},
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    setTotalOrders(res.data?.data?.meta?.totalElements);
-
   } catch (error) {
     console.error(
       "❌ Lỗi khi lấy số lượng đơn hàng:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const getTotalRevenue = async (setTotalRevenue) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.get(`/orders/total-revenue`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setTotalRevenue(res.data.data);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy doanh thu:",
       error.response?.data || error.message
     );
   }
@@ -199,4 +238,6 @@ export {
   getAllOrders,
   updateOrderStatus,
   getTotalOrderQuantity,
+  reorderByOrderId,
+  getTotalRevenue,
 };

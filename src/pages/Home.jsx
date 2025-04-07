@@ -4,20 +4,13 @@ import { IoBookOutline } from "react-icons/io5";
 import { FaEarthAsia } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { LuCalendarFold } from "react-icons/lu";
-// import th1 from "../assets/th-1.jpg";
 import th2 from "../assets/th-2.jpg";
 import th3 from "../assets/th-3.jpg";
 import th4 from "../assets/th-4.jpg";
 import th5 from "../assets/th-5.jpg";
-// import s1 from "../assets/s1.jpg";
-// import s2 from "../assets/s2.jpg";
-// import s3 from "../assets/s3.jpg";
-// import s4 from "../assets/s4.jpg";
-// import b3 from "../assets/books/b3.webp";
-import { Link, NavLink } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import BannerDeal from "../components/banner/BannerDeal";
-// import axios from "axios";
 import { IoIosArrowBack } from "react-icons/io";
 import SidebarArticles from "../components/sideBar/SidebarArticles";
 import axiosInstance from "../services/axiosInstance";
@@ -25,16 +18,12 @@ import axiosInstance from "../services/axiosInstance";
 const Home = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
 
+  const navigate = useNavigate();
+
   const truncateText = (text, wordLimit) => {
     const words = text.split(" ");
     return words.length > wordLimit
       ? words.slice(0, wordLimit).join(" ") + "..."
-      : text;
-  };
-  const truncateDate = (text, wordLimit) => {
-    const words = text.split(" ");
-    return words.length > wordLimit
-      ? words.slice(0, wordLimit).join(" ")
       : text;
   };
   // useEffect(() => {
@@ -60,23 +49,9 @@ const Home = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        // const token = localStorage.getItem("token");
-        // if (!token) {
-        //   console.error(
-        //     "❌ Không tìm thấy token! Người dùng có thể chưa đăng nhập."
-        //   );
-        //   return;
-        // }
+        const res = await axiosInstance.get("/articles/all", {});
 
-        const res = await axiosInstance.get("/articles/all", {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
-        });
-
-        // console.log("✅ Dữ liệu API trả về:", res.data);
         setArticles(res.data?.data?.data || []);
-        // console.log("Danh sách bài báo:", res.data?.data?.data);
       } catch (error) {
         console.error(
           "❌ Lỗi khi lấy danh sách bài báo:",
@@ -90,9 +65,8 @@ const Home = () => {
     fetchArticles();
   }, []);
 
-  // if (loading) return <p className="text-center">Đang tải...</p>;
   return (
-    <div className="home bg-[#efefef] h-fit w-full">
+    <div className="home bg-[#efefef] h-fit w-full relative">
       <div
         className="home banner container mx-auto p-4 bg-cover bg-center min-w-full"
         style={{ backgroundImage: `url(${libra})` }}
@@ -328,7 +302,6 @@ const Home = () => {
 
         <div className="grid max-w-6xl mx-auto grid-cols-1">
           <div className=" px-10 pb-10">
-            {/* <h2 className="text-xl font-bold mb-4">Danh sách bài báo</h2> */}
             {articles.length === 0 ? (
               <p className="text-gray-500">Không có bài báo nào!</p>
             ) : (
@@ -370,6 +343,7 @@ const Home = () => {
                               onClick={() => {
                                 setSelected(true);
                                 setArticle(article);
+                                navigate("/tin-tức");
                               }}
                             >
                               Tin tức
@@ -380,7 +354,15 @@ const Home = () => {
                               <div>
                                 <LuCalendarFold className="translate-y-1 mr-1" />
                               </div>
-                              <div>{truncateDate(article.createdAt, 1)}</div>
+                              <div>
+                                {new Date(
+                                  new Date(article.createdAt).getTime()
+                                ).toLocaleDateString("vi-VN", {
+                                  year: "numeric",
+                                  month: "2-digit",
+                                  day: "2-digit",
+                                })}
+                              </div>
                             </div>
                             <div className="flex sm:ml-auto">
                               <div>
@@ -390,16 +372,15 @@ const Home = () => {
                             </div>
                           </div>
                           <div>
-                            <NavLink
-                              to="#"
-                              className="font-bold hover:text-yellow-500 duration-200 transition-all"
+                            <div
+                              className="font-bold hover:cursor-pointer
+                               hover:text-yellow-500 duration-200 transition-all"
                               onClick={() => {
-                                setSelected(true);
-                                setArticle(article);
+                                navigate("/tin-tức");
                               }}
                             >
                               {truncateText(article.title, 10)}
-                            </NavLink>
+                            </div>
                           </div>
                           <div className=" xl:mb-0 mb-10">
                             {truncateText(article.content, 10)}
@@ -443,6 +424,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+
       <div className="h-1"></div>
     </div>
   );

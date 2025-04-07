@@ -207,12 +207,55 @@ const Address = () => {
         }`}
       >
         {showForm && (
-          <form className="mt-4 border border-[#f5b4b4] p-4 rounded-md font-medium bg-[#fffaf5]">
+          <form
+            className="mt-4 border border-[#f5b4b4] p-4 rounded-md font-medium bg-[#fffaf5]"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              // If this is the first address, set it as default
+              const isFirstAddress = addresses.length === 0;
+              const defaultForFirst = isFirstAddress ? true : defaultAddress;
+
+              try {
+                await createNewAddress(
+                  name,
+                  phoneNumber,
+                  city,
+                  district,
+                  ward,
+                  address,
+                  defaultForFirst, // Use the modified default value
+                  userId
+                );
+
+                setAddresses([
+                  ...addresses,
+                  {
+                    name,
+                    phoneNumber,
+                    city,
+                    district,
+                    ward,
+                    address,
+                    defaultAddress: defaultForFirst, // Use the same modified value
+                  },
+                ]);
+
+                if (isFirstAddress) {
+                  setIdDefault(addresses.length + 1); // Update default address ID
+                }
+
+                handleCancel();
+              } catch (error) {
+                console.error("Error creating address:", error);
+              }
+            }}
+          >
             <div className="flex w-15/24 mx-auto lg:items-center lg:flex-row flex-col">
               <label className="lg:w-1/2">Họ tên</label>
               <input
                 className="w-full border focus:outline-none focus:ring-2 focus:ring-[#f5b4b4]
                 border-[#f5b4b4] p-2 rounded mb-2 bg-white"
+                required
                 value={!newForm ? name : null}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Nhập họ tên"
@@ -223,6 +266,7 @@ const Address = () => {
               <input
                 className="w-full border focus:outline-none focus:ring-2 focus:ring-[#f5b4b4]
                 border-[#f5b4b4] p-2 rounded mb-2 bg-white"
+                required
                 value={!newForm ? phoneNumber : null}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Nhập số điện thoại"
@@ -233,6 +277,7 @@ const Address = () => {
               <input
                 className="w-full border focus:outline-none focus:ring-2 focus:ring-[#f5b4b4]
                 border-[#f5b4b4] p-2 rounded mb-2 bg-white"
+                required
                 value={!newForm ? city : null}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="Nhập tỉnh/thành phố"
@@ -243,6 +288,7 @@ const Address = () => {
               <input
                 className="w-full border focus:outline-none focus:ring-2 focus:ring-[#f5b4b4]
                 border-[#f5b4b4] p-2 rounded mb-2 bg-white"
+                required
                 value={!newForm ? district : null}
                 onChange={(e) => setDistrict(e.target.value)}
                 placeholder="Nhập quận/huyện"
@@ -253,6 +299,7 @@ const Address = () => {
               <input
                 className="w-full border focus:outline-none focus:ring-2 focus:ring-[#f5b4b4]
                 border-[#f5b4b4] p-2 rounded mb-2 bg-white"
+                required
                 value={!newForm ? ward : null}
                 onChange={(e) => setWard(e.target.value)}
                 placeholder="Nhập phường/xã"
@@ -263,6 +310,7 @@ const Address = () => {
               <input
                 className="w-full border focus:outline-none focus:ring-2 focus:ring-[#f5b4b4]
                 border-[#f5b4b4] p-2 rounded mb-2 bg-white"
+                required
                 value={!newForm ? address : null}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Ví dụ: 23, đường Hoàng Mai"
@@ -296,48 +344,6 @@ const Address = () => {
               {newForm ? (
                 <button
                   type="submit"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    // If this is the first address, set it as default
-                    const isFirstAddress = addresses.length === 0;
-                    const defaultForFirst = isFirstAddress
-                      ? true
-                      : defaultAddress;
-
-                    try {
-                      await createNewAddress(
-                        name,
-                        phoneNumber,
-                        city,
-                        district,
-                        ward,
-                        address,
-                        defaultForFirst, // Use the modified default value
-                        userId
-                      );
-
-                      setAddresses([
-                        ...addresses,
-                        {
-                          name,
-                          phoneNumber,
-                          city,
-                          district,
-                          ward,
-                          address,
-                          defaultAddress: defaultForFirst, // Use the same modified value
-                        },
-                      ]);
-
-                      if (isFirstAddress) {
-                        setIdDefault(addresses.length + 1); // Update default address ID
-                      }
-
-                      handleCancel();
-                    } catch (error) {
-                      console.error("Error creating address:", error);
-                    }
-                  }}
                   className="bg-red-500 hover:bg-red-600 duration-300
                  text-white px-4 py-2 rounded hover:cursor-pointer"
                 >
