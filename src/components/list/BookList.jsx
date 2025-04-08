@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-// import axios from "axios";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
-import toast from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
 import BookUpdate from "../update/BookUpdate";
 import AddBook from "../addForm/AddBook";
 import { handleDeleteBook } from "../../services/BookServices";
+import { useNavigate } from "react-router";
 
 const BookList = () => {
+  const navigate = useNavigate();
+
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingBookId, setEditingBookId] = useState(null);
@@ -201,14 +202,15 @@ const BookList = () => {
                     }
                   />
 
-                  {editingBookId === book.id && (
-                    <BookUpdate
-                      bookId={book.id}
-                      onUpdateSuccess={handleUpdateSuccess}
-                      onClose={handleClose} // Đóng form khi cập nhật xong hoặc bấm "Hủy"
-                      book={book}
-                    />
-                  )}
+                  {
+                    editingBookId === book.id && navigate(`/admin/admin-books/updating/${book.id}`) // Chuyển hướng đến trang AdminBooks
+                    // <BookUpdate
+                    //   bookId={book.id}
+                    //   onUpdateSuccess={handleUpdateSuccess}
+                    //   onClose={handleClose} // Đóng form khi cập nhật xong hoặc bấm "Hủy"
+                    //   book={book}
+                    // />
+                  }
                 </div>
               </div>
             ))}

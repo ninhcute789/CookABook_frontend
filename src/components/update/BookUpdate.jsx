@@ -153,7 +153,7 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-15/22">
         <h2 className="text-xl font-semibold mb-4">Cập nhật sách</h2>
         <form onSubmit={handleSubmit}>

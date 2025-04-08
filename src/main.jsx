@@ -30,6 +30,7 @@ import UserArticles from "./components/user/UserArticles.jsx";
 import UserSupport from "./components/user/UserSupport.jsx";
 import UserSelectedOrder from "./components/user/UserSelectedOrder.jsx";
 import AdminOrderDetail from "./pages/AdminOrderDetail.jsx";
+import AdminBooksUpdate from "./pages/AdminBooksUpdate.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -67,6 +68,7 @@ ReactDOM.createRoot(root).render(
         <Route path="admin" element={<Admin />}>
           <Route index element={<AdminDashboard />} />
           <Route path="admin-books" element={<AdminBooks />} />
+          <Route path="admin-books/updating/:id" element={<AdminBooksUpdate />} />
           <Route path="admin-orders" element={<AdminOrders />} />
           <Route path="admin-orders/:id" element={<AdminOrderDetail />} />
           <Route path="admin-users" element={<AdminUsers />} />

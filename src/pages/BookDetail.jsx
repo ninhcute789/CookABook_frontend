@@ -435,6 +435,15 @@ const BookDetail = () => {
                 <hr className="text-gray-300" />
               </div>
             </div>
+            {/* Mô tả sản phẩm */}
+            <div className="bg-white p-4 rounded-lg shadow-lg mt-6">
+              <h2 className="text-xl font-semibold mb-2">Mô tả sản phẩm</h2>
+              <p className="text-gray-700 leading-relaxed">
+                {book.description
+                  ? book.description
+                  : "Hiện tại chưa có mô tả chi tiết cho sản phẩm này. Vui lòng quay lại sau hoặc liên hệ với chúng tôi để biết thêm thông tin."}
+              </p>
+            </div>
           </div>
         </div>
         <div className="3 w-full bg-white h-80 rounded-lg mt-6 shadow-lg">
@@ -503,55 +512,66 @@ const BookDetail = () => {
         </div>
 
         {/* Nút hành động */}
-        <button
-          className="w-full bg-red-500 duration-300 hover:cursor-pointer
+        {book.available ? (
+          <button
+            className="w-full bg-red-500 duration-300 hover:cursor-pointer
         hover:bg-red-600 text-white py-2 rounded-lg font-semibold mb-2"
-          onClick={() => {
-            if (!user) {
-              toast.error("Bạn chưa đăng nhập!");
-              navigate("/dang-nhap");
-            } else {
-              const fetch = async () => {
-                try {
-                  await addBookToCart(book.id, user.cartId, quantity);
-                  await fetchQuantity();
-                } catch (error) {
-                  console.error("Lỗi khi lấy địa chỉ mặc định:", error);
-                }
-              };
-              fetch();
-              setTimeout(() => {
-                navigate("/gio-hang");
-              }, 100);
-              
-            }
-          }}
-        >
-          Mua ngay
-        </button>
-        <button
-          className="w-full border border-gray-300 duration-300
+            onClick={() => {
+              if (!user) {
+                toast.error("Bạn chưa đăng nhập!");
+                navigate("/dang-nhap");
+              } else {
+                const fetch = async () => {
+                  try {
+                    await addBookToCart(book.id, user.cartId, quantity);
+                    await fetchQuantity();
+                  } catch (error) {
+                    console.error("Lỗi khi lấy địa chỉ mặc định:", error);
+                  }
+                };
+                fetch();
+                setTimeout(() => {
+                  navigate("/gio-hang");
+                }, 100);
+              }
+            }}
+          >
+            Mua ngay
+          </button>
+        ) : (
+          <button
+            className="w-full bg-red-500 duration-300 hover:cursor-pointer
+          hover:bg-red-600 text-white py-2 rounded-lg font-semibold"
+            disabled
+          >
+            Hết hàng
+          </button>
+        )}
+        {book.available ? (
+          <button
+            className="w-full border border-gray-300 duration-300
           py-2 rounded-lg hover:cursor-pointer hover:bg-gray-200"
-          onClick={() => {
-            if (!user) {
-              toast.error("Bạn chưa đăng nhập!");
-              navigate("/dang-nhap");
-            } else {
-              const fetch = async () => {
-                try {
-                  await addBookToCart(book.id, user.cartId, quantity);
-                  await fetchQuantity();
-                } catch (error) {
-                  console.error("Lỗi khi lấy địa chỉ mặc định:", error);
-                }
-              };
-              fetch();
-            }
-          }}
-        >
-          Thêm vào giỏ
-          {/* {console.log("cartItems", cartItems)} */}
-        </button>
+            onClick={() => {
+              if (!user) {
+                toast.error("Bạn chưa đăng nhập!");
+                navigate("/dang-nhap");
+              } else {
+                const fetch = async () => {
+                  try {
+                    await addBookToCart(book.id, user.cartId, quantity);
+                    await fetchQuantity();
+                  } catch (error) {
+                    console.error("Lỗi khi lấy địa chỉ mặc định:", error);
+                  }
+                };
+                fetch();
+              }
+            }}
+          >
+            Thêm vào giỏ
+            {/* {console.log("cartItems", cartItems)} */}
+          </button>
+        ) : null}
         {/* <button className="w-full border border-gray-300 py-2 rounded-lg">
           Mua trước trả sau
         </button> */}

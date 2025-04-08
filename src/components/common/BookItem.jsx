@@ -55,14 +55,24 @@ const BookItem = (props) => {
               </h3>
 
               <div className=" line-clamp-2 h-14 text-xl">{book.title}</div>
+              <div className="flex items-center justify-between">
+                {book.official ? (
+                  <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold h-6">
+                    CHÍNH HÃNG
+                  </span>
+                ) : (
+                  <span className="px-1 h-6"></span>
+                )}
 
-              {book.official ? (
-                <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
-                  CHÍNH HÃNG
-                </span>
-              ) : (
-                <span className="px-1"></span>
-              )}
+                {!book.available ? (
+                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold h-6">
+                    HẾT HÀNG
+                  </span>
+                ) : (
+                  <span className="px-1 h-6"></span>
+                )}
+              </div>
+
               <div className="flex items-center gap-1 text-yellow-500 mt-2">
                 {[...Array(4)].map((_, i) => (
                   <svg
@@ -84,45 +94,47 @@ const BookItem = (props) => {
         ))}
       </div>
       {/* Phân trang */}
-      { <div className="flex justify-center mt-4 space-x-2">
-        <button
-          onClick={() => {
-            setPage((prev) => Math.max(prev - 1, 1));
-            setTimeout(() => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
-          }}
-          className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
-            page === 1
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
-          }`}
-          disabled={page === 1}
-        >
-          Trước
-        </button>
+      {
+        <div className="flex justify-center mt-4 space-x-2">
+          <button
+            onClick={() => {
+              setPage((prev) => Math.max(prev - 1, 1));
+              setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
+            }}
+            className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
+              page === 1
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
+            }`}
+            disabled={page === 1}
+          >
+            Trước
+          </button>
 
-        <span className="px-4 py-2 rounded-lg shadow-md">
-          {page} / {totalPages}
-        </span>
+          <span className="px-4 py-2 rounded-lg shadow-md">
+            {page} / {totalPages}
+          </span>
 
-        <button
-          onClick={() => {
-            setPage((prev) => Math.min(prev + 1, totalPages));
-            setTimeout(() => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
-          }}
-          className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
-            page === totalPages
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
-          }`}
-          disabled={page === totalPages}
-        >
-          Tiếp
-        </button>
-      </div>}
+          <button
+            onClick={() => {
+              setPage((prev) => Math.min(prev + 1, totalPages));
+              setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
+            }}
+            className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
+              page === totalPages
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
+            }`}
+            disabled={page === totalPages}
+          >
+            Tiếp
+          </button>
+        </div>
+      }
     </div>
   );
 };

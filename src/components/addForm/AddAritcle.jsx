@@ -73,7 +73,7 @@ const AddArticle = (props) => {
         <div className="z-50  fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] ">
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-lg shadow-lg w-11/22"
+            className="bg-white p-6 rounded-lg shadow-lg w-15/22 min-h-96"
           >
             <h2 className="text-lg font-semibold mb-4">Thêm bài báo</h2>
             <div className="CONTENT grid grid-cols-2 space-x-4">
@@ -84,9 +84,11 @@ const AddArticle = (props) => {
                   placeholder="Tiêu đề mới"
                   value={title}
                   onChange={handleTitleChange}
-                  className="w-full p-2 border rounded mb-3"
+                  className="w-full p-2 border rounded mb-3 h-fit"
+                  rows="2"
                 />
                 <textarea
+                  type="text"
                   name="content"
                   placeholder="Nội dung mới"
                   value={content}
@@ -95,11 +97,11 @@ const AddArticle = (props) => {
                   rows="4"
                 />
               </div>
-              <div className="items-center overflow-hidden object-center mb-3">
+              <div className="items-center overflow-hidden object-center mb-3 ">
                 <ImageUploader onUploadSuccess={(url) => setImageUrl(url)} />
               </div>
             </div>
-            <div className="flex justify-end mt-4 space-x-2">
+            <div className="flex justify-end mt-10 space-x-2">
               <button
                 className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer"
                 onClick={() => setIsModalOpen(false)}

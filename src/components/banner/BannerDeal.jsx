@@ -83,35 +83,14 @@ const TopDealBanner = () => {
         </span>
         TOP DEAL - SIÊU RẺ
       </h2>
-      {/* {console.log("tong so sach", totalElements)} */}
 
       <div className={`book-container duration-300 ${isFading ? "fade-out" : "fade-in"} flex space-x-2 mt-4 relative`}>
-        {/* <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className={`p-3 bg-gray-200 shadow-[0px_2px_8px_rgba(0,0,0,0.2)] shadow-neutral-900 z-10 hover:cursor-pointer hover:bg-white duration-300 ${
-            page === 1 ? "hidden" : ""
-          }
-          rounded-full disabled:opacity-50 items-center top-[45%] absolute left-2`}
-        >
-          <IoIosArrowBack className="text-black" />
-        </button>
-        <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={totalPages === books?.length}
-          className={`p-3 bg-gray-200 shadow-[0px_2px_8px_rgba(0,0,0,0.2)] shadow-neutral-900 z-10 hover:cursor-pointer hover:bg-white duration-300 ${
-            page === totalPages ? "hidden" : ""
-          }
-          rounded-full disabled:opacity-50 items-center top-[45%] absolute right-0`}
-        >
-          <IoIosArrowForward className="text-black" />
-        </button> */}
         {books.map((product) => (
           <div
             key={product.id}
             onClick={() => navigate(`/sách/${product.id}`)}
             className="w-[300px] hover:shadow-2xl mb-5
-            shadow-md transition duration-200 
+            shadow-md transition duration-200 hover:cursor-pointer
              border-cyan-700 p-3 rounded-lg "
           >
             <div className="relative">
