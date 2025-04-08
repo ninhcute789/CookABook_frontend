@@ -274,7 +274,7 @@ const AdminOrderDetail = () => {
   }
 
   return (
-    <div className="w-full bg-gray-100 p-6">
+    <div className="w-full bg-gray-100 p-6 min-h-screen">
       {/* Back Button */}
       <button
         onClick={() => navigate("/admin/admin-orders")} // Navigate back to orders list

@@ -29,7 +29,7 @@ const OrderList = () => {
   }, [page, size, change, status]);
 
   return (
-    <div className="w-full bg-gray-100 p-6">
+    <div className="w-full bg-gray-100 p-6 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Quản lý đơn hàng</h2>
         <div className="SORT+FILTER flex gap-4">
@@ -202,7 +202,7 @@ const OrderList = () => {
           </button>
         </div>
       ) : (
-        <div className="text-center py-4 text-gray-500">
+        <div className="text-center py-20 text-gray-500">
           Không tìm thấy đơn hàng nào
         </div>
       )}
