@@ -49,7 +49,7 @@ const OrderStatusUpdatePopup = ({
           className="w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none "
         >
           <option value="PENDING">Đang chờ xử lý</option>
-          <option value="CONFIRMED">Đang xử lý</option>
+          <option value="CONFIRMED">Được chấp nhận</option>
           <option value="DELIVERING">Đang giao hàng</option>
           <option value="DELIVERED">Đã giao hàng</option>
           <option value="COMPLETED">Đã hoàn thành</option>
@@ -471,6 +471,10 @@ const AdminOrderDetail = () => {
                     ? "text-red-500"
                     : order.status === "DELIVERED"
                     ? "text-purple-500"
+                    : order.status === "DELIVERING"
+                    ? "text-orange-500"
+                    : order.status === "RETURNED"
+                    ? "text-gray-700"
                     : ""
                 }`}
               >
@@ -479,6 +483,8 @@ const AdminOrderDetail = () => {
                 {order.status === "PENDING" && "Đang chờ xử lý"}
                 {order.status === "CONFIRMED" && "Được chấp nhận"}
                 {order.status === "DELIVERED" && "Đã giao hàng"}
+                {order.status === "DELIVERING" && "Đang giao hàng"}
+                {order.status === "RETURNED" && "Đã trả lại"}
               </span>
             </p>
             <button
