@@ -140,7 +140,7 @@ const UserOrder = () => {
                           />
                           <p
                             className="text-sm h-5 w-7 text-center
-                        text-white bottom-0 right-0 absolute bg-gray-500 px-1 rounded-tl rounded-br "
+                        text-gray-700 bottom-0 right-0 absolute bg-gray-300 px-1 rounded-tl rounded-br "
                           >
                             x{item.quantity}
                           </p>
@@ -191,7 +191,7 @@ const UserOrder = () => {
                       minute: "2-digit",
                     })}
                   </p>
-                  <p className="text-right text-lg text-black font-medium">
+                  <p className="text-right text-xl text-black font-medium">
                     <span className="text-gray-500">Tổng tiền: </span>{" "}
                     {order.totalPrice?.toLocaleString("vi-VN")}₫
                   </p>

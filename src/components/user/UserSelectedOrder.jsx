@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
-import { getOrderById } from "../../services/OrderServices";
+import { cancelOrderById, getOrderById } from "../../services/OrderServices";
 import { useNavigate, useParams } from "react-router";
+import toast from "react-hot-toast";
 
 const UserSelectedOrder = () => {
   const context = useContext(AppContext);
@@ -13,6 +14,8 @@ const UserSelectedOrder = () => {
   const [error, setError] = useState(null);
   const [address, setAddress] = useState(null);
   const [payment, setPayment] = useState(null);
+
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -45,6 +48,29 @@ const UserSelectedOrder = () => {
     fetchOrders();
   }, [id, context?.user?.id]);
 
+  const handleCancelOrder = async () => {
+    try {
+      // Call API to cancel order
+      await cancelOrderById(order.id);
+
+      // Update local order state
+      setOrder((prevOrder) => ({
+        ...prevOrder,
+        status: "CANCELLED",
+      }));
+
+      // Close the modal
+      setShowCancelModal(false);
+
+      // Optional: Refresh order data
+      // const updatedOrder = await getOrderById(id);
+      // setOrder(updatedOrder);
+    } catch (error) {
+      console.error("Error cancelling order:", error);
+      toast.error("Không thể hủy đơn hàng. Vui lòng thử lại sau.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="w-39/48 flex justify-center items-center py-8">
@@ -75,38 +101,48 @@ const UserSelectedOrder = () => {
                 ? "text-red-600"
                 : order.status === "DELIVERED"
                 ? "text-orange-600"
+                : order.status === "DELIVERING"
+                ? "text-purple-600"
+                : order.status === "RETURNED"
+                ? "text-gray-600"
                 : ""
             }`}
           >
-            {order.status === "COMPLETED" && " Đã hoàn thành"}
+            {order.status === "COMPLETED" && "Đã hoàn thành"}
             {order.status === "CANCELLED" && "Đã hủy"}
             {order.status === "PENDING" && "Đang chờ xử lý"}
             {order.status === "CONFIRMED" && "Được xác nhận"}
             {order.status === "DELIVERED" && "Đã giao hàng"}
+            {order.status === "DELIVERING" && "Đang giao hàng"}
+            {order.status === "RETURNED" && "Đã trả hàng"}
           </div>
         </div>
-
         <div className="grid xl:grid-cols-3 grid-cols-1 gap-4 mb-4">
           {/* Column 1 */}
           <div className="flex flex-col">
             <h2 className="font-bold mb-2">ĐỊA CHỈ NGƯỜI NHẬN</h2>
             <div className="bg-white rounded p-4 shadow-sm flex-1">
               <p className="mb-2 font-medium">{address?.name}</p>
-              <p className="mb-2">
-                Địa chỉ: {address?.address}, {address?.ward},{" "}
-                {address?.district}, {address?.city}
+              <p className="mb-2 text-gray-700">
+                <span className="text-gray-400">Địa chỉ:</span>{" "}
+                {address?.address}, {address?.ward}, {address?.district},{" "}
+                {address?.city}
               </p>
-              <p>Điện thoại: 0394517504</p>
+              <p className="text-gray-700">
+                <span className="text-gray-400">Điện thoại:</span> 0394517504
+              </p>
             </div>
           </div>
 
           {/* Column 2 */}
           <div className="flex flex-col">
             <h2 className="font-bold mb-2">HÌNH THỨC GIAO HÀNG</h2>
-            <div className="bg-white rounded p-4 shadow-sm flex-1">
-              <div className="mb-2">FAST Giao Tiết Kiệm</div>
-              <div className="mb-2">Phí vận chuyển: 46.100₫</div>
-              <div>
+            <div className="bg-white rounded p-4 shadow-sm flex-1 text-gray-700">
+              <div className="mb-2 ">
+                <span className="text-yellow-400 font-medium">FAST</span> Giao
+                Tiết Kiệm
+              </div>
+              <div className="mb-2 ">
                 Giao hàng trước ngày{" "}
                 {new Date(
                   new Date(order.createdAt).getTime() + 2 * 24 * 60 * 60 * 1000
@@ -116,13 +152,14 @@ const UserSelectedOrder = () => {
                   day: "2-digit",
                 })}
               </div>
+              <div>Được giao bởi Cook A Book</div>
             </div>
           </div>
 
           {/* Column 3 */}
           <div className="flex flex-col">
             <h2 className="font-bold mb-2">HÌNH THỨC THANH TOÁN</h2>
-            <div className="bg-white rounded p-4 shadow-sm flex-1">
+            <div className="bg-white rounded p-4 shadow-sm flex-1 text-gray-700">
               {payment?.paymentMethod === "COD" && (
                 <p className="mb-2">Thanh toán tiền mặt khi nhận hàng</p>
               )}
@@ -135,7 +172,6 @@ const UserSelectedOrder = () => {
             </div>
           </div>
         </div>
-
         <div className="overflow-x-auto overflow-hidden rounded-lg mb-4 shadow-sm">
           <table className="min-w-full bg-white border border-gray-200">
             <thead>
@@ -203,9 +239,59 @@ const UserSelectedOrder = () => {
                   </td>
                 </tr>
               ))}
+              <tr className=" font-medium">
+                <td colSpan="4" className="p-3 text-right ">
+                  Tổng tiền thanh toán:
+                </td>
+                <td className="p-3 text-center text-red-600">
+                  {order.totalPrice?.toLocaleString("vi-VN")}₫
+                </td>
+              </tr>
             </tbody>
           </table>
-        </div>
+        </div>{" "}
+        {(order.status === "PENDING" || order.status === "CONFIRMED") && (
+          <>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setShowCancelModal(true)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:cursor-pointer
+                      hover:bg-red-600 transition duration-300 ease-in-out"
+              >
+                Hủy đơn hàng
+              </button>
+            </div>
+
+            {showCancelModal && (
+              <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center z-50">
+                <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Xác nhận hủy đơn hàng
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Bạn có chắc chắn muốn hủy đơn hàng này không?
+                  </p>
+                  <div className="flex justify-end space-x-4">
+                    <button
+                      onClick={() => setShowCancelModal(false)}
+                      className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:cursor-pointer
+                              hover:bg-gray-400 transition duration-300"
+                    >
+                      Không
+                    </button>
+                    <button
+                      onClick={handleCancelOrder}
+                      className="px-4 py-2 bg-red-500 text-white rounded hover:cursor-pointer
+                            hover:bg-red-600 transition duration-300"
+                    >
+                      Xác nhận hủy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

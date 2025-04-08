@@ -371,6 +371,7 @@ const BookUpdate = ({ bookId, onUpdateSuccess, onClose, book }) => {
               onUploadSuccess={(url) => setImageUrl(url)}
               initialImageUrl={book.imageURL}
             />
+            {/* {console.log("37444", book.imageURL)}  */}
           </div>
           <div className="flex justify-end space-x-2 mt-2">
             <button

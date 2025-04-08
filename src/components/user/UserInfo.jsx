@@ -39,6 +39,27 @@ const UserInfo = () => {
     confirmPassword: "",
   });
 
+  const fetchUser = async () => {
+    try {
+      setIsLoading(true);
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return;
+
+      const parsedUser = JSON.parse(storedUser);
+      const res = await getUsersById(parsedUser.id);
+      context.setUser(res);
+      setCurrentAvatar(res.avatar || ava);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu user:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -53,27 +74,7 @@ const UserInfo = () => {
     if (context?.user?.avatar) {
       setCurrentAvatar(context.user.avatar);
     }
-  }, [context?.user]);
-
-  const fetchUser = async () => {
-    try {
-      setIsLoading(true);
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) return;
-
-      const parsedUser = JSON.parse(storedUser);
-      const res = await getUsersById(parsedUser.id);
-      context.setUser(res);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu user:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  }, [context?.user?.avatar]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -164,18 +165,26 @@ const UserInfo = () => {
                     <h2 className="text-lg font-semibold mb-4">
                       Đổi ảnh đại diện
                     </h2>
+                    {console.log("167777", context.user.avatar)}
+
                     <div className="space-y-4 w-full">
-                      <ImageUploader
-                        onUploadSuccess={(url) => {
-                          setCurrentAvatar(url);
-                          context?.setUser((prevState) => ({
-                            ...prevState,
-                            avatar: url,
-                          }));
-                        }}
-                        initialImage={currentAvatar}
-                      />
+                      {!isLoading && (
+                        <ImageUploader
+                          onUploadSuccess={(url) => {
+                            setCurrentAvatar(url);
+                            context?.setUser((prevState) => ({
+                              ...prevState,
+                              avatar: url,
+                            }));
+                          }}
+                          initialImage={
+                            currentAvatar || context?.user?.avatar || ava
+                          }
+                        />
+                      )}
                     </div>
+                    {console.log("17999", context.user.avatar)}
+
                     <div className="flex justify-end mt-4 space-x-2">
                       <button
                         className="px-4 py-2 duration-300 bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
@@ -502,7 +511,9 @@ const UserInfo = () => {
                             context.setUser
                           );
                           setIsUpdatePassword(false);
-                        } else if (passwordForm.oldPassword === passwordForm.newPassword) {
+                        } else if (
+                          passwordForm.oldPassword === passwordForm.newPassword
+                        ) {
                           toast.error("Mật khẩu cũ và mới giống nhau!");
                         } else {
                           toast.error("Mật khẩu không khớp!");

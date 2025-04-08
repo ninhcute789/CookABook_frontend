@@ -531,7 +531,7 @@ const BookDetail = () => {
         </button>
         <button
           className="w-full border border-gray-300 duration-300
-          py-2 rounded-lg mb-2 hover:cursor-pointer hover:bg-gray-200"
+          py-2 rounded-lg hover:cursor-pointer hover:bg-gray-200"
           onClick={() => {
             if (!user) {
               toast.error("Bạn chưa đăng nhập!");
@@ -552,9 +552,9 @@ const BookDetail = () => {
           Thêm vào giỏ
           {/* {console.log("cartItems", cartItems)} */}
         </button>
-        <button className="w-full border border-gray-300 py-2 rounded-lg">
+        {/* <button className="w-full border border-gray-300 py-2 rounded-lg">
           Mua trước trả sau
-        </button>
+        </button> */}
       </div>
     </div>
   );

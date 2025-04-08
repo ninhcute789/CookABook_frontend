@@ -229,6 +229,50 @@ const getTotalRevenue = async (setTotalRevenue) => {
   }
 };
 
+const cancelOrderById = async (orderId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.post(
+      `/orders/${orderId}/cancel`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    // setTotalOrders(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy số lượng đơn hàng:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const deleteOrderById = async (orderId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.delete(`/orders/${orderId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    // setTotalOrders(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy số lượng đơn hàng:",
+      error.response?.data || error.message
+    );
+  }
+};
+
 export {
   saveCartToSession,
   saveAddressToSession,
@@ -240,4 +284,6 @@ export {
   getTotalOrderQuantity,
   reorderByOrderId,
   getTotalRevenue,
+  cancelOrderById,
+  deleteOrderById,
 };

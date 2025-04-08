@@ -40,8 +40,8 @@ const OrderList = () => {
               setPage(1); // Reset to page 1 when status changes
             }}
             className=" border-gray-300 appearance-none focus:outline-none
-              duration-300 ease-in-out border text-gray-500 bg-white
-              rounded-full px-5 py-2 shadow-sm outline-none"
+            duration-300 ease-in-out border text-gray-500 bg-white
+            rounded-full px-5 py-2 shadow-sm outline-none"
           >
             <option value="" className="hidden bg-gray-400">
               Lọc theo trạng thái
@@ -51,6 +51,8 @@ const OrderList = () => {
             <option value="CONFIRMED">Được chấp nhận</option>
             <option value="COMPLETED">Đã hoàn thành</option>
             <option value="DELIVERED">Đã giao hàng</option>
+            <option value="DELIVERING">Đang giao hàng</option>
+            <option value="RETURNED">Đã trả lại</option>
             <option value="">Tất cả</option>
           </select>
           <select
@@ -122,14 +124,20 @@ const OrderList = () => {
                         ? "text-red-800 bg-red-100"
                         : order.status === "DELIVERED"
                         ? "text-purple-800 bg-purple-100"
+                        : order.status === "DELIVERING"
+                        ? "text-orange-800 bg-orange-100"
+                        : order.status === "RETURNED"
+                        ? "text-gray-800 bg-gray-100"
                         : ""
                     }`}
                   >
                     {order.status === "COMPLETED" && "Đã hoàn thành"}
                     {order.status === "CANCELLED" && "Đã hủy"}
                     {order.status === "PENDING" && "Đang chờ xử lý"}
-                    {order.status === "CONFIRMED" && "Đang xử lý"}
+                    {order.status === "CONFIRMED" && "Được chấp nhận"}
                     {order.status === "DELIVERED" && "Đã giao hàng"}
+                    {order.status === "DELIVERING" && "Đang giao hàng"}
+                    {order.status === "RETURNED" && "Đã trả lại"}
                   </span>
                 </td>
                 {/* <td className="px-6 py-4 text-center">

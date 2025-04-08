@@ -70,7 +70,7 @@ const AddArticle = (props) => {
         Thêm bài báo
       </button>
       {isModalOpen && (
-        <div className="z-50  fixed inset-0 flex items-center justify-center bg-black ">
+        <div className="z-50  fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] ">
           <form
             onSubmit={handleSubmit}
             className="bg-white p-6 rounded-lg shadow-lg w-11/22"

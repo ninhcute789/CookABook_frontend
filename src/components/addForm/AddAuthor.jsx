@@ -75,7 +75,7 @@ const AddAuthor = (props) => {
         </button>
       </div>
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
             <h2 className="text-lg font-semibold mb-4">Thêm tác giả</h2>
             <div className="space-y-4 ">
