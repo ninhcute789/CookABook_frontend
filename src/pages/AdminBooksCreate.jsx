@@ -5,6 +5,7 @@ import { getAllCategoriesWithSizeAndPage } from "../services/CategoryServices";
 import axiosInstance from "../services/axiosInstance";
 import ImageUploader from "../components/common/ImageUpload";
 import { useNavigate } from "react-router";
+import Select from "react-select";
 
 const AdminBooksCreate = () => {
   // State quản lý form
@@ -45,7 +46,7 @@ const AdminBooksCreate = () => {
           page,
           size,
           setCategories,
-          setTotalPages, 
+          setTotalPages,
           setTotalElements
         );
         console.log("Danh sách thể loại:", res.data?.data?.data);
@@ -316,25 +317,29 @@ const AdminBooksCreate = () => {
               />
             </label>
             <label className="block">
-              Thể loại sách
-              <div className="space-y-2">
-                {categories.map((category) => (
-                  <label
-                    key={category.id}
-                    className="flex items-center space-x-2"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.some(
-                        (cat) => cat.id === category.id
-                      )}
-                      onChange={() => handleCategoryChange(category)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span>{category.name}</span>
-                  </label>
-                ))}
-              </div>
+              <span className="">Thể loại sách</span>
+              <Select
+                isMulti
+                options={categories.map((category) => ({
+                  value: category.id,
+                  label: category.name,
+                }))}
+                value={selectedCategories.map((category) => ({
+                  value: category.id,
+                  label: category.name,
+                }))}
+                onChange={(selectedOptions) => {
+                  setSelectedCategories(
+                    selectedOptions.map((option) => ({
+                      id: option.value,
+                      name: option.label,
+                    }))
+                  );
+                }}
+                className="mt-2"
+                classNamePrefix="react-select"
+                placeholder="Chọn thể loại"
+              />
             </label>
           </div>
           <ImageUploader

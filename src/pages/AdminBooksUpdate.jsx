@@ -5,6 +5,7 @@ import axiosInstance from "../services/axiosInstance";
 import ImageUploader from "../components/common/ImageUpload";
 import { getBooksById } from "../services/BookServices";
 import { useNavigate, useParams } from "react-router";
+import Select from "react-select";
 
 const AdminBooksUpdate = ({ onUpdateSuccess }) => {
   const { id } = useParams();
@@ -115,8 +116,6 @@ const AdminBooksUpdate = ({ onUpdateSuccess }) => {
     });
   };
 
-
-
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -177,7 +176,6 @@ const AdminBooksUpdate = ({ onUpdateSuccess }) => {
                   className="w-full border p-2 rounded"
                 />
               </label>
-
               {/* Author */}
               <label className="block">
                 <span className="text-gray-700">Tác giả</span>
@@ -334,7 +332,6 @@ const AdminBooksUpdate = ({ onUpdateSuccess }) => {
                 </select>
               </label>
               {/* Categories Section */}
-
               {/* {console.log("selectedCategories", selectedCategories)} */}
               <label className="block">
                 Còn hàng hay hết hàng
@@ -365,25 +362,30 @@ const AdminBooksUpdate = ({ onUpdateSuccess }) => {
                 />
               </label>
               <label className="block">
-                <span className="text-gray-700">Thể loại</span>
-                <div className="space-y-2">
-                  {categories.map((category) => (
-                    <label
-                      key={category.id}
-                      className="flex items-center space-x-2"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.some(
-                          (cat) => cat.id === category.id
-                        )}
-                        onChange={() => handleCategoryChange(category)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-700">{category.name}</span>
-                    </label>
-                  ))}
-                </div>
+                <span className="">Thể loại</span>
+                <Select
+                  isMulti
+                  options={categories.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                  }))}
+                  value={selectedCategories.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                  }))}
+                  onChange={(selectedOptions) => {
+                    setSelectedCategories(
+                      selectedOptions.map((option) => ({
+                        id: option.value,
+                        name: option.label,
+                      }))
+                    );
+                  }}
+                  className="mt-2"
+                  classNamePrefix="react-select"
+                  placeholder="Chọn thể loại"
+
+                />
               </label>
             </div>
             {/* Image Uploader */}
