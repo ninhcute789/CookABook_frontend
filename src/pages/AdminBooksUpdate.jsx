@@ -352,16 +352,16 @@ const AdminBooksUpdate = ({ onUpdateSuccess }) => {
                   </option>
                 </select>
               </label>
-              <label className="block">
+              <label className="block" style={{ gridColumn: "span 2" }}>
                 Mô tả sách
-                <input
-                  className="w-full border p-2 rounded"
+                <textarea
+                  className="w-full border p-2 rounded min-h-50"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                 />
               </label>
-              <label className="block">
+              <label className="block ">
                 <span className="">Thể loại</span>
                 <Select
                   isMulti
@@ -381,10 +381,9 @@ const AdminBooksUpdate = ({ onUpdateSuccess }) => {
                       }))
                     );
                   }}
-                  className="mt-2"
+                  className=""
                   classNamePrefix="react-select"
                   placeholder="Chọn thể loại"
-
                 />
               </label>
             </div>

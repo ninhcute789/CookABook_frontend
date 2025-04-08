@@ -307,10 +307,10 @@ const AdminBooksCreate = () => {
                 <option value="false">Hết hàng</option>
               </select>
             </label>
-            <label className="block">
+            <label className="block" style={{ gridColumn: "span 2" }}>
               Mô tả sách
               <textarea
-                className="w-full border p-2 rounded"
+                className="w-full border p-2 rounded min-h-50"
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
@@ -336,7 +336,7 @@ const AdminBooksCreate = () => {
                     }))
                   );
                 }}
-                className="mt-2"
+                className=""
                 classNamePrefix="react-select"
                 placeholder="Chọn thể loại"
               />
