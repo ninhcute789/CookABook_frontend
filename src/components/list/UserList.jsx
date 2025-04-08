@@ -159,134 +159,145 @@ const UserList = () => {
       />
       <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
         <h2 className="text-xl font-bold">Danh sách người dùng</h2>
-        <p
-          className="text-md 
-          hover:-translate-2 duration-300 hover:cursor-context-menu
-          font-medium ml-auto [@media(max-width:600px)]:mx-auto bg-[#7dd237] p-2 rounded-md"
+        <div
+          className="flex items-center gap-2 ml-auto [@media(max-width:600px)]:mx-auto 
+          bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg 
+          shadow-md hover:shadow-lg transition-all duration-300 group"
         >
-          Số lượng người dùng: {totalElements}
-        </p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 group-hover:scale-110 transition-transform duration-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+          <span className="font-medium">
+            Tổng số người dùng:
+            <span className="ml-1 font-bold">{totalElements}</span>
+          </span>
+        </div>
       </div>
       {users.length === 0 ? (
         <p className="text-gray-500">Không có người dùng nào!</p>
       ) : (
         <>
-          <div className="rounded-lg overflow-hidden shadow-lg">
-            <table className="min-w-full border-collapse border border-gray-300 rounded-xl">
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="min-w-full">
               <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2">
+                <tr className="bg-gray-50 border-b">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Tên tài khoản
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Họ và tên
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Giới tính
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Ngày sinh
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">Email</th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
+                    Email
+                  </th>
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Thời gian tạo
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
                     Thời gian sửa
                   </th>
-                  <th className="border border-gray-300 px-4 py-2"></th>
+                  <th className="px-6 py-3 text-sm font-medium text-gray-500 text-center">
+                    Thao tác
+                  </th>
                 </tr>
               </thead>
-              <tbody>
-                {users.map(
-                  (
-                    user // Đảo ngược mảng để hiển thị người dùng mới nhất lên trên
-                  ) => (
-                    <tr
-                      key={user.id}
-                      className="border border-gray-300 hover:bg-gray-300 transition-all"
-                    >
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.username}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.name}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.gender}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {new Date(user.dob).toLocaleDateString("vi-VN")}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.email}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.createdAt}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.updatedAt || "Chưa cập nhật"}
-                      </td>
-                      <td className=" p-2 space-x-4 items-center justify-center flex h-10">
+              <tbody className="divide-y divide-gray-200">
+                {users.map((user) => (
+                  <tr key={user.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-center">
+                      {user.username}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {user.name}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {user.gender === "FEMALE" && "Nữ"}
+                      {user.gender === "MALE" && "Nam"}
+                      {user.gender === "OTHER" && "Khác"}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {new Date(user.dob).toLocaleDateString("vi-VN")}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {user.email}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {user.createdAt}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      {user.updatedAt || "Chưa cập nhật"}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-center">
+                      <div className="flex items-center justify-center space-x-4">
                         <LuPencilLine
-                          className="text-blue-500 hover:cursor-pointer hover:scale-150 duration-200"
+                          className="text-blue-600 hover:text-blue-900 hover:cursor-pointer hover:scale-125 duration-200"
                           onClick={() => setEditingUserId(user.id)}
                         />
-
                         <GoTrash
-                          className="text-red-700 hover:cursor-pointer hover:scale-150 duration-200"
+                          className="text-red-600 hover:text-red-900 hover:cursor-pointer hover:scale-125 duration-200"
                           onClick={() => handleDelete(user.id)}
                         />
-                        {editingUserId === user.id && (
-                          <UserUpdate
-                            user={user}
-                            onUpdate={handleUpdate}
-                            onClose={handleClose}
-                            userId={user.id}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  )
-                )}
+                      </div>
+                      {editingUserId === user.id && (
+                        <UserUpdate
+                          user={user}
+                          onUpdate={handleUpdate}
+                          onClose={handleClose}
+                          userId={user.id}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-          <div className="flex justify-center mt-4 space-x-2">
+          <div className="flex justify-center mt-4 gap-2">
             <button
               onClick={() => {
                 setPage((prev) => Math.max(prev - 1, 1));
-                setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
+                // window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
-                page === 1
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
-              }`}
               disabled={page === 1}
+              className={`px-4 py-2 rounded ${
+                page === 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
+              }`}
             >
               Trước
             </button>
-
-            <span className="px-4 py-2 rounded-lg shadow-md">
+            <span className="px-4 py-2 bg-white rounded">
               {page} / {totalPages}
             </span>
-
             <button
               onClick={() => {
                 setPage((prev) => Math.min(prev + 1, totalPages));
-                setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }, 0); // Delay nhỏ để đảm bảo React đã cập nhật UI trước khi cuộn
+                // window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className={`px-4 py-2 rounded-lg shadow-md shadow-gray-400 ${
-                page === totalPages
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-white text-black hover:bg-gray-300 duration-300 hover:cursor-pointer"
-              }`}
               disabled={page === totalPages}
+              className={`px-4 py-2 rounded ${
+                page === totalPages
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
+              }`}
             >
               Tiếp
             </button>

@@ -40,7 +40,7 @@
   top: 50%;
   transform: translateY(-50%);
 }
-#dateAdimnUser::-webkit-calendar-picker-indicator {
+#dateAdminUser::-webkit-calendar-picker-indicator {
   background-size: contain;
   background-image: url();
   cursor: pointer;
@@ -70,7 +70,7 @@
 }
 
 .goes-in {
-  animation: goesIn 1s ;
+  animation: goesIn 1s;
 }
 
 @keyframes goesOut {
@@ -87,11 +87,9 @@
   animation: goesOut 1s;
 }
 
-
 /* .custom-w {
   width: calc(100% - 208px);
 } */
-
 
 @keyframes popUp {
   from {

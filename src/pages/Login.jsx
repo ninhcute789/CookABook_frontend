@@ -5,9 +5,17 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import bg from "../assets/bg-10.jpg";
 import toast from "react-hot-toast";
 import axiosInstance from "../services/axiosInstance";
-import Cookies from "js-cookie";
 import { AppContext } from "../context/AppContext";
 import { getQuantityOfCartItems } from "../services/CartServices";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 70, behavior: "smooth" });
+    console.log("Đã scroll lên đầu trang!");
+  }, [pathname]);
+  return null;
+};
 
 const Login = () => {
   const context = useContext(AppContext);
@@ -22,13 +30,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Xử lý scroll lên đầu trang khi thay đổi route
-  const ScrollToTop = () => {
-    const { pathname } = useLocation();
-    useEffect(() => {
-      window.scrollTo({ top: 70, behavior: "smooth" });
-    }, [pathname]);
-    return null;
-  };
 
   // const handleLogin = async (event) => {
   //   event.preventDefault(); // Ngăn form reload trang
@@ -121,20 +122,6 @@ const Login = () => {
     }
   };
 
-  // const refreshToken = () => {
-  //   axiosInstance
-  //     .get("/auth/refresh", {
-  //       withCredentials: true,
-  //     })
-  //     .then((response) => {
-  //       if (response.data.status === 200 && response.data.data?.accessToken) {
-  //         document.cookie = `refreshToken=${response.data.data.accessToken}; path=/; Secure; HttpOnly`;
-  //         console.log("Refresh token đã lưu vào cookie!");
-  //       }
-  //     })
-  //     .catch((error) => console.error("Lỗi khi lấy refresh token:", error));
-  // };
-
   return (
     <div
       className="Login-container flex justify-center items-center min-h-screen bg-cover bg-center"
@@ -202,7 +189,9 @@ const Login = () => {
           {/* Nút đăng nhập */}
           <button
             type="submit"
-            className="w-full bg-white text-black h-14 rounded-4xl shadow-2xl font-bold text-xl hover:bg-black hover:text-white transition-all duration-300"
+            className="w-full bg-white text-black hover:cursor-pointer
+            h-14 rounded-4xl shadow-2xl font-bold text-xl 
+            hover:bg-black hover:text-white transition-all duration-300"
           >
             Đăng nhập
           </button>

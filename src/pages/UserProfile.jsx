@@ -27,12 +27,15 @@ const UserProfile = () => {
 
   return (
     <div
-      className=" shadow-2xl w-full bg-[#e6e6e6] 
+      className=" shadow-2xl w-full bg-[#e6e6e6]
     shadow-neutral-600 text-black min-h-fit px-6 flex lg:flex-row flex-col"
     >
-      <div className="flex mx-auto min-h-screen w-18/24">
+      <div className="flex mx-auto min-h-screen w-21/24  relative">
         {/* Sidebar */}
-        <div className="min-w-55 w-9/48 bg-transparent p-4">
+        <div
+          className="min-w-55 w-9/48 bg-transparent p-4 sticky top-3 h-fit hover:cursor-pointer"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
           <div className="flex items-center space-x-3">
             <img
               src={context.user?.avatar || ava}

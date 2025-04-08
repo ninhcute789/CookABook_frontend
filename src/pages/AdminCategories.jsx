@@ -19,7 +19,7 @@ const AdminCategories = () => {
       setCategories(res.data?.data?.data || []);
       // setArticles(Array.isArray(res.data?.data?.data) ? res.data?.data?.data : []);
       // console.log("Danh sách bài viết - adminNews:", res.data?.data?.data);
-      toast.success("🎉 Tải danh sách thể loại thành công!");
+      // toast.success("🎉 Tải danh sách thể loại thành công!");
     } catch (error) {
       toast.error("Lỗi khi tải danh sách thể loại:", error);
       console.error("Lỗi khi tải danh sách thể loại:", error);

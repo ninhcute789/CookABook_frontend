@@ -21,7 +21,7 @@ const AdminUsers = () => {
         setUsers(res.data?.data?.data || []);
         // setUsers(Array.isArray(res.data?.data?.data) ? res.data?.data?.data : []);
         // console.log("Danh sách người dùng - adminNews:", res.data?.data?.data);
-        toast.success(<div className="w-90">🎉 Tải danh sách người dùng thành công!</div>);
+        // toast.success(<div className="w-90">🎉 Tải danh sách người dùng thành công!</div>);
       } catch (error) {
         toast.error("Lỗi khi tải danh sách người dùng:", error);
         console.error("Lỗi khi tải danh sách người dùng:", error);

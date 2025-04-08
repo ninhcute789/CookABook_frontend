@@ -1,116 +1,80 @@
 import { useContext, useEffect, useRef, useState } from "react";
-// import { getAllArticlesByUserId, getUsersById } from "../services/UserSevices";
-// import UserUpdate from "../components/update/UserUpdate";
-// import { handleDelete } from "../services/ArticleServices";
-// import { LuPencilLine } from "react-icons/lu";
-// import { GoTrash } from "react-icons/go";
-// import ArticleUpdate from "../components/update/ArticleUpdate";
-// import { truncateText } from "../services/CommonServices";
-// import AddArticle from "../components/addForm/AddAritcle";
 import ava from "../../assets/ava.png"; // Thay bằng ảnh đại diện thực tế
 import { AppContext } from "../../context/AppContext";
-// import { useNavigate } from "react-router";
-// import { FaBell } from "react-icons/fa";
-// import { RiFileList2Fill } from "react-icons/ri";
-// import { IoNewspaper } from "react-icons/io5";
-// import { PiAddressBookFill } from "react-icons/pi";
-// import { FaUser } from "react-icons/fa6";
-import { FiPhone } from "react-icons/fi";
 import { HiOutlineMail } from "react-icons/hi";
 import {
-  // getAllArticlesByUserId,
   getUsersById,
+  handleUpdatePassword,
   handleUpdateUser,
 } from "../../services/UserSevices";
 import { SlLock } from "react-icons/sl";
 import { GoKey } from "react-icons/go";
-import { IoMdClose } from "react-icons/io";
 import ImageUploader from "../common/ImageUpload";
+import toast from "react-hot-toast";
 
 const UserInfo = () => {
   const context = useContext(AppContext);
-
-  // const [user, setUser] = useState({});
-
-  // const navigate = useNavigate();
-
-  // const [editingUserId, setEditingUserId] = useState(null);
-  // const [editingArticleId, setEditingArticleId] = useState(null);
 
   const genders = [
     { label: "Nam", value: "MALE" },
     { label: "Nữ", value: "FEMALE" },
     { label: "Khác", value: "OTHER" },
   ];
+  const [isLoading, setIsLoading] = useState(true);
 
   const [isOpenAvatar, setIsOpenAvatar] = useState(false);
   const [isUpdateAvatar, setIsUpdateAvatar] = useState(false);
   const popupRef = useRef(null);
 
-  // const parsedUser = JSON.parse(localStorage.getItem("user"));
-  // const currentUserId = parsedUser.id;
+  const [isUpdateEmail, setIsUpdateEmail] = useState(false);
+  const [newEmail, setNewEmail] = useState(context?.user?.email);
+  const [currentAvatar, setCurrentAvatar] = useState(
+    context?.user?.avatar || ava
+  );
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     if (!token) {
-  //       console.error("❌ Không tìm thấy token!");
-  //       return;
-  //     }
-
-  //     const res = await axiosInstance.put(
-  //       "/users",
-  //       {
-  //         id: id,
-  //         password: password,
-  //         name: name,
-  //         gender: gender || null,
-  //         dob: dob,
-  //         email: email,
-  //         avatar: avatar,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     setAvatar(res.data.data.avatar);
-  //     console.log("avatar đã được cập nhật:", res.data.data.avatar);
-  //     console.log("✅ Người dùng đã được cập nhật:", res.data);
-  //     onUpdate(res.data.data); // Cập nhật danh sách user
-  //     onClose();
-  //     // alert("🎉 Cập nhật người dùng thành công!");
-  //     toast.success("🎉 Cập nhật người dùng thành công!");
-  //   } catch (error) {
-  //     toast.error(
-  //       "❌ Lỗi khi cập nhật người dùng:",
-  //       error.response?.data || error.message
-  //     );
-  //   }
-  // };
+  const [isUpdatePassword, setIsUpdatePassword] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   const fetchUser = async () => {
     try {
+      setIsLoading(true);
       const storedUser = localStorage.getItem("user");
       if (!storedUser) return;
 
       const parsedUser = JSON.parse(storedUser);
       const res = await getUsersById(parsedUser.id);
       context.setUser(res);
-      // const fetchUserArticles = await getAllArticlesByUserId(parsedUser.id);
-      // setArticles(fetchUserArticles.data.data);
-      // console.log("👤 Dữ liệu bài báo:", id);
+      setCurrentAvatar(res.avatar || ava);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu user:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    if (context?.user?.email) {
+      setNewEmail(context.user.email);
+    }
+  }, [context?.user]);
+  // Thêm useEffect để theo dõi thay đổi của avatar
+  useEffect(() => {
+    if (context?.user?.avatar) {
+      setCurrentAvatar(context.user.avatar);
+    }
+  }, [context?.user?.avatar]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -123,30 +87,6 @@ const UserInfo = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  // useEffect(() => {
-  //   // add or remove overflow-y-hidden class to body
-  //   if (editingUserId || editingArticleId) {
-  //     document.body.classList.add("overflow-y-hidden");
-  //   } else {
-  //     document.body.classList.remove("overflow-y-hidden");
-  //   }
-  // }, [editingUserId, editingArticleId]);
-
-  // const handleCloseUser = () => {
-  //   setEditingUserId(null);
-  // };
-
-  // const handleUpdate = (updatedUser) => {
-  //   context.setUser((prev) => {
-  //     console.log("🔄 Trước khi cập nhật:", prev);
-  //     const updatedUserData = { ...prev, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
-  //     console.log("✅ Sau khi cập nhật:", updatedUserData);
-  //     return updatedUserData;
-  //   });
-  // };
-
-  // const [user, setUser] = useState({});
 
   return (
     <div className="w-39/48">
@@ -225,40 +165,61 @@ const UserInfo = () => {
                     <h2 className="text-lg font-semibold mb-4">
                       Đổi ảnh đại diện
                     </h2>
+                    {console.log("167777", context.user.avatar)}
+
                     <div className="space-y-4 w-full">
-                      <ImageUploader
-                        onUploadSuccess={(url) =>
-                          context?.setUser((prevState) => ({
-                            ...prevState,
-                            avatar: url,
-                          }))
-                        }
-                      />
+                      {!isLoading && (
+                        <ImageUploader
+                          onUploadSuccess={(url) => {
+                            setCurrentAvatar(url);
+                            context?.setUser((prevState) => ({
+                              ...prevState,
+                              avatar: url,
+                            }));
+                          }}
+                          initialImage={
+                            currentAvatar || context?.user?.avatar || ava
+                          }
+                        />
+                      )}
                     </div>
+                    {console.log("17999", context.user.avatar)}
+
                     <div className="flex justify-end mt-4 space-x-2">
                       <button
-                        className="px-4 py-2 duration-300
-                        bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
-                        onClick={() => setIsUpdateAvatar(false)}
+                        className="px-4 py-2 duration-300 bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
+                        onClick={() => {
+                          setIsUpdateAvatar(false);
+                          setCurrentAvatar(context?.user?.avatar || ava);
+                        }}
                       >
                         Hủy
                       </button>
                       <button
-                        className="px-4 py-2 duration-300
-                        bg-blue-500 hover:bg-blue-600 text-white rounded hover:cursor-pointer"
-                        onClick={() => {
-                          handleUpdateUser(
-                            context?.user.id,
-                            context?.user.password,
-                            context?.user.name,
-                            context?.user.gender,
-                            context?.user.dob,
-                            context?.user.email,
-                            context?.user.avatar,
-                            context?.setUser
-                            // setEditingUserId
-                          );
-                          setIsUpdateAvatar(false);
+                        className="px-4 py-2 duration-300 bg-blue-500 hover:bg-blue-600 text-white rounded hover:cursor-pointer"
+                        onClick={async () => {
+                          try {
+                            await handleUpdateUser(
+                              context?.user?.id,
+                              context?.user?.password,
+                              context?.user?.name,
+                              context?.user?.gender,
+                              context?.user?.dob,
+                              context?.user?.email,
+                              currentAvatar,
+                              context?.setUser
+                            );
+
+                            // Cập nhật context sau khi API thành công
+                            context?.setUser((prevState) => ({
+                              ...prevState,
+                              avatar: currentAvatar,
+                            }));
+
+                            setIsUpdateAvatar(false);
+                          } catch (error) {
+                            console.error("Lỗi khi cập nhật avatar:", error);
+                          }
                         }}
                       >
                         Cập nhật
@@ -371,39 +332,200 @@ const UserInfo = () => {
               </button>
             </div>
           </div>
-          <div className="SDT-EMAIL w-12/27 pl-5">
-            <div className=" bg-white py-2">
-              <h3 className="text-lg text-gray-500 mb-4">
-                Số điện thoại và Email
-              </h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center border-b border-gray-300 pb-4">
-                  <div className="flex flex-row items-center space-x-3">
-                    <FiPhone className="text-gray-600 text-2xl " />
-                    <div className="flex  flex-col ">
-                      <span className=""> Số điện thoại</span>
-                      <span className=""> 9034563488</span>
-                    </div>
+          {isUpdateEmail && (
+            <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 className="text-lg font-semibold mb-4">Cập nhật Email</h2>
+                <div className="space-y-4 w-full">
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Email mới
+                    </label>
+                    <input
+                      type="email"
+                      value={newEmail}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 
+                     focus:ring-blue-500 focus:border-transparent outline-none"
+                      placeholder="Nhập địa chỉ email mới"
+                    />
                   </div>
-                  <button className=" px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 hover:cursor-pointer">
+                </div>
+                <div className="flex justify-end mt-6 space-x-2">
+                  <button
+                    className="px-4 py-2 duration-300
+                   bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
+                    onClick={() => {
+                      setIsUpdateEmail(false);
+                      setNewEmail(context?.user?.email);
+                    }}
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    className="px-4 py-2 duration-300
+                   bg-blue-500 hover:bg-blue-600 text-white rounded hover:cursor-pointer"
+                    onClick={() => {
+                      handleUpdateUser(
+                        context?.user.id,
+                        context?.user.password,
+                        context?.user.name,
+                        context?.user.gender,
+                        context?.user.dob,
+                        newEmail,
+                        context?.user.avatar,
+                        context?.setUser
+                      );
+                      setIsUpdateEmail(false);
+                    }}
+                  >
                     Cập nhật
                   </button>
                 </div>
-                <div className="flex justify-between items-center">
+              </div>
+            </div>
+          )}
+          <div className="SDT-EMAIL w-12/27 pl-5">
+            <div className="bg-white py-2">
+              <h3 className="text-lg text-gray-500 mb-4">Email</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-b border-gray-300 pb-3">
                   <div className="flex flex-row items-center space-x-3">
-                    <HiOutlineMail className="text-gray-600 text-2xl " />
-                    <div className="flex  flex-col ">
-                      <span className=""> Địa chỉ Email</span>
-                      <span className="text-gray-600"> Thêm địa chỉ Email</span>
+                    <HiOutlineMail className="text-gray-600 text-2xl" />
+                    <div className="flex flex-col">
+                      <span>Địa chỉ Email</span>
+                      {context?.user?.email ? (
+                        <span className="text-gray-600">
+                          {context.user.email}
+                        </span>
+                      ) : (
+                        <span className="text-gray-600">
+                          Thêm địa chỉ Email
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <button className=" px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 hover:cursor-pointer">
+                  <button
+                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 hover:cursor-pointer"
+                    onClick={() => {
+                      setNewEmail(context?.user?.email || ""); // Đồng bộ email khi mở modal
+                      setIsUpdateEmail(true);
+                    }}
+                  >
                     Cập nhật
                   </button>
                 </div>
               </div>
             </div>
 
+            {isUpdatePassword && (
+              <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                  <h2 className="text-lg font-semibold mb-4">Đổi mật khẩu</h2>
+                  <div className="space-y-4 w-full">
+                    <div className="flex flex-col space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Mật khẩu cũ
+                      </label>
+                      <input
+                        type="password"
+                        value={passwordForm.oldPassword}
+                        onChange={(e) =>
+                          setPasswordForm((prev) => ({
+                            ...prev,
+                            oldPassword: e.target.value,
+                          }))
+                        }
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 
+                      focus:ring-blue-500 focus:border-transparent outline-none"
+                        placeholder="Nhập mật khẩu cũ"
+                      />
+                    </div>
+
+                    <div className="flex flex-col space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Mật khẩu mới
+                      </label>
+                      <input
+                        type="password"
+                        value={passwordForm.newPassword}
+                        onChange={(e) =>
+                          setPasswordForm((prev) => ({
+                            ...prev,
+                            newPassword: e.target.value,
+                          }))
+                        }
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 
+                        focus:ring-blue-500 focus:border-transparent outline-none"
+                        placeholder="Nhập mật khẩu mới"
+                      />
+                    </div>
+
+                    <div className="flex flex-col space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Nhập lại mật khẩu mới
+                      </label>
+                      <input
+                        type="password"
+                        value={passwordForm.confirmPassword}
+                        onChange={(e) =>
+                          setPasswordForm((prev) => ({
+                            ...prev,
+                            confirmPassword: e.target.value,
+                          }))
+                        }
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 
+                         focus:ring-blue-500 focus:border-transparent outline-none"
+                        placeholder="Nhập lại mật khẩu mới"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-6 space-x-2">
+                    <button
+                      className="px-4 py-2 duration-300
+                        bg-gray-300 rounded hover:cursor-pointer hover:bg-gray-400"
+                      onClick={() => {
+                        setIsUpdatePassword(false);
+                        setPasswordForm({
+                          oldPassword: "",
+                          newPassword: "",
+                          confirmPassword: "",
+                        });
+                      }}
+                    >
+                      Hủy
+                    </button>
+                    <button
+                      className="px-4 py-2 duration-300
+                      bg-blue-500 hover:bg-blue-600 text-white rounded hover:cursor-pointer"
+                      onClick={() => {
+                        if (
+                          passwordForm.newPassword ===
+                            passwordForm.confirmPassword &&
+                          passwordForm.oldPassword !== passwordForm.newPassword
+                        ) {
+                          handleUpdatePassword(
+                            context.user.username,
+                            passwordForm.oldPassword,
+                            passwordForm.newPassword,
+                            context.setUser
+                          );
+                          setIsUpdatePassword(false);
+                        } else if (
+                          passwordForm.oldPassword === passwordForm.newPassword
+                        ) {
+                          toast.error("Mật khẩu cũ và mới giống nhau!");
+                        } else {
+                          toast.error("Mật khẩu không khớp!");
+                        }
+                      }}
+                    >
+                      Cập nhật
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className=" bg-white py-2">
               <h3 className="text-lg text-gray-500 mb-4">Bảo mật</h3>
               <div className="space-y-4">
@@ -412,7 +534,17 @@ const UserInfo = () => {
                     <SlLock className="text-gray-600 text-2xl " />
                     <span>Đổi mật khẩu</span>
                   </div>
-                  <button className=" px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 hover:cursor-pointer">
+                  <button
+                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 hover:cursor-pointer"
+                    onClick={() => {
+                      setPasswordForm({
+                        oldPassword: "",
+                        newPassword: "",
+                        confirmPassword: "",
+                      });
+                      setIsUpdatePassword(true);
+                    }}
+                  >
                     Cập nhật
                   </button>
                 </div>
@@ -425,7 +557,7 @@ const UserInfo = () => {
                     Thiết lập
                   </button>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center pb-3">
                   <span className="text-red-500">🗑 Yêu cầu xóa tài khoản</span>
                   <button className=" px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer">
                     Yêu cầu
@@ -434,7 +566,7 @@ const UserInfo = () => {
               </div>
             </div>
 
-            <div className=" bg-white py-2">
+            {/* <div className=" bg-white py-2">
               <h3 className="text-lg text-gray-500 mb-4">
                 Liên kết mạng xã hội
               </h3>
@@ -452,7 +584,7 @@ const UserInfo = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

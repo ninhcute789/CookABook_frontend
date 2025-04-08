@@ -65,7 +65,7 @@ const AddCategory = (props) => {
 
   return (
     <>
-      <div className="w-3/4 mx-auto">
+      <div className="w-full mx-auto">
         <button
           onClick={() => setIsOpen(true)}
           className="bg-blue-500 hover:cursor-pointer mb-5 w-50 duration-300
@@ -75,7 +75,7 @@ const AddCategory = (props) => {
         </button>
       </div>
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-8/22">
             <h2 className="text-lg font-semibold mb-4">Thêm thể loại sách</h2>
             <div className="space-y-4 ">

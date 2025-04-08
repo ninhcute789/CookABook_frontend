@@ -127,7 +127,9 @@ const handleDeleteBook = async (id, setBooks, setTotalElements) => {
                 toast.success("🗑 Xóa sách thành công!");
               } catch (error) {
                 console.error("❌ Lỗi khi xóa sách:", error);
-                toast.error("Không thể xóa sách!");
+                toast.error(
+                  error.response?.data?.error || "Xóa sách thất bại!"
+                );
               }
             }}
             className="px-4 py-2 bg-red-500 text-white rounded"
@@ -208,6 +210,33 @@ const getAllBooksWithAuthorId = async (
   }
 };
 
+const getTotalBookQuantity = async (setTotalBooks) => {
+  try {
+    const res = await axiosInstance.get(`/books/preview`);
+
+    setTotalBooks(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy số lượng sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+const getTopBooks = async (page, size, setBooks) => {
+  try {
+    const res = await axiosInstance.get(
+      `/books/preview?page=${page}&size=${size}`
+    );
+    setBooks(res.data?.data?.data || []);
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy danh sách:",
+      error.response?.data || error.message
+    );
+  }
+};
+
 export {
   getBooksById,
   getAllBooksWithSizeAndPage,
@@ -215,4 +244,6 @@ export {
   getAllBooksWithCategoryId,
   getAllBooksPreview,
   getAllBooksWithAuthorId,
+  getTotalBookQuantity,
+  getTopBooks,
 };

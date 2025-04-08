@@ -1,4 +1,10 @@
+import { useEffect } from "react";
+
 const UserSupport = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
     <div className="w-39/48">
       <h2 className="text-xl font-semibold px-4 py-[22px]">

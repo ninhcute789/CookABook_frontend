@@ -29,7 +29,7 @@ const AdminNews = () => {
       setArticles(res.data?.data?.data || []);
       // setArticles(Array.isArray(res.data?.data?.data) ? res.data?.data?.data : []);
       console.log("Danh sách bài viết - adminNews:", res.data?.data?.data);
-      toast.success("🎉 Tải danh sách bài viết thành công!");
+      // toast.success("🎉 Tải danh sách bài viết thành công!");
       // fetchArticles();
     } catch (error) {
       toast.error("Lỗi khi tải danh sách bài viết:", error);

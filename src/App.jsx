@@ -6,13 +6,32 @@ import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import axiosInstance from "./services/axiosInstance.jsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AppProvider } from "./context/AppContext.jsx";
+import { FaArrowUp } from "react-icons/fa6";
 // import Cookies from 'js-cookie';
-
 
 const App = () => {
   const location = useLocation();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+      setShowScrollTop(window.scrollY > 300); // Hiển thị nút khi scroll > 300px
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     refreshToken(); // Gọi khi app khởi động
@@ -56,6 +75,17 @@ const App = () => {
             <Outlet />
           </div>
         </div>
+        {showScrollTop && (
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-16 right-16 bg-red-500 text-white p-3 
+          rounded-full shadow-lg hover:bg-red-600 transition-all duration-300
+          hover:scale-110 active:scale-95 z-50"
+            aria-label="Scroll to top"
+          >
+            <FaArrowUp className="text-xl" />
+          </button>
+        )}
         <div className="footer-container">
           <Footer />
         </div>

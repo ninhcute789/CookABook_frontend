@@ -1,13 +1,10 @@
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { newsArticles } from "../data/dataNews.js";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
-// import axios from "axios";
 import SidebarArticles from "../components/sideBar/SidebarArticles.jsx";
 import { NavLink } from "react-router";
 import axiosInstance from "../services/axiosInstance.jsx";
-import toast from "react-hot-toast";
-import { getAllArticlesWithSizeAndPage } from "../services/ArticleServices.jsx";
 // import { filterAllArticlesWithTitle } from "../services/ArticleServices.jsx";
 
 // const ScrollToTop = () => {
@@ -35,28 +32,15 @@ const News = () => {
   const size = 12; // Số bài viết mỗi trang
   const [totalElements, setTotalElements] = useState(0); // Tổng số bài
 
-  // const filter = filterAllArticlesWithTitle({
-  //   page,
-  //   size,
-  //   setArticles,
-  //   setTotalPages,
-  //   setTotalElements,
-  //   content,
-  // });
+  
+
+  
 
   const fetchArticles = async () => {
     try {
-      // const token = localStorage.getItem("token");
-      // if (!token) {
-      //   console.error("❌ Không tìm thấy token!");
-      //   return;
-      // }
 
       const res = await axiosInstance.get(
-        `/articles/all?size=${size}&page=${page}&sort=createdAt,${change}&filter=title ~ '${content}'`,
-        // {
-        //   headers: { Authorization: `Bearer ${token}` },
-        // }
+        `/articles/all?size=${size}&page=${page}&sort=createdAt,${change}&filter=title ~ '${content}'`
       );
 
       // console.log("✅ API trả về:", res.data);
@@ -77,25 +61,13 @@ const News = () => {
   useEffect(() => {
     fetchArticles(page);
     // setPage(1);
-  }, [ page]);
+  }, [page]);
   useEffect(() => {
     fetchArticles(page);
     setPage(1);
   }, [content]);
 
   const [selectedArticle, setSelectedArticle] = useState(null);
-  // const truncateText = (text, wordLimit) => {
-  //   const words = text.split(" ");
-  //   return words.length > wordLimit
-  //     ? words.slice(0, wordLimit).join(" ") + "..."
-  //     : text;
-  // };
-  const truncateDate = (text, wordLimit) => {
-    const words = text.split(" ");
-    return words.length > wordLimit
-      ? words.slice(0, wordLimit).join(" ")
-      : text;
-  };
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
 
@@ -156,7 +128,7 @@ const News = () => {
 
         {!selectedArticle ? (
           articles.length === 0 ? (
-            <div className="text-center text-2xl font-semibold mt-5">
+            <div className="text-center text-2xl font-semibold mt-5"> 
               Không tìm thấy tin tức nào!
             </div>
           ) : (
@@ -187,7 +159,25 @@ const News = () => {
                           {article?.user?.name || "Không rõ tác giả"}
                         </div>
                         <div className="font-medium text-[12px]">
-                          {article?.updatedAt ? truncateDate(article.updatedAt, 2) : truncateDate(article.createdAt, 2)}
+                          {article?.updatedAt
+                            ? new Date(
+                                new Date(article.updatedAt).getTime()
+                              ).toLocaleDateString("vi-VN", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : new Date(
+                                new Date(article.createdAt).getTime()
+                              ).toLocaleDateString("vi-VN", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
                         </div>
                       </div>
                       <NavLink
@@ -269,7 +259,15 @@ const News = () => {
               <h2 className="text-2xl font-bold ">{article.title}</h2>
               <p className="text-gray-600">
                 Bởi {article?.user?.name || "Không rõ"} <br /> Lúc{" "}
-                {truncateDate(article.createdAt, 2)}
+                {new Date(
+                  new Date(article.createdAt).getTime()
+                ).toLocaleDateString("vi-VN", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </p>
               <img
                 src={article.imageURL}

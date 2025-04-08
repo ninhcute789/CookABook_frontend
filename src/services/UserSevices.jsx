@@ -17,23 +17,6 @@ const getUsersById = async (id) => {
   }
 };
 
-// const getUserAvatarById = async (id) => {
-//   try {
-//     const token = localStorage.getItem("token");
-//     const response = await axiosInstance.get(`/users/${id}/avatar`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     // toast.success("🎉 Lấy thông tin người dùng thành công!");
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("❌ Error in getUser:", error);
-//     return null;
-//   }
-// };
-
 const getAllArticlesByUserId = async (
   id,
   page,
@@ -96,7 +79,7 @@ const handleUpdateUser = async (
   dob,
   email,
   avatar,
-  setUser,
+  setUser
   // setEditingUserId
 ) => {
   try {
@@ -161,10 +144,109 @@ const handleUpdateUser = async (
   }
 };
 
+const getAllOrdersByUserId = async (
+  userId,
+  page,
+  size,
+  change,
+  setTotalPages
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axiosInstance.get(
+      `/users/${userId}/orders?page=${page}&size=${size}&sort=createdAt,${change}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+      { withCredentials: true }
+    );
+    setTotalPages(response.data.data.meta.totalPages);
+    return response.data.data.data;
+    // return response.data;
+  } catch (error) {
+    console.error("❌ Error in getUser:", error);
+    return null;
+  }
+};
+
+const getTotalUserQuantity = async (setTotalUsers) => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axiosInstance.get("/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setTotalUsers(res.data?.data?.meta?.totalElements);
+  } catch (error) {
+    console.error("Lỗi khi tải số lượng người dùng:", error);
+  }
+};
+
+const handleUpdatePassword = async (
+  username,
+  oldPassword,
+  newPassword,
+  setUser
+  // setEditingUserId
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("❌ Không tìm thấy token!");
+      return;
+    }
+
+    const res = await axiosInstance.put(
+      "/users/update-password",
+      {
+        username,
+        oldPassword,
+        newPassword,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const handleUpdate = (updatedUser) => {
+      setUser((prevUser) => {
+        if (!prevUser || typeof prevUser !== "object") {
+          console.error(
+            "❌ Lỗi: `prevUser` không phải là một object!",
+            prevUser
+          );
+          return {};
+        }
+
+        console.log("🔄 Trước khi cập nhật:", prevUser);
+
+        const updatedUserData = { ...prevUser, ...updatedUser }; // ✅ Gộp dữ liệu cũ với mới
+
+        console.log("✅ Sau khi cập nhật:", updatedUserData);
+        return updatedUserData;
+      });
+    };
+
+    handleUpdate(res.data.data);
+    toast.success("🎉 Cập nhật mật khẩu thành công!");
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật người dùng:", error.response.data.error);
+    toast.error(error.response.data.error);
+  }
+};
+
 export {
   getUsersById,
   fetchUsers,
-  // getUserAvatarById,
   getAllArticlesByUserId,
   handleUpdateUser,
+  getAllOrdersByUserId,
+  getTotalUserQuantity,
+  handleUpdatePassword,
 };
