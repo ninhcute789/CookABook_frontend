@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import {
   decreaseCartItem,
-  deleteCartItemById,
   getCartById,
   handleDeleteCart,
   handleDeleteCartItem,
@@ -17,7 +16,6 @@ import {
 import { getDefautAddressByUserId } from "../services/AddressServices";
 import { AppContext } from "../context/AppContext.jsx";
 import {
-  getOrderSession,
   saveCartToSession,
 } from "../services/OrderServices.jsx";
 
