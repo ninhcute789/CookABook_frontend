@@ -32,13 +32,15 @@ const News = () => {
   const size = 12; // Số bài viết mỗi trang
   const [totalElements, setTotalElements] = useState(0); // Tổng số bài
 
-  
-
-  
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   const fetchArticles = async () => {
     try {
-
       const res = await axiosInstance.get(
         `/articles/all?size=${size}&page=${page}&sort=createdAt,${change}&filter=title ~ '${content}'`
       );
@@ -128,7 +130,7 @@ const News = () => {
 
         {!selectedArticle ? (
           articles.length === 0 ? (
-            <div className="text-center text-2xl font-semibold mt-5"> 
+            <div className="text-center text-2xl font-semibold mt-5">
               Không tìm thấy tin tức nào!
             </div>
           ) : (

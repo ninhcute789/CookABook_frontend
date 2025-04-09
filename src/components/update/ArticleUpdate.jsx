@@ -76,8 +76,8 @@ const ArticleUpdate = ({ articleId, onUpdateSuccess, onClose, article }) => {
   // });
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg  w-11/22">
+    <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)] z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg  w-15/22 min-h-96">
         <h2 className="text-xl font-semibold mb-4">Cập nhật bài báo</h2>
         <form onSubmit={handleSubmit}>
           <div className="CONTENT grid grid-cols-2 space-x-4">

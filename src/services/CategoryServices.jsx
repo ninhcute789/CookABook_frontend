@@ -76,7 +76,8 @@ const getAllCategoriesWithSizeAndPage = async (
     console.log("✅ API trả về - CATEGORY:", res.data);
     // console.log("✅ API trả về:", res.data);
     setCategories(res.data?.data?.data || []);
-    // console.log("Danh sách bài viết:", res.data?.data?.data);
+
+    // console.log("CATEEEEEEEE:", res.data?.data?.data);
     setTotalPages(res.data?.data?.meta?.totalPages);
     // setPage(res.data?.data?.meta?.page);
     // console.log("trang hien tai:", res.data?.data?.meta?.page);

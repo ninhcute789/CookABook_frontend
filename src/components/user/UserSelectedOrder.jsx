@@ -124,12 +124,12 @@ const UserSelectedOrder = () => {
             <div className="bg-white rounded p-4 shadow-sm flex-1">
               <p className="mb-2 font-medium">{address?.name}</p>
               <p className="mb-2 text-gray-700">
-                <span className="text-gray-400">Địa chỉ:</span>{" "}
+                <span className="text-gray-900">Địa chỉ:</span>{" "}
                 {address?.address}, {address?.ward}, {address?.district},{" "}
                 {address?.city}
               </p>
               <p className="text-gray-700">
-                <span className="text-gray-400">Điện thoại:</span> 0394517504
+                <span className="text-gray-900">Điện thoại:</span> 0394517504
               </p>
             </div>
           </div>
@@ -167,6 +167,26 @@ const UserSelectedOrder = () => {
               {payment?.paymentMethod === "VNPAY" && (
                 <p className="mb-2">Thanh toán qua VNPAY</p>
               )}
+              <div className="flex items-center">
+                <span className="">Trạng thái thanh toán:</span>
+                <span
+                  className={`ml-2 px-3 py-1 rounded-full text-sm font-semibold ${
+                    payment?.paymentStatus === "COMPLETED"
+                      ? "bg-green-100 text-green-700"
+                      : payment?.paymentStatus === "PENDING"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : payment?.paymentStatus === "FAILED"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {payment?.paymentStatus === "COMPLETED" && "Đã thanh toán"}
+                  {payment?.paymentStatus === "PENDING" &&
+                    "Đang chờ xử lý"}
+                  {payment?.paymentStatus === "FAILED" && "Thanh toán thất bại"}
+                  {!payment?.paymentStatus && "Không xác định"}
+                </span>
+              </div>
               {/* <p className="mb-2">Thanh toán khi nhận hàng</p>
               <p>Thanh toán tiền mặt khi nhận hàng</p> */}
             </div>

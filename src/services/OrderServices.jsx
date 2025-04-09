@@ -18,7 +18,7 @@ const saveCartToSession = async (idCart) => {
       }
     );
     console.log("✅ Lưu giỏ hàng vào session thành công:", res.data.message);
-    toast.success("Lưu giỏ hàng vào session thành công!");
+    // toast.success("Lưu giỏ hàng vào session thành công!");
   } catch (error) {
     console.error(
       "❌ Lỗi khi lấy danh sách:",
@@ -43,7 +43,7 @@ const saveAddressToSession = async (idAddress) => {
         withCredentials: true,
       }
     );
-    toast.success("Lưu địa chỉ giao hàng vào session thành công!");
+    // toast.success("Lưu địa chỉ giao hàng vào session thành công!");
   } catch (error) {
     console.error(
       "❌ Lỗi khi lấy danh sách:",

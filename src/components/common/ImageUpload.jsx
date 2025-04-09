@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FcPlus } from "react-icons/fc";
 
 const ImageUploader = ({ onUploadSuccess, initialImageUrl }) => {
   const [imagePreview, setImagePreview] = useState(initialImageUrl || null);
   const [loading, setLoading] = useState(false);
+
+  // Đồng bộ imagePreview với initialImageUrl khi initialImageUrl thay đổi
+  useEffect(() => {
+    setImagePreview(initialImageUrl);
+  }, [initialImageUrl]);
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
@@ -29,31 +34,26 @@ const ImageUploader = ({ onUploadSuccess, initialImageUrl }) => {
       const data = await response.json();
       const imageUrl = data.secure_url;
 
-      // Hiển thị ảnh preview
-      setImagePreview(imageUrl);
+      if (imageUrl) {
+        // Hiển thị ảnh preview
+        setImagePreview(imageUrl);
 
-      // Gọi callback để gửi URL về parent component
-      onUploadSuccess(imageUrl);
+        // Gọi callback để gửi URL về parent component
+        onUploadSuccess(imageUrl);
+      } else {
+        console.error("Không nhận được URL ảnh từ Cloudinary:", data);
+      }
     } catch (error) {
       console.error("Lỗi upload ảnh:", error);
     } finally {
       setLoading(false);
     }
   };
-  
-  
 
   return (
     <div>
-      {/* <input
-        type="file"
-        accept="image/*"
-        placeholder="Chọn ảnh"
-        onChange={handleUpload}
-        className="bg-amber-500 mb-1 rounded p-1"
-      /> */}
       <label
-        className=" p-1 rounded flex items-center space-x-2 w-fit
+        className="p-1 rounded flex items-center space-x-2 w-fit
             bg-gray-300 hover:cursor-pointer mb-2 hover:bg-gray-400 duration-300"
         htmlFor="labelUpload"
       >
@@ -77,8 +77,7 @@ const ImageUploader = ({ onUploadSuccess, initialImageUrl }) => {
         />
       ) : (
         <div className="h-40 border-1 rounded w-full">
-          {" "}
-          <div className="h-full flex items-center justify-center text-gray-500 ">
+          <div className="h-full flex items-center justify-center text-gray-500">
             Chưa có ảnh
           </div>
         </div>
@@ -91,4 +90,5 @@ ImageUploader.propTypes = {
   onUploadSuccess: PropTypes.func.isRequired,
   initialImageUrl: PropTypes.string,
 };
+
 export default ImageUploader;

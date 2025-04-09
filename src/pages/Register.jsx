@@ -174,7 +174,7 @@ const Register = () => {
           <div className="input-box flex w-full h-12 relative mb-4">
             <input
               type="text"
-              placeholder="Tài khoản"
+              placeholder="Tên tài khoản"
               // required
               onChange={(e) => {
                 setUsername(e.target.value);

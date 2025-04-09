@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-// import axios from "axios";
 import { LuPencilLine } from "react-icons/lu";
 import { GoTrash } from "react-icons/go";
-import toast from "react-hot-toast";
 import axiosInstance from "../../services/axiosInstance";
 import BookUpdate from "../update/BookUpdate";
 import AddBook from "../addForm/AddBook";
 import { handleDeleteBook } from "../../services/BookServices";
+import { useNavigate } from "react-router";
 
 const BookList = () => {
+  const navigate = useNavigate();
+
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingBookId, setEditingBookId] = useState(null);
@@ -69,7 +70,7 @@ const BookList = () => {
 
   return (
     <div className="p-10">
-      <AddBook
+      {/* <AddBook
         onSubmit={(e) => fetchBooks(e)}
         initialData={{
           title: "",
@@ -90,7 +91,15 @@ const BookList = () => {
           author: { id: "" },
           categories: [{ id: "", name: "" }],
         }}
-      />
+      /> */}
+      <button
+        onClick={() => navigate("/admin/admin-books/creating")}
+        className="bg-blue-500 hover:cursor-pointer mb-5 w-50 duration-300
+          hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Thêm sách mới
+      </button>
+
       <div className="flex flex-row mb-4 items-center [@media(max-width:600px)]:flex-col">
         <h2 className="text-xl font-bold">Danh sách Sách</h2>
         <div
@@ -201,14 +210,16 @@ const BookList = () => {
                     }
                   />
 
-                  {editingBookId === book.id && (
-                    <BookUpdate
-                      bookId={book.id}
-                      onUpdateSuccess={handleUpdateSuccess}
-                      onClose={handleClose} // Đóng form khi cập nhật xong hoặc bấm "Hủy"
-                      book={book}
-                    />
-                  )}
+                  {
+                    editingBookId === book.id &&
+                      navigate(`/admin/admin-books/updating/${book.id}`) // Chuyển hướng đến trang AdminBooks
+                    // <BookUpdate
+                    //   bookId={book.id}
+                    //   onUpdateSuccess={handleUpdateSuccess}
+                    //   onClose={handleClose} // Đóng form khi cập nhật xong hoặc bấm "Hủy"
+                    //   book={book}
+                    // />
+                  }
                 </div>
               </div>
             ))}
