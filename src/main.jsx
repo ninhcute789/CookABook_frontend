@@ -32,6 +32,9 @@ import UserSelectedOrder from "./components/user/UserSelectedOrder.jsx";
 import AdminOrderDetail from "./pages/AdminOrderDetail.jsx";
 import AdminBooksUpdate from "./pages/AdminBooksUpdate.jsx";
 import AdminBooksCreate from "./pages/AdminBooksCreate.jsx";
+import EmailInput from "./components/getPassword/EmailInput.jsx";
+import OTPInput from "./components/getPassword/OTPInput.jsx";
+import NewPasswordInput from "./components/getPassword/NewPasswordInput.jsx";
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
@@ -39,7 +42,11 @@ ReactDOM.createRoot(root).render(
     <Routes>
       <Route path="/" element={<App />}>
         <Route path="dang-nhap" element={<Login />} />
+        <Route path="quen-mat-khau/nhap-email" element={<EmailInput />} />
+        <Route path="quen-mat-khau/nhap-otp" element={<OTPInput />} />
+        <Route path="quen-mat-khau/nhap-mat-khau-moi" element={<NewPasswordInput />} />
         <Route path="dang-ky" element={<Register />} />
+
         <Route index element={<Home />} />
         <Route path="sách" element={<Books />} />
         <Route path="sách/:id" element={<BookDetail />} />

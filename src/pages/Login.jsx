@@ -31,6 +31,8 @@ const Login = () => {
 
   // Xử lý scroll lên đầu trang khi thay đổi route
 
+ 
+
   // const handleLogin = async (event) => {
   //   event.preventDefault(); // Ngăn form reload trang
 
@@ -181,7 +183,10 @@ const Login = () => {
               />{" "}
               Lưu tài khoản
             </label>
-            <NavLink to="#" className="hover:underline">
+            <NavLink
+              to="/quen-mat-khau/nhap-email"
+              className="hover:underline"
+            >
               Quên mật khẩu?
             </NavLink>
           </div>
@@ -205,6 +210,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      
     </div>
   );
 };
