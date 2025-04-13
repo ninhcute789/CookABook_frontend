@@ -104,3 +104,24 @@
 .pop-up {
   animation: popUp 0.5s;
 }
+
+/* Spinner */
+.spinner-border {
+  display: inline-block;
+  width: 24px; /* Kích thước spinner */
+  height: 24px;
+  margin-top: 5px;
+  border: 3px solid rgba(0, 0, 0, 0.3); /* Viền mờ */
+  border-top-color: #064d7c; /* Màu viền trên */
+  border-radius: 50%; /* Hình tròn */
+  animation: spin 0.8s linear infinite; /* Hiệu ứng xoay */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

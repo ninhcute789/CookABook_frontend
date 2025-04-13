@@ -36,10 +36,10 @@ const EmailInput = () => {
       }
     } catch (error) {
       console.error("Lỗi khi gửi yêu cầu:", error);
-    //   toast.error("Đã xảy ra lỗi. Vui lòng thử lại!");
+      //   toast.error("Đã xảy ra lỗi. Vui lòng thử lại!");
     } finally {
       setIsLoading(false); // Kết thúc loading
-    //   setEmail("");
+      //   setEmail("");
     }
   };
 
@@ -84,7 +84,7 @@ const EmailInput = () => {
                   h-14 rounded-4xl shadow-2xl font-bold text-xl 
                   hover:bg-black hover:text-white transition-all duration-300"
           >
-            {isLoading ? "Đang gửi..." : "Gửi yêu cầu"}
+            {isLoading ? <div className="spinner-border"></div> : "Gửi yêu cầu"}
           </button>
 
           {/* Chuyển sang đăng ký */}
