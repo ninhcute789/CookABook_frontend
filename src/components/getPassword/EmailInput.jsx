@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { forgotPasswordRequest } from "../../services/ForgotPasswordServices";
 import bg from "../../assets/bg-10.jpg";
 import { AppContext } from "../../context/AppContext";
@@ -86,6 +86,18 @@ const EmailInput = () => {
           >
             {isLoading ? <div className="spinner-border"></div> : "Gửi yêu cầu"}
           </button>
+
+          <div className="text-center mt-4 text-xs text-white flex flex-row gap-2 justify-between px-5">
+            <Link to="/dang-nhap" className="font-bold hover:underline">
+              Trở lại
+            </Link>
+            <div>
+              Bạn chưa có tài khoản?{" "}
+              <NavLink to="/dang-ky" className="font-bold hover:underline">
+                Đăng ký ngay
+              </NavLink>
+            </div>
+          </div>
 
           {/* Chuyển sang đăng ký */}
           {/* <div className="text-center mt-4 text-xs text-white">
