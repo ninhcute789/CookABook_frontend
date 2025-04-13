@@ -105,55 +105,6 @@ const Header = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const Test = async () => {
-  //     //   const user1 = JSON.parse(user);
-  //     //   // setUser(JSON.parse(user));
-  //     //   // console.log(user1.id);
-  //     //   const res = await getUserById(user1.id);
-  //     //   // console.log(res); // Lấy thông tin người dùng từ API
-  //     //   setUser(res);
-  //     getUserById(JSON.parse(user).id).then((res) => {
-  //       console.log(res);
-  //       setUser(res);
-  //     });
-  //   };
-  //   Test();
-  // }, [user]);
-
-  // const handleLogout = async () => {
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     if (!token) {
-  //       console.error("❌ Không tìm thấy token!");
-  //       return;
-  //     }
-
-  //     const response = await axiosInstance.post(
-  //       "/auth/logout",
-  //       {},
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
-  //     // console.log(
-  //     //   "🚀 ~ file: Header.jsx ~ line 68 ~ handleLogout ~ token",
-  //     //   token
-  //     // );
-  //     // Xóa token & username sau khi logout thành công
-  //     // localStorage.removeItem("token");
-  //     localStorage.removeItem("username");
-  //     localStorage.removeItem("user");
-  //     setLoggedInUser(""); // Reset lại state
-  //     toast.success(response.data.message);
-  //     navigate("/dang-nhap"); // Chuyển về trang đăng nhập
-  //   } catch (error) {
-  //     console.error(
-  //       "❌ Lỗi khi đăng xuất:",
-  //       error.response?.data || error.message
-  //     );
-  //     alert("Không thể đăng xuất, vui lòng thử lại!");
-  //   }
-  // };
-
   return (
     <header className="bg-white shadow-md top-0 z-50 px-6 md:px-10">
       <div className="container mx-auto flex justify-between items-center py-4">

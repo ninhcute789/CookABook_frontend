@@ -12,7 +12,7 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo({ top: 70, behavior: "smooth" });
-    console.log("Đã scroll lên đầu trang!");
+    // console.log("Đã scroll lên đầu trang!");
   }, [pathname]);
   return null;
 };

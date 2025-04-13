@@ -1,22 +1,19 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { forgotPasswordRequest } from "../../services/ForgotPasswordServices";
 import bg from "../../assets/bg-10.jpg";
-import { AppContext } from "../../context/AppContext";
 import { MdOutlineMail } from "react-icons/md";
-import toast from "react-hot-toast";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 73, behavior: "smooth" });
-    console.log("Đã scroll lên đầu trang!");
+    window.scrollTo({ top: 70, behavior: "smooth" });
+    // console.log("Đã scroll lên đầu trang!");
   }, [pathname]);
   return null;
 };
 
 const EmailInput = () => {
-  const context = useContext(AppContext);
   const navigate = useNavigate(); // Lấy hàm navigate từ context
 
   const [isLoading, setIsLoading] = useState(false); // State để quản lý loading

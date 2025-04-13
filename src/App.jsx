@@ -65,7 +65,11 @@ const App = () => {
         <div className="header-container">
           {/* Hiển thị header riêng cho login và register */}
           {location.pathname === "/dang-nhap" ||
-          location.pathname === "/dang-ky" ? (
+          location.pathname === "/dang-ky" ||
+          location.pathname === "/quen-mat-khau/nhap-otp" ||
+          location.pathname === "/quen-mat-khau/nhap-mat-khau-moi" ||
+          location.pathname === "/quen-mat-khau/nhap-email" 
+          ? (
             <LoginRegisterHeader />
           ) : (
             <Header />
