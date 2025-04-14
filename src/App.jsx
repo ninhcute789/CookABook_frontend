@@ -85,7 +85,7 @@ const App = () => {
             onClick={scrollToTop}
             className="fixed bottom-16 right-16 bg-red-500 text-white p-3 
           rounded-full shadow-lg hover:bg-red-600 transition-all duration-300
-          hover:scale-110 active:scale-95 z-50"
+          hover:scale-110 active:scale-95 z-50 hover:cursor-pointer"
             aria-label="Scroll to top"
           >
             <FaArrowUp className="text-xl" />

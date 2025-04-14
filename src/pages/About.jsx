@@ -82,7 +82,7 @@ const About = () => {
     <div className="max-w-7xl mx-auto p-8 bg-gradient-to-r from-[#f0f9ff] to-[#e0f7fa] rounded-2xl shadow-xl my-10">
       {/* Header Section */}
       <div className="text-center">
-        <h2 className="text-5xl font-extrabold text-[#2c9f24] mb-6">
+        <h2 className="text-5xl font-extrabold text-[#2c9f24] mb-6 mt-5">
           Về Chúng Tôi
         </h2>
         <p className="text-xl text-gray-700 leading-relaxed mb-4">
@@ -92,7 +92,7 @@ const About = () => {
           rằng sách không chỉ là nguồn tri thức mà còn là người bạn đồng hành
           trong cuộc sống.
         </p>
-        <div className="mb-8 flex justify-center">
+        <div className="flex justify-center">
           <NavLink
             to="/sách"
             className="px-8 py-4 bg-[#20B2AA] hover:cursor-pointer text-white font-semibold rounded-full shadow-lg hover:bg-[#008B8B] transition duration-300 text-lg"
@@ -103,19 +103,10 @@ const About = () => {
       </div>
 
       {/* Video Section */}
-      <div className="mt-16">
+      <div className="mt-11">
         <h3 className="text-3xl font-bold text-[#2c9f24] text-center">
           Hành Trình Của Chúng Tôi
         </h3>
-        {/* <div className="relative w-full h-64 md:h-96 rounded-xl overflow-hidden shadow-lg">
-          <iframe
-            className="w-full h-full border-0" // Thêm class "border-0" để loại bỏ viền
-            src="https://www.youtube.com/embed/3hNNb7z1NMo"
-            title="Cook A Book Journey"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div> */}
       </div>
 
       {/* Statistics Section */}

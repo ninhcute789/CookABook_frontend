@@ -10,7 +10,9 @@ const forgotPasswordRequest = async (email) => {
     // }
 
     const res = await axiosInstance.post(`/auth/forgot-password`, { email });
-    toast.success(res.data.message);
+    // toast.success(res.data.message);
+    console.log("Thành công:", res.data.message);
+
     // toast.success("Lưu địa chỉ giao hàng vào session thành công!");
     return res; // Trả về dữ liệu để sử dụng sau này
   } catch (error) {

@@ -66,7 +66,7 @@ const Books = () => {
             setTotalPages,
             setTotalElements,
             change,
-            idCate,
+            idCate
           );
         } else if (idAuthor) {
           await getAllBooksWithAuthorId(
@@ -121,34 +121,36 @@ const Books = () => {
             >
               Nhà sách CaB
             </NavLink>
-            <select
-              onChange={(e) => setChange(e.target.value)}
-              className="transition-all border-gray-300 appearance-none focus:outline-none
+            <div className="flex md:flex-row flex-col items-center">
+              <select
+                onChange={(e) => setChange(e.target.value)}
+                className="transition-all border-gray-300 appearance-none focus:outline-none
               duration-300 ease-in-out border text-gray-500
               rounded-full px-5 py-2 shadow-sm outline-none  ml-auto mr-2"
-            >
-              <option value="" className="hidden bg-gray-400">
-                Sắp xếp theo giá
-              </option>
-              <option value="desc">Cao đến thấp</option>
-              <option value="asc">Thấp đến cao</option>
-            </select>
-            {!idAuthor && !idCate && (
-              <div className="relative">
-                <input
-                  // ref={inputRef} // Ref cho input
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  type="text"
-                  placeholder="Tìm sách, tác giả..."
-                  className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none
+              >
+                <option value="" className="hidden bg-gray-400">
+                  Sắp xếp theo giá
+                </option>
+                <option value="desc">Cao đến thấp</option>
+                <option value="asc">Thấp đến cao</option>
+              </select>
+              {!idAuthor && !idCate && (
+                <div className="relative">
+                  <input
+                    // ref={inputRef} // Ref cho input
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    type="text"
+                    placeholder="Tìm sách, tác giả..."
+                    className={`transition-all duration-300 ease-in-out border rounded-full px-4 py-2 shadow-sm outline-none
                 ${isFocused ? "w-80 border-gray-400" : "w-48 border-gray-300"}`}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                />
-                <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
-              </div>
-            )}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                  />
+                  <FaSearch className="absolute right-3 top-2.5 text-gray-700 translate-y-0.5" />
+                </div>
+              )}
+            </div>
           </div>
         </header>
 

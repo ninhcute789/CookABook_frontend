@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { forgotPasswordRequest } from "../../services/ForgotPasswordServices";
 import bg from "../../assets/bg-10.jpg";
 import { MdOutlineMail } from "react-icons/md";
+import toast from "react-hot-toast";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -24,7 +25,14 @@ const EmailInput = () => {
     setIsLoading(true); // Bắt đầu loading
     try {
       console.log("Email để reset mật khẩu:", email);
-      const res = await forgotPasswordRequest(email);
+      const res = await toast.promise(
+        forgotPasswordRequest(email), // Promise cần theo dõi
+        {
+          loading: "Đang gửi yêu cầu...",
+          success: "Đã gửi mã xác nhận đến email",
+          error: "Đã xảy ra lỗi. Vui lòng thử lại!",
+        }
+      );
       console.log("Kết quả gửi yêu cầu:", res.data.message);
 
       // Chuyển sang path khác sau khi gửi thành công
