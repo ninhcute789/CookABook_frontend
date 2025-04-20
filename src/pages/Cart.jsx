@@ -114,7 +114,7 @@ const Cart = () => {
   return (
     <>
       <div className="bg-gray-100 ">
-        <div className="w-10/12 mx-auto pt-10">
+        <div className="w-10/12 mx-auto pt-10 min-h-[calc(100vh-200px)]">
           <h2 className="text-2xl font-medium mb-4 text-black">GIỎ HÀNG</h2>
           <div className="PAYMENT flex gap-4">
             <div className="LEFT w-20/27">

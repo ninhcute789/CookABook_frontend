@@ -138,8 +138,7 @@ const handleUpdateUser = async (
   } catch (error) {
     console.error("❌ Lỗi khi cập nhật người dùng:", error);
     toast.error(
-      "❌ Lỗi khi cập nhật người dùng:",
-      error.response?.data || error.message
+      error.response?.data.error || error.message
     );
   }
 };
